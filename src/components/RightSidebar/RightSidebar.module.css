@@ -1,0 +1,50 @@
+.sidebar {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #121212;
+  flex-direction: column;
+}
+
+.scrollArea {
+  display: flex;
+  min-height: 0;
+  padding: 0 16px 18px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-direction: column;
+  gap: 16px;
+  scrollbar-color: #5f5f5f transparent;
+  scrollbar-width: thin;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scrollArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  border: 3px solid #121212;
+  border-radius: 999px;
+  background: #5f5f5f;
+}
+
+.scrollArea::-webkit-scrollbar-thumb:hover {
+  background: #7c7c7c;
+}
+
+@media (max-width: 860px) {
+  .sidebar {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .scrollArea {
+    padding-inline: clamp(12px, 4vw, 24px);
+  }
+}

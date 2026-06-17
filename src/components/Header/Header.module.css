@@ -1,0 +1,153 @@
+.navbar {
+  display: grid;
+  height: 72px;
+  padding: 8px 24px;
+  background: #000;
+  grid-template-columns: minmax(88px, 1fr) minmax(280px, 680px) minmax(120px, 1fr);
+  align-items: center;
+  gap: 18px;
+}
+
+.left,
+.right,
+.center {
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  gap: 8px;
+}
+
+.right {
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.center {
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.iconButton,
+.homeButton {
+  display: inline-grid;
+  border: 0;
+  color: #b3b3b3;
+  background: #1f1f1f;
+  cursor: pointer;
+  place-items: center;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.iconButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.homeButton {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.iconButton:hover,
+.homeButton:hover {
+  color: #fff;
+  background: #2a2a2a;
+  transform: scale(1.04);
+}
+
+.iconButton:focus-visible,
+.homeButton:focus-visible,
+.searchBox:focus-within {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  width: min(100%, 590px);
+  height: 52px;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: #b3b3b3;
+  background: #1f1f1f;
+  gap: 14px;
+  transition:
+    background-color 160ms ease,
+    outline-color 160ms ease;
+}
+
+.searchBox:hover {
+  background: #2a2a2a;
+}
+
+.searchBox input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 16px;
+}
+
+.searchBox input::placeholder {
+  color: #b3b3b3;
+}
+
+.profile {
+  width: 44px;
+  height: 44px;
+  border: 3px solid #1f1f1f;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    height: auto;
+    padding: 8px 12px;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+  }
+
+  .left {
+    display: none;
+  }
+
+  .searchBox {
+    height: 48px;
+  }
+
+  .right {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 620px) {
+  .navbar {
+    grid-template-columns: auto 1fr;
+  }
+
+  .center {
+    justify-content: flex-start;
+  }
+
+  .homeButton {
+    width: 46px;
+    height: 46px;
+  }
+
+  .right .iconButton {
+    display: none;
+  }
+}

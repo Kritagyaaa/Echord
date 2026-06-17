@@ -1,0 +1,175 @@
+.playerBar {
+  display: grid;
+  height: 96px;
+  padding: 12px 20px;
+  color: #fff;
+  background: #000;
+  grid-template-columns: minmax(180px, 30%) minmax(260px, 40%) minmax(190px, 30%);
+  align-items: center;
+  gap: 18px;
+}
+
+.track,
+.extras,
+.controls,
+.progressSection {
+  display: flex;
+  align-items: center;
+}
+
+.track {
+  min-width: 0;
+  gap: 12px;
+}
+
+.albumCover {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.songInfo {
+  min-width: 0;
+}
+
+.songInfo h2,
+.songInfo p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.songInfo h2 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.songInfo p {
+  margin-top: 3px;
+  color: #b3b3b3;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.playerCenter {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls {
+  justify-content: center;
+  gap: 14px;
+}
+
+.extras {
+  justify-content: flex-end;
+  min-width: 0;
+  gap: 8px;
+}
+
+.controlButton,
+.savedButton,
+.playButton {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  color: #b3b3b3;
+  background: transparent;
+  cursor: pointer;
+  place-items: center;
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.controlButton:hover,
+.savedButton:hover,
+.playButton:hover {
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.playButton {
+  width: 42px;
+  height: 42px;
+  color: #fff;
+}
+
+.controlButton:focus-visible,
+.savedButton:focus-visible,
+.playButton:focus-visible {
+  border-radius: 50%;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.savedButton {
+  color: #1db954;
+  flex: 0 0 auto;
+}
+
+.progressSection {
+  width: min(100%, 560px);
+  gap: 10px;
+}
+
+.progressSection span {
+  width: 36px;
+  color: #b3b3b3;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.progressSection input,
+.volumeSlider {
+  height: 4px;
+  min-width: 0;
+  accent-color: #fff;
+  cursor: pointer;
+}
+
+.progressSection input {
+  width: 100%;
+}
+
+.volumeSlider {
+  width: 82px;
+}
+
+@media (max-width: 920px) {
+  .playerBar {
+    height: auto;
+    padding: 10px 12px;
+    grid-template-columns: minmax(160px, 1fr) minmax(220px, 1.2fr);
+  }
+
+  .extras {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .playerBar {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .track {
+    justify-content: center;
+  }
+
+  .playerCenter {
+    width: 100%;
+  }
+}

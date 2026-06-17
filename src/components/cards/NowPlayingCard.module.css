@@ -1,0 +1,83 @@
+.nowPlaying {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.albumCover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+}
+
+.songInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  gap: 14px;
+}
+
+.textBlock {
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 4px;
+  overflow: hidden;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artist {
+  margin: 0;
+  overflow: hidden;
+  color: #b3b3b3;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.likeButton {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #b3b3b3;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
+  place-items: center;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.likeButton:hover {
+  color: #1db954;
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.05);
+}
+
+.likeButton:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .title {
+    font-size: 22px;
+  }
+}

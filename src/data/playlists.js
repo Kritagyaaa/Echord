@@ -17,6 +17,18 @@ export const playlists = [
         artist: "Paul McCartney",
         duration: "2:32",
       },
+      {
+        id: 3,
+        title: "Hey Jude",
+        artist: "The Beatles",
+        duration: "7:11",
+      },
+      {
+        id: 4,
+        title: "Calico Skies",
+        artist: "Paul McCartney",
+        duration: "2:32",
+      },
     ],
   },
 
@@ -34,6 +46,18 @@ export const playlists = [
       },
       {
         id: 2,
+        title: "Chura Liya Hai",
+        artist: "Asha Bhosle",
+        duration: "4:48",
+      },
+      {
+        id: 3,
+        title: "Pal Pal Dil Ke Paas",
+        artist: "Kishore Kumar",
+        duration: "5:12",
+      },
+      {
+        id: 4,
         title: "Chura Liya Hai",
         artist: "Asha Bhosle",
         duration: "4:48",
@@ -59,6 +83,18 @@ export const playlists = [
         artist: "Chris Stapleton",
         duration: "4:54",
       },
+       {
+        id: 3,
+        title: "Take Me Home, Country Roads",
+        artist: "John Denver",
+        duration: "3:10",
+      },
+      {
+        id: 4,
+        title: "Tennessee Whiskey",
+        artist: "Chris Stapleton",
+        duration: "4:54",
+      },
     ],
   },
 
@@ -80,6 +116,18 @@ export const playlists = [
         artist: "AC/DC",
         duration: "4:15",
       },
+       {
+        id: 3,
+        title: "Sweet Child O' Mine",
+        artist: "Guns N' Roses",
+        duration: "5:56",
+      },
+      {
+        id: 4,
+        title: "Back In Black",
+        artist: "AC/DC",
+        duration: "4:15",
+      },
     ],
   },
 
@@ -97,6 +145,18 @@ export const playlists = [
       },
       {
         id: 2,
+        title: "Paradise City",
+        artist: "Guns N' Roses",
+        duration: "6:45",
+      },
+      {
+        id: 3,
+        title: "November Rain",
+        artist: "Guns N' Roses",
+        duration: "8:57",
+      },
+      {
+        id: 4,
         title: "Paradise City",
         artist: "Guns N' Roses",
         duration: "6:45",

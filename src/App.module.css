@@ -18,6 +18,8 @@
 
 .mainPlaceholder {
   min-width: 0;
+  min-height: 0;   /* Shubh */
+  overflow: hidden; /* shubh */
   border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 34%),

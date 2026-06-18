@@ -1,0 +1,121 @@
+.container {
+  height: 100%;
+  overflow-y: auto;
+  color: white;
+}
+
+.empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b3b3b3;
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  gap: 24px;
+  padding: 32px;
+  min-height: 300px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(29, 185, 84, 0.25),
+    rgba(18, 18, 18, 1)
+  );
+}
+
+.cover {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.info {
+  min-width: 0;
+  flex: 1;
+}
+
+.info h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.type {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.subtitle {
+  margin-top: 12px;
+  color: #b3b3b3;
+}
+.container {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  color: white;
+}
+.actions {
+  padding: 24px 32px;
+}
+
+.playButton {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: #1db954;
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.header {
+  display: flex;
+  align-items: end;
+  gap: 24px;
+  padding: 32px;
+  min-height: 300px;
+  overflow: hidden;
+
+  background: linear-gradient(
+    180deg,
+    rgba(29, 185, 84, 0.25),
+    rgba(18, 18, 18, 1)
+  );
+}
+.songList {
+  padding: 0 32px 32px;
+}
+
+.songHeader,
+.songRow {
+  display: grid;
+  grid-template-columns: 50px 2fr 1.5fr 100px;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.songHeader {
+  color: #b3b3b3;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+}
+
+.songRow {
+  border-radius: 4px;
+  padding: 12px 8px;
+  transition: background 0.2s;
+}
+
+.songRow:hover {
+  background: rgba(255,255,255,0.08);
+}

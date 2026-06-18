@@ -248,3 +248,11 @@
     padding: 8px 0;
   }
 }
+
+.activePlaylist {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.activePlaylist:hover {
+  background: rgba(255, 255, 255, 0.18);
+}

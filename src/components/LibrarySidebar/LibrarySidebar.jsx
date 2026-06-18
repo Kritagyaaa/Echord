@@ -1,42 +1,14 @@
 import { ListFilter, Plus, Search } from 'lucide-react';
 import styles from './LibrarySidebar.module.css';
+import { playlists } from '../../data/playlists';
 
-const libraryItems = [
-  {
-    id: 1,
-    image: 'https://picsum.photos/seed/comfort/64',
-    title: 'Comfort',
-    subtitle: 'Playlist - Shubham',
-  },
-  {
-    id: 2,
-    image: 'https://picsum.photos/seed/hindi-nostalgic/64',
-    title: 'HindiNostalgic',
-    subtitle: 'Playlist - Shubham',
-  },
-  {
-    id: 3,
-    image: 'https://picsum.photos/seed/country/64',
-    title: 'Country',
-    subtitle: 'Playlist - Shubham',
-  },
-  {
-    id: 4,
-    image: 'https://picsum.photos/seed/rocknroll/64',
-    title: 'Absolute rocknroll',
-    subtitle: 'Playlist - Shubham',
-  },
-  {
-    id: 5,
-    image: 'https://picsum.photos/seed/guns-roses/64',
-    title: "Guns N' Roses",
-    subtitle: 'Artist',
-  },
-];
 
 const filters = ['Playlists', 'Artists', 'Albums', 'Podcasts'];
 
-export function LibrarySidebar() {
+export function LibrarySidebar({
+  onPlaylistSelect,
+  selectedPlaylist,
+}) {
   return (
     <aside className={styles.sidebar} aria-label="Your library">
       <div className={styles.sidebarHeader}>
@@ -69,8 +41,17 @@ export function LibrarySidebar() {
       </div>
 
       <div className={styles.libraryList}>
-        {libraryItems.map((item) => (
-          <button className={styles.libraryItem} type="button" key={item.id}>
+        {playlists.map((item) => (
+          <button
+  className={`${styles.libraryItem} ${
+  selectedPlaylist?.id === item.id
+    ? styles.activePlaylist
+    : ""
+}`}
+  type="button"
+  key={item.id}
+  onClick={() => onPlaylistSelect(item)}
+>
             <img src={item.image} alt="" />
             <span className={styles.itemInfo}>
               <span className={styles.itemTitle}>{item.title}</span>

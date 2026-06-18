@@ -6,10 +6,15 @@ import {
   Home,
   Search,
   UsersRound,
+  ExternalLink,
+  Check,
 } from 'lucide-react';
+import { useState } from 'react';
 import styles from './Header.module.css';
 
 export function Header() {
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
   return (
     <header className={styles.navbar} aria-label="Main navigation">
       <div className={styles.left}>
@@ -40,12 +45,48 @@ export function Header() {
         <button className={styles.iconButton} type="button" aria-label="Friends activity">
           <UsersRound size={22} strokeWidth={2.2} />
         </button>
-        <img
-          src="https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"
-          alt="Profile"
-          className={styles.profile}
-        />
+        <div className={styles.profileWrapper}>
+          <img
+            src="https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"
+            alt="Profile"
+            className={styles.profile}
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            role="button"
+            tabIndex={0}
+            aria-expanded={showProfileMenu}
+            aria-label="User profile menu"
+          />
+          {showProfileMenu && (
+            <div className={styles.profileMenu} role="menu">
+              <div className={styles.menuItem} role="menuitem">
+                <span>Account</span>
+                <ExternalLink size={16} />
+              </div>
+              <div className={styles.menuItem} role="menuitem">Profile</div>
+              <div className={styles.menuItem} role="menuitem">Recents</div>
+              <div className={styles.menuItem} role="menuitem">
+                <span>Support</span>
+                <ExternalLink size={16} />
+              </div>
+              <div className={styles.menuItem} role="menuitem">
+                <span>Download</span>
+                <ExternalLink size={16} />
+              </div>
+              <div className={styles.menuItem} role="menuitem">Settings</div>
+              <div className={styles.menuItem} role="menuitem">Log out</div>
+              <hr className={styles.divider} />
+              <div className={styles.updatesSection}>
+                <h3>Your Updates</h3>
+                <div className={styles.checkIcon}>
+                  <Check size={60} strokeWidth={2.5} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
 }
+
+export default Header;

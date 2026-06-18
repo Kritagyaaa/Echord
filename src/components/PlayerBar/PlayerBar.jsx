@@ -11,10 +11,18 @@ import {
   SkipForward,
   Volume2,
 } from 'lucide-react';
-import { currentSong } from '../../data/songData.js';
 import styles from './PlayerBar.module.css';
 
-export function PlayerBar({ song = currentSong }) {
+const defaultSong = {
+  id: 'song-001',
+  title: 'Midnight City',
+  artist: 'M83',
+  albumCover:
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=90',
+  duration: '4:03',
+};
+
+export function PlayerBar({ song = defaultSong }) {
   return (
     <footer className={styles.playerBar} aria-label="Music player">
       <div className={styles.track}>

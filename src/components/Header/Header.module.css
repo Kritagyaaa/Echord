@@ -110,6 +110,71 @@
   border: 3px solid #1f1f1f;
   border-radius: 50%;
   object-fit: cover;
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+}
+
+.profileWrapper {
+  position: relative;
+}
+
+.profileMenu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 320px;
+  background: #282828;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.menuItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 160ms ease;
+}
+
+.menuItem:hover {
+  background: #3e3e3e;
+}
+
+.menuItem span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #404040;
+  margin: 0;
+}
+
+.updatesSection {
+  padding: 20px;
+  text-align: center;
+}
+
+.updatesSection h3 {
+  text-align: left;
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.checkIcon {
+  display: flex;
+  justify-content: center;
+  color: #fff;
 }
 
 @media (max-width: 900px) {

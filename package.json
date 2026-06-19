@@ -1,7 +1,7 @@
 {
   "name": "spotify-clone",
   "private": true,
-  "homepage": "https://kritagyaaa.github.io/spotifyGhostt",
+  "homepage": "https://kritagyaaa.github.io/spotify-ghostt",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",

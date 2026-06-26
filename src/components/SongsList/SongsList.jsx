@@ -3,7 +3,7 @@ import { Music } from "lucide-react";
 import styles from "./SongsList.module.css";
 
 import { getSongs } from "../../services/api";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 
 export function SongsList() {
   const [songs, setSongs] = useState([]);

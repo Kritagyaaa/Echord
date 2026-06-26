@@ -3,6 +3,7 @@ import { CreditsCard } from '../cards/CreditsCard.jsx';
 import { NowPlayingCard } from '../cards/NowPlayingCard.jsx';
 import { SidebarHeader } from './SidebarHeader.jsx';
 import styles from './RightSidebar.module.css';
+import { RecommendationCard } from "../cards/RecommendationCard";
 
 const defaultSong = {
   id: 'song-001',
@@ -36,6 +37,7 @@ export function RightSidebar({ song = defaultSong, playlistName = 'Today\'s Top 
         <NowPlayingCard song={song} />
         <AboutArtistCard artist={song.artistInfo} />
         <CreditsCard credits={song.credits} />
+         <RecommendationCard />
       </div>
     </aside>
   );

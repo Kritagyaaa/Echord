@@ -5,18 +5,12 @@ import App from "./App";
 
 import "./styles/global.css";
 
-import { PlayerProvider } from "./context/PlayerContext";
+import { PlayerProvider } from "./context/playercontext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-
-<React.StrictMode>
-
-<PlayerProvider>
-
-<App />
-
-</PlayerProvider>
-
-</React.StrictMode>
-
+  <React.StrictMode>
+    <PlayerProvider>
+      <App />
+    </PlayerProvider>
+  </React.StrictMode>
 );

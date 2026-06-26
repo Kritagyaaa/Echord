@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import styles from "./PlayerBar.module.css";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 
 export function PlayerBar() {
   const {

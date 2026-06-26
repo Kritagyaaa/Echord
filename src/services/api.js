@@ -26,3 +26,18 @@ export async function getSongStream(songId) {
 
     return data.streamUrl;
 }
+
+export async function getContentRecommendations(songId) {
+
+    const response = await fetch(
+        `${API_URL}/recommend/content/${songId}`
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch recommendations");
+    }
+
+    const data = await response.json();
+
+    return data.recommendations;
+}

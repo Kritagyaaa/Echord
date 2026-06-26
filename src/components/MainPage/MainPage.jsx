@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './MainPage.module.css';
 import placeholder from "../../assets/music-placeholder.jpg";
 import { getSongs } from "../../services/api";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 
 
 const QUICK_PICKS = [

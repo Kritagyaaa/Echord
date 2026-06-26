@@ -8,7 +8,7 @@ import {
 
 import { getSongStream } from "../services/api";
 
-const PlayerContext = createContext();
+const playercontext = createContext();
 
 export function PlayerProvider({ children }) {
 
@@ -135,7 +135,7 @@ console.log("STREAM URL:", streamUrl);
 
     return (
 
-        <PlayerContext.Provider
+        <playercontext.Provider
             value={{
                 queue,
                 currentSong,
@@ -153,13 +153,13 @@ console.log("STREAM URL:", streamUrl);
 
             {children}
 
-        </PlayerContext.Provider>
+        </playercontext.Provider>
 
     );
 }
 
 export function usePlayer() {
 
-    return useContext(PlayerContext);
+    return useContext(playercontext);
 
 }

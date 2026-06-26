@@ -17,6 +17,7 @@ console.log("DB_NAME:", process.env.DB_NAME);
 
 // Import Routes
 const songRoutes = require("./routes/songRoutes");
+const recommendationRoutes = require("./routes/recommendationRoutes");
 
 // Middleware
 app.use(cors());
@@ -32,6 +33,7 @@ app.get("/api/health", (req, res) => {
 
 // Register Routes
 app.use("/api/songs", songRoutes);
+app.use("/api/recommend", recommendationRoutes);
 
 // 404 Handler
 app.use((req, res) => {

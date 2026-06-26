@@ -162,7 +162,7 @@ console.log("STREAM URL:", streamUrl);
             }));
         } catch (err) {
             console.error("Failed to toggle like:", err);
-            throw err;
+            alert(err.message || "Please log in to like songs!");
         }
     };
 

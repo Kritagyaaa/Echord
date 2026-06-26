@@ -30,8 +30,8 @@ async function getAllSongs(req, res) {
                 s.b2_key,
                 s.cover_url AS cover_url,
                 s.play_count,
+                s.like_count AS like_count,
                 s.created_at,
-                (SELECT COUNT(*) FROM likes WHERE song_id = s.id) AS like_count,
                 IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
             LEFT JOIN artists a
@@ -132,12 +132,22 @@ async function toggleLikeSong(req, res) {
                 "DELETE FROM likes WHERE user_id = ? AND song_id = ?",
                 [userId, id]
             );
+            // Decrement like_count in songs table
+            await pool.query(
+                "UPDATE songs SET like_count = CASE WHEN like_count > 0 THEN like_count - 1 ELSE 0 END WHERE id = ?",
+                [id]
+            );
             return res.status(200).json({ success: true, liked: false });
         } else {
             // Like
             await pool.query(
                 "INSERT INTO likes (user_id, song_id) VALUES (?, ?)",
                 [userId, id]
+            );
+            // Increment like_count in songs table
+            await pool.query(
+                "UPDATE songs SET like_count = like_count + 1 WHERE id = ?",
+                [id]
             );
             return res.status(200).json({ success: true, liked: true });
         }

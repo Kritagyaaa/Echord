@@ -27,6 +27,7 @@ export function PlayerBar() {
     currentTime,
     duration,
     seek,
+    volume,
     setVolume,
     toggleLike,
   } = usePlayer();
@@ -180,7 +181,7 @@ export function PlayerBar() {
           min={0}
           max={1}
           step={0.01}
-          defaultValue={1}
+          value={volume}
           onChange={(e) =>
             setVolume(Number(e.target.value))
           }

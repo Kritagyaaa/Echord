@@ -26,9 +26,12 @@ export function PlayerProvider({ children }) {
 
     const [duration, setDuration] = useState(0);
 
+    const [volume, setVolumeState] = useState(0.3);
+
     useEffect(() => {
 
         const audio = audioRef.current;
+        audio.volume = volume; // Start song at 30% volume
 
         audio.ontimeupdate = () => {
 
@@ -68,6 +71,7 @@ export function PlayerProvider({ children }) {
 
 console.log("STREAM URL:", streamUrl);
             audioRef.current.src = streamUrl;
+            audioRef.current.volume = volume;
 
             await audioRef.current.play();
 
@@ -134,6 +138,7 @@ console.log("STREAM URL:", streamUrl);
     const setVolume = (value) => {
 
         audioRef.current.volume = value;
+        setVolumeState(value);
 
     };
 
@@ -180,6 +185,7 @@ console.log("STREAM URL:", streamUrl);
                 nextSong,
                 previousSong,
                 seek,
+                volume,
                 setVolume,
                 toggleLike,
             }}

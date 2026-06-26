@@ -1,5 +1,6 @@
 import styles from "./PlaylistView.module.css";
 import { Play } from "lucide-react";
+import placeholder from "../../assets/music-placeholder.jpg";
 
 export function PlaylistView({ playlist }) {
   if (!playlist) {
@@ -18,7 +19,7 @@ export function PlaylistView({ playlist }) {
     <div className={styles.container}>
       <div className={styles.header}>
         <img
-          src={playlist.image}
+          src={playlist.image || placeholder}
           alt={playlist.title}
           className={styles.cover}
         />

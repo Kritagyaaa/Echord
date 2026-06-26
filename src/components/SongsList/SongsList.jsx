@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Music } from "lucide-react";
+import { Music, Heart } from "lucide-react";
 import styles from "./SongsList.module.css";
 
-import { getSongs } from "../../services/api";
+import { getSongs, toggleLikeSong } from "../../services/api";
 import { usePlayer } from "../../context/PlayerContext";
 
 export function SongsList() {
@@ -27,6 +27,26 @@ export function SongsList() {
 
     fetchSongs();
   }, []);
+
+  const handleLikeToggle = async (e, songId) => {
+    e.stopPropagation(); // Avoid triggering playSong on card click
+    try {
+      const res = await toggleLikeSong(songId);
+      setSongs(prevSongs => prevSongs.map(s => {
+        if (s.id === songId) {
+          return {
+            ...s,
+            is_liked: res.liked ? 1 : 0,
+            like_count: res.liked ? (s.like_count || 0) + 1 : Math.max(0, (s.like_count || 0) - 1)
+          };
+        }
+        return s;
+      }));
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to toggle like.");
+    }
+  };
 
   if (loading) {
     return (
@@ -65,6 +85,7 @@ export function SongsList() {
             <div
               key={song.id}
               className={styles.songCard}
+              onClick={() => playSong(song, songs)}
             >
               <img
                 src={
@@ -99,12 +120,24 @@ export function SongsList() {
                 </div>
               </div>
 
-              <button
-                className={styles.playButton}
-                onClick={() => playSong(song, songs)}
-              >
-                {playing ? "⏸" : <Music size={20} />}
-              </button>
+              <div className={styles.songControls}>
+                <button
+                  className={`${styles.likeButton} ${song.is_liked ? styles.liked : ''}`}
+                  onClick={(e) => handleLikeToggle(e, song.id)}
+                >
+                  <Heart size={18} fill={song.is_liked ? "#1db954" : "none"} color={song.is_liked ? "#1db954" : "#b3b3b3"} />
+                </button>
+
+                <button
+                  className={styles.playButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSong(song, songs);
+                  }}
+                >
+                  {playing ? "⏸" : <Music size={20} />}
+                </button>
+              </div>
             </div>
           );
         })}

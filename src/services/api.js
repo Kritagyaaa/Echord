@@ -1,7 +1,13 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function getSongs() {
-    const response = await fetch(`${API_URL}/songs`);
+    const token = localStorage.getItem('token');
+    const headers = {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_URL}/songs`, { headers });
 
     if (!response.ok) {
         throw new Error("Failed to fetch songs");
@@ -39,4 +45,23 @@ export async function getSongStream(songId) {
     const data = await response.json();
 
     return data.streamUrl;
+}
+
+export async function toggleLikeSong(songId) {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error("Unauthorized: Please log in first.");
+
+    const response = await fetch(`${API_URL}/songs/${songId}/like`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "Failed to toggle like");
+    }
+
+    return await response.json();
 }

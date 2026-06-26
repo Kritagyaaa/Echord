@@ -1,5 +1,5 @@
 import {
-  CheckCircle2,
+    Heart,
   ListMusic,
   Maximize2,
   Mic2,
@@ -15,6 +15,7 @@ import {
 
 import styles from "./PlayerBar.module.css";
 import { usePlayer } from "../../context/PlayerContext";
+import placeholder from "../../assets/music-placeholder.jpg";
 
 export function PlayerBar() {
   const {
@@ -26,7 +27,9 @@ export function PlayerBar() {
     currentTime,
     duration,
     seek,
+    volume,
     setVolume,
+    toggleLike,
   } = usePlayer();
 
   // Nothing selected yet
@@ -60,7 +63,7 @@ export function PlayerBar() {
           className={styles.albumCover}
           src={
             currentSong.cover_url ||
-            "https://placehold.co/64x64?text=♪"
+            placeholder
           }
           alt={currentSong.title}
         />
@@ -71,12 +74,15 @@ export function PlayerBar() {
         </div>
 
         <button
-          className={styles.savedButton}
+          className={`${styles.savedButton} ${currentSong.is_liked ? styles.liked : ''}`}
           type="button"
+          onClick={toggleLike}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
-          <CheckCircle2
+          <Heart
             size={19}
-            fill="#1db954"
+            fill={currentSong.is_liked ? "#1db954" : "none"}
+            color={currentSong.is_liked ? "#1db954" : "#b3b3b3"}
             strokeWidth={2.2}
           />
         </button>
@@ -175,7 +181,7 @@ export function PlayerBar() {
           min={0}
           max={1}
           step={0.01}
-          defaultValue={1}
+          value={volume}
           onChange={(e) =>
             setVolume(Number(e.target.value))
           }

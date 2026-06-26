@@ -1,5 +1,7 @@
 const pool = require("../db");
 const b2Service = require("../services/b2Service");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET || 'meowsick-secret-key-123';
 
 /* ==========================
    GET ALL SONGS
@@ -7,6 +9,17 @@ const b2Service = require("../services/b2Service");
 
 async function getAllSongs(req, res) {
     try {
+        let userId = null;
+        const authHeader = req.headers['authorization'];
+        if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
+            const token = authHeader.split(' ')[1];
+            try {
+                const decoded = jwt.verify(token, JWT_SECRET);
+                userId = decoded.id;
+            } catch (e) {
+                // Ignore token errors and treat as guest
+            }
+        }
 
         const [songs] = await pool.query(`
             SELECT
@@ -21,7 +34,9 @@ async function getAllSongs(req, res) {
                 s.b2_key,
                 s.cover_url,
                 s.play_count,
-                s.created_at
+                s.like_count AS like_count,
+                s.created_at,
+                IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
             LEFT JOIN artists a
                 ON s.artist_id = a.id
@@ -30,7 +45,7 @@ async function getAllSongs(req, res) {
             LEFT JOIN genres g
                 ON s.genre_id = g.id
             ORDER BY s.id DESC
-        `);
+        `, [userId, userId]);
 
         res.status(200).json({
             success: true,
@@ -148,6 +163,12 @@ async function streamSong(req, res) {
 
         const { id } = req.params;
 
+        // Increment play_count
+        await pool.query(
+            "UPDATE songs SET play_count = play_count + 1 WHERE id = ?",
+            [id]
+        );
+
         const [songs] = await pool.query(
             `
             SELECT
@@ -191,8 +212,51 @@ async function streamSong(req, res) {
     }
 }
 
+async function toggleLikeSong(req, res) {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+
+        // Check if like exists
+        const [likes] = await pool.query(
+            "SELECT * FROM likes WHERE user_id = ? AND song_id = ?",
+            [userId, id]
+        );
+
+        if (likes.length > 0) {
+            // Unlike
+            await pool.query(
+                "DELETE FROM likes WHERE user_id = ? AND song_id = ?",
+                [userId, id]
+            );
+            // Decrement like_count in songs table
+            await pool.query(
+                "UPDATE songs SET like_count = CASE WHEN like_count > 0 THEN like_count - 1 ELSE 0 END WHERE id = ?",
+                [id]
+            );
+            return res.status(200).json({ success: true, liked: false });
+        } else {
+            // Like
+            await pool.query(
+                "INSERT INTO likes (user_id, song_id) VALUES (?, ?)",
+                [userId, id]
+            );
+            // Increment like_count in songs table
+            await pool.query(
+                "UPDATE songs SET like_count = like_count + 1 WHERE id = ?",
+                [id]
+            );
+            return res.status(200).json({ success: true, liked: true });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
 module.exports = {
     getAllSongs,
     searchSongs,
     streamSong,
+    toggleLikeSong,
 };

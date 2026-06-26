@@ -139,6 +139,10 @@
   flex: 0 0 auto;
 }
 
+.liked {
+  color: #1db954;
+}
+
 .progressSection {
   width: min(100%, 560px);
   gap: 10px;

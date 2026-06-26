@@ -9,10 +9,13 @@ async function getAllSongs(req, res) {
                 s.id,
                 s.title,
                 a.name AS artist,
+                a.bio AS artist_bio,
+                a.cover_url AS artist_image,
                 al.title AS album,
                 g.name AS genre,
                 s.duration,
                 s.b2_key,
+                s.cover_url AS cover_url,
                 s.play_count,
                 s.created_at
             FROM songs s

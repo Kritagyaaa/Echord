@@ -112,7 +112,6 @@
   cursor: pointer;
   color: #000;
   transition: all 0.2s ease;
-  align-self: flex-end;
 }
 
 .playButton:hover {
@@ -122,4 +121,46 @@
 
 .playButton:active {
   transform: scale(0.95);
+}
+
+.songControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.likeButton {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #b3b3b3;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.likeButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.likeButton.liked {
+  color: #1db954;
+}
+
+.likeCount {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.playCount {
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  color: #a7a7a7;
 }

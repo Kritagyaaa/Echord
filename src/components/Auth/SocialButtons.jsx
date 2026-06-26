@@ -40,13 +40,13 @@ const SOCIAL_ICONS = {
   ),
 };
 
-export function SocialButtons({ authType = 'login' }) {
+export function SocialButtons({ authType = 'login', onPhoneLoginClick, onGoogleClick }) {
   const loginText = authType === 'login' ? 'login with' : 'sign up with';
 
   return (
     <>
       {/* Phone Number Button */}
-      <button className="social-btn phone-btn">
+      <button className="social-btn phone-btn" onClick={onPhoneLoginClick}>
         <span className="social-icon">
           <Phone size={18} />
         </span>
@@ -54,7 +54,7 @@ export function SocialButtons({ authType = 'login' }) {
       </button>
 
       {/* Google Button */}
-      <button className="social-btn google-btn">
+      <button className="social-btn google-btn" onClick={onGoogleClick}>
         <span className="social-icon">{SOCIAL_ICONS.google}</span>
         {authType === 'login' ? 'Continue with' : 'Sign up with'} Google
       </button>

@@ -1,58 +1,199 @@
+import { useEffect } from "react";
+import { searchSongs } from "./services/api";
+import styles from './App.module.css';
+import { useState } from "react";
+import { Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
 import { Header } from './components/Header/Header.jsx';
 import { LibrarySidebar } from './components/LibrarySidebar/LibrarySidebar.jsx';
 import { PlayerBar } from './components/PlayerBar/PlayerBar.jsx';
 import { RightSidebar } from './components/RightSidebar/RightSidebar.jsx';
 import { MainPage } from './components/MainPage';
-import styles from './App.module.css';
-import { useState } from "react";
 import { PlaylistView } from "./components/PlaylistView/PlaylistView";
-
 import Login from './components/Auth/Login.jsx';
 import SignUp from './components/Auth/SignUp.jsx';
+import AccountPage from './components/Auth/AccountPage.jsx';
 
 function App() {
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
-  const path = window.location.pathname;
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [user, setUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || 'null');
+    } catch {
+      return null;
+    }
+  });
 
-  // Auth Routes
-  if (path.includes("/auth/signup")) {
-    return <SignUp />;
-  }
+  const navigate = useNavigate();
 
-  if (path.includes("/auth")) {
-    return <Login />;
-  }
+  useEffect(() => {
 
-  // Home Page
-  return (
-    <div className={styles.appFrame}>
+  const timer = setTimeout(async () => {
+
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+
+      const results = await searchSongs(searchQuery);
+
+      setSearchResults(results);
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  }, 300);
+
+  return () => clearTimeout(timer);
+
+}, [searchQuery]);
+  const handleLoginSuccess = (token, loggedInUser) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(loggedInUser));
+    setUser(loggedInUser);
+    setIsAuthenticated(true);
+    navigate('/');
+  };
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        await fetch('http://localhost:5000/api/auth/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate('/login');
+  };
+
+  // Protected Layout component that renders the full Spotify layout
+  const AppLayout = () => {
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace />;
+    }
+
+    return (
+      <div className={styles.appFrame}>
       <Header
-        onHomeClick={() => setSelectedPlaylist(null)}
+  onHomeClick={() => {
+    setSelectedPlaylist(null);
+    setSearchQuery("");
+    navigate("/");
+  }}
+  user={user}
+  onLogout={handleLogout}
+  onAccountClick={() => navigate("/profile")}
+  searchQuery={searchQuery}
+  setSearchQuery={setSearchQuery}
+/>
+
+        <div className={styles.appShell}>
+          <LibrarySidebar
+            onPlaylistSelect={(playlist) => {
+              setSelectedPlaylist(playlist);
+              navigate('/');
+            }}
+            selectedPlaylist={selectedPlaylist}
+          />
+          <main
+            className={styles.mainPlaceholder}
+            aria-label="Main content"
+          >
+            <Outlet />
+          </main>
+
+          <RightSidebar />
+        </div>
+
+        <PlayerBar />
+      </div>
+    );
+  };
+
+  return (
+    <Routes>
+      {/* Public/Guest Routes */}
+      <Route
+        path="/login"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/" replace />
+          ) : (
+            <Login
+              onShowSignUp={() => navigate('/signup')}
+              onLoginSuccess={handleLoginSuccess}
+            />
+          )
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/" replace />
+          ) : (
+            <SignUp
+              onShowLogin={() => navigate('/login')}
+              onSignUpSuccess={() => navigate('/login')}
+              onLoginSuccess={handleLoginSuccess}
+            />
+          )
+        }
       />
 
-      <div className={styles.appShell}>
-        <LibrarySidebar
-          onPlaylistSelect={setSelectedPlaylist}
-          selectedPlaylist={selectedPlaylist}
+      {/* Legacy auth route compatibility */}
+      <Route path="/auth" element={<Navigate to="/login" replace />} />
+      <Route path="/auth/signup" element={<Navigate to="/signup" replace />} />
+
+      {/* Protected Routes inside the App Layout */}
+      <Route element={<AppLayout />}>
+        <Route
+          path="/"
+          element={
+            selectedPlaylist ? (
+              <PlaylistView playlist={selectedPlaylist} />
+            ) : (
+             <MainPage
+    searchQuery={searchQuery}
+    searchResults={searchResults}
+/>
+            )
+          }
         />
+        <Route
+          path="/profile"
+          element={
+            <AccountPage
+              user={user}
+              onProfileUpdate={(updated) => setUser(updated)}
+              onBackToMain={() => {
+                setSelectedPlaylist(null);
+                navigate('/');
+              }}
+            />
+          }
+        />
+      </Route>
 
-        <main
-          className={styles.mainPlaceholder}
-          aria-label="Main content"
-        >
-          {selectedPlaylist ? (
-            <PlaylistView playlist={selectedPlaylist} />
-          ) : (
-            <MainPage />
-          )}
-        </main>
-
-        <RightSidebar />
-      </div>
-
-      <PlayerBar />
-    </div>
+      {/* Fallback route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

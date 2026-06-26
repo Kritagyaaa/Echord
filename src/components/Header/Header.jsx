@@ -10,18 +10,37 @@ import {
   Check,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 
-export function Header({ onHomeClick }) {
+export function Header({
+  onHomeClick,
+  user,
+  onLogout,
+  onAccountClick,
+  searchQuery,
+  setSearchQuery,
+}) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className={styles.navbar} aria-label="Main navigation">
       <div className={styles.left}>
-        <button className={styles.iconButton} type="button" aria-label="Go back">
+        <button 
+          className={styles.iconButton} 
+          type="button" 
+          aria-label="Go back"
+          onClick={() => navigate(-1)}
+        >
           <ChevronLeft size={22} strokeWidth={2.4} />
         </button>
-        <button className={styles.iconButton} type="button" aria-label="Go forward">
+        <button 
+          className={styles.iconButton} 
+          type="button" 
+          aria-label="Go forward"
+          onClick={() => navigate(1)}
+        >
           <ChevronRight size={22} strokeWidth={2.4} />
         </button>
       </div>
@@ -38,7 +57,13 @@ export function Header({ onHomeClick }) {
 
         <label className={styles.searchBox}>
           <Search size={22} strokeWidth={2.2} />
-          <input type="text" placeholder="What do you want to play?" aria-label="Search music" />
+          <input
+  type="text"
+  placeholder="What do you want to play?"
+  aria-label="Search music"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+/>
           <Briefcase size={22} strokeWidth={2.1} />
         </label>
       </div>
@@ -52,7 +77,7 @@ export function Header({ onHomeClick }) {
         </button>
         <div className={styles.profileWrapper}>
           <img
-            src="https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"
+            src={user?.profile_picture || "https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"}
             alt="Profile"
             className={styles.profile}
             onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -63,11 +88,18 @@ export function Header({ onHomeClick }) {
           />
           {showProfileMenu && (
             <div className={styles.profileMenu} role="menu">
-              <div className={styles.menuItem} role="menuitem">
+              <div
+                className={styles.menuItem}
+                role="menuitem"
+                onClick={() => {
+                  setShowProfileMenu(false);
+                  onAccountClick?.();
+                }}
+                style={{ cursor: 'pointer' }}
+              >
                 <span>Account</span>
                 <ExternalLink size={16} />
               </div>
-              <div className={styles.menuItem} role="menuitem">Profile</div>
               <div className={styles.menuItem} role="menuitem">Recents</div>
               <div className={styles.menuItem} role="menuitem">
                 <span>Support</span>
@@ -78,7 +110,7 @@ export function Header({ onHomeClick }) {
                 <ExternalLink size={16} />
               </div>
               <div className={styles.menuItem} role="menuitem">Settings</div>
-              <div className={styles.menuItem} role="menuitem">Log out</div>
+              <div className={styles.menuItem} role="menuitem" onClick={onLogout} style={{ cursor: 'pointer' }}>Log out</div>
               <hr className={styles.divider} />
               <div className={styles.updatesSection}>
                 <h3>Your Updates</h3>

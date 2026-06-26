@@ -5,6 +5,10 @@ const pool = require('./db');
 async function viewDatabase() {
   try {
     const tables = [
+      'users',
+      'sessions',
+      'login_activity',
+      'otp_verifications',
       'artists',
       'albums',
       'genres',

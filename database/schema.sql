@@ -180,3 +180,76 @@ CREATE INDEX idx_song_album ON songs(album_id);
 CREATE INDEX idx_song_genre ON songs(genre_id);
 
 CREATE INDEX idx_song_playcount ON songs(play_count);
+
+-- =========================
+-- USERS (AUTH)
+-- =========================
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone_number VARCHAR(50),
+  password VARCHAR(255),
+  profile_picture VARCHAR(500),
+  role VARCHAR(20) DEFAULT 'user' CHECK(role IN ('user', 'admin')),
+  is_verified BOOLEAN DEFAULT 0,
+  is_google_user BOOLEAN DEFAULT 0,
+  google_id VARCHAR(255),
+  last_login DATETIME,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- =========================
+-- SESSIONS
+-- =========================
+CREATE TABLE IF NOT EXISTS sessions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  token TEXT NOT NULL,
+  device_info TEXT,
+  ip_address VARCHAR(45),
+  is_active BOOLEAN DEFAULT 1,
+  expires_at DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+-- =========================
+-- LOGIN ACTIVITY
+-- =========================
+CREATE TABLE IF NOT EXISTS login_activity (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  ip_address VARCHAR(45),
+  device_info TEXT,
+  status VARCHAR(20) CHECK(status IN ('success', 'failed')) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+-- =========================
+-- OTP VERIFICATIONS
+-- =========================
+CREATE TABLE IF NOT EXISTS otp_verifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  otp_code VARCHAR(20) NOT NULL,
+  purpose VARCHAR(20) CHECK(purpose IN ('login', 'reset', 'verify')) NOT NULL,
+  is_used BOOLEAN DEFAULT 0,
+  expires_at DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+-- =========================
+-- PASSWORD RESET TOKENS
+-- =========================
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  token VARCHAR(255) NOT NULL,
+  expires_at DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);

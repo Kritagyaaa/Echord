@@ -1,11 +1,11 @@
 import {
-  CheckCircle2,
+    Heart,
   ListMusic,
   Maximize2,
   Mic2,
   MonitorSpeaker,
-  PauseCircle,
-  PlayCircle,
+  Pause,
+  Play,
   Repeat2,
   Shuffle,
   SkipBack,
@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 
 import styles from "./PlayerBar.module.css";
-import { usePlayer } from "../../context/playercontext";
+import { usePlayer } from "../../context/PlayerContext";
+import placeholder from "../../assets/music-placeholder.jpg";
 
 export function PlayerBar() {
   const {
@@ -26,7 +27,9 @@ export function PlayerBar() {
     currentTime,
     duration,
     seek,
+    volume,
     setVolume,
+    toggleLike,
   } = usePlayer();
 
   // Nothing selected yet
@@ -60,7 +63,7 @@ export function PlayerBar() {
           className={styles.albumCover}
           src={
             currentSong.cover_url ||
-            "https://placehold.co/64x64?text=♪"
+            placeholder
           }
           alt={currentSong.title}
         />
@@ -71,12 +74,15 @@ export function PlayerBar() {
         </div>
 
         <button
-          className={styles.savedButton}
+          className={`${styles.savedButton} ${currentSong.is_liked ? styles.liked : ''}`}
           type="button"
+          onClick={toggleLike}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
-          <CheckCircle2
+          <Heart
             size={19}
-            fill="#1db954"
+            fill={currentSong.is_liked ? "#1db954" : "none"}
+            color={currentSong.is_liked ? "#1db954" : "#b3b3b3"}
             strokeWidth={2.2}
           />
         </button>
@@ -85,9 +91,7 @@ export function PlayerBar() {
       {/* CENTER */}
       <div className={styles.playerCenter}>
         <div className={styles.controls}>
-          <button
-            className={styles.controlButton}
-          >
+          <button className={styles.controlButton}>
             <Shuffle size={18} />
           </button>
 
@@ -106,16 +110,19 @@ export function PlayerBar() {
             onClick={togglePlay}
           >
             {isPlaying ? (
-              <PauseCircle
-                size={40}
-                fill="currentColor"
-              />
-            ) : (
-              <PlayCircle
-                size={40}
-                fill="currentColor"
-              />
-            )}
+    <div className={styles.pauseIcon}>
+        <span></span>
+        <span></span>
+    </div>
+) : (
+    <Play
+        size={18}
+        fill="black"
+        color="black"
+        strokeWidth={2.5}
+        className={styles.playIcon}
+    />
+)}
           </button>
 
           <button
@@ -128,9 +135,7 @@ export function PlayerBar() {
             />
           </button>
 
-          <button
-            className={styles.controlButton}
-          >
+          <button className={styles.controlButton}>
             <Repeat2 size={18} />
           </button>
         </div>
@@ -154,27 +159,19 @@ export function PlayerBar() {
 
       {/* RIGHT */}
       <div className={styles.extras}>
-        <button
-          className={styles.controlButton}
-        >
+        <button className={styles.controlButton}>
           <Mic2 size={18} />
         </button>
 
-        <button
-          className={styles.controlButton}
-        >
+        <button className={styles.controlButton}>
           <ListMusic size={18} />
         </button>
 
-        <button
-          className={styles.controlButton}
-        >
+        <button className={styles.controlButton}>
           <MonitorSpeaker size={18} />
         </button>
 
-        <button
-          className={styles.controlButton}
-        >
+        <button className={styles.controlButton}>
           <Volume2 size={18} />
         </button>
 
@@ -184,15 +181,13 @@ export function PlayerBar() {
           min={0}
           max={1}
           step={0.01}
-          defaultValue={1}
+          value={volume}
           onChange={(e) =>
             setVolume(Number(e.target.value))
           }
         />
 
-        <button
-          className={styles.controlButton}
-        >
+        <button className={styles.controlButton}>
           <Maximize2 size={17} />
         </button>
       </div>

@@ -1,6 +1,7 @@
 import { ListFilter, Plus, Search } from 'lucide-react';
 import styles from './LibrarySidebar.module.css';
 import { playlists } from '../../data/playlists';
+import placeholder from '../../assets/music-placeholder.jpg';
 
 
 const filters = ['Playlists', 'Artists', 'Albums', 'Podcasts'];
@@ -52,7 +53,7 @@ export function LibrarySidebar({
   key={item.id}
   onClick={() => onPlaylistSelect(item)}
 >
-            <img src={item.image} alt="" />
+            <img src={item.image || placeholder} alt="" />
             <span className={styles.itemInfo}>
               <span className={styles.itemTitle}>{item.title}</span>
               <span className={styles.itemSubtitle}>{item.subtitle}</span>

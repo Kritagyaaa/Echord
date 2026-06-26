@@ -8,14 +8,14 @@ const {
     streamSong,
     toggleLikeSong,
 } = require("../controllers/songController");
-// const expressAuth = async (req, res, next) => {
-//     try {
-//         await authenticateRequest(req);
-//         next();
-//     } catch (error) {
-//         res.status(error.statusCode || 401).json({ error: error.message });
-//     }
-// };
+const expressAuth = async (req, res, next) => {
+    try {
+        await authenticateRequest(req);
+        next();
+    } catch (error) {
+        res.status(error.statusCode || 401).json({ error: error.message });
+    }
+};
 /* ==========================
    GET ALL SONGS
 ========================== */

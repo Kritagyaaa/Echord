@@ -8,7 +8,7 @@ import {
 
 import { getSongStream, toggleLikeSong } from "../services/api";
 
-const PlayerContext = createContext();
+const playercontext = createContext();
 
 export function PlayerProvider({ children }) {
 
@@ -18,15 +18,13 @@ export function PlayerProvider({ children }) {
 
     const [currentSong, setCurrentSong] = useState(null);
 
-    const [currentIndex, setCurrentIndex] = useState(-1);
-
     const [isPlaying, setIsPlaying] = useState(false);
 
     const [currentTime, setCurrentTime] = useState(0);
 
     const [duration, setDuration] = useState(0);
 
-    const [volume, setVolumeState] = useState(0.3);
+    const [volume, setVolumeState] = useState(0.20);
 
     useEffect(() => {
 
@@ -59,17 +57,14 @@ export function PlayerProvider({ children }) {
 
             if (playlist.length > 0) {
 
-                setQueue(playlist);
-
-                setCurrentIndex(
-                    playlist.findIndex((s) => s.id === song.id)
-                );
-
+             if (playlist.length > 0) {
+          setQueue(playlist);
+}
             }
 
             const streamUrl = await getSongStream(song.id);
 
-console.log("STREAM URL:", streamUrl);
+            console.log("STREAM URL:", streamUrl);
             audioRef.current.src = streamUrl;
             audioRef.current.volume = volume;
 
@@ -110,22 +105,38 @@ console.log("STREAM URL:", streamUrl);
         }
 
     };
+   const nextSong = () => {
 
-    const nextSong = () => {
+    console.log("========== NEXT ==========");
+    console.log("Queue:", queue);
+    console.log("Current Song:", currentSong);
 
-        if (currentIndex + 1 >= queue.length) return;
+    const index = queue.findIndex(
+        song => song.id === currentSong.id
+    );
 
-        playSong(queue[currentIndex + 1], queue);
+    console.log("Index:", index);
 
-    };
+    if (index === -1) return;
+
+    if (index === queue.length - 1) return;
+
+    playSong(queue[index + 1], queue);
+};
 
     const previousSong = () => {
 
-        if (currentIndex <= 0) return;
+    if (!currentSong || queue.length === 0) return;
 
-        playSong(queue[currentIndex - 1], queue);
+    const index = queue.findIndex(
+        song => song.id === currentSong.id
+    );
 
-    };
+    if (index <= 0) return;
+
+    playSong(queue[index - 1], queue);
+
+};
 
     const seek = (value) => {
 
@@ -173,7 +184,7 @@ console.log("STREAM URL:", streamUrl);
 
     return (
 
-        <PlayerContext.Provider
+        <playercontext.Provider
             value={{
                 queue,
                 currentSong,
@@ -193,13 +204,13 @@ console.log("STREAM URL:", streamUrl);
 
             {children}
 
-        </PlayerContext.Provider>
+        </playercontext.Provider>
 
     );
 }
 
 export function usePlayer() {
 
-    return useContext(PlayerContext);
+    return useContext(playercontext);
 
 }

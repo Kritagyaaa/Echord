@@ -19,6 +19,7 @@ console.log("DB_NAME:", process.env.DB_NAME);
 
 // Import Routes
 const songRoutes = require("./routes/songRoutes");
+const recommendationRoutes = require("./routes/recommendationRoutes");
 
 // Middleware
 app.use(cors());
@@ -66,6 +67,7 @@ app.put("/api/admin/users/:userId/role", expressAuth, (req, res) => auth.handleA
 
 // Register Routes
 app.use("/api/songs", songRoutes);
+app.use("/api/recommend", recommendationRoutes);
 
 // Database Viewer (HTML)
 app.get("/db-viewer", async (req, res) => {

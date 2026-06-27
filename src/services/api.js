@@ -19,10 +19,21 @@ export async function getSongs() {
 }
 
 export async function searchSongs(query, options = {}) {
+    const token = localStorage.getItem('token');
+    const headers = {
+        ...(options.headers || {})
+    };
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
 
     const response = await fetch(
         `${API_URL}/songs/search?q=${encodeURIComponent(query)}`,
-        options
+        {
+            ...options,
+            headers
+        }
     );
 
     if (!response.ok) {
@@ -46,6 +57,19 @@ export async function getSongStream(songId) {
     const data = await response.json();
 
     return data.streamUrl;
+}
+
+export async function getContentRecommendations(songId) {
+
+    const response = await fetch(`${API_URL}/recommend/content/${songId}`);
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch recommendations");
+    }
+
+    const data = await response.json();
+
+    return data.recommendations;
 }
 
 export async function toggleLikeSong(songId) {

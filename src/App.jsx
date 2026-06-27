@@ -98,7 +98,8 @@ function App() {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await fetch('http://localhost:5000/api/auth/logout', {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        await fetch(`${apiUrl}/auth/logout`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });

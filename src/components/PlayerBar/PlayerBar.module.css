@@ -211,3 +211,10 @@
     background: #000;
     border-radius: 2px;
 }
+
+/* Disabled / idle state */
+.disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}

@@ -2,6 +2,7 @@ import { usePlayer } from '../../context/PlayerContext';
 import { AboutArtistCard } from '../cards/AboutArtistCard.jsx';
 import { CreditsCard } from '../cards/CreditsCard.jsx';
 import { NowPlayingCard } from '../cards/NowPlayingCard.jsx';
+import { RecommendationCard } from '../cards/recommendationCard.jsx';
 import { SidebarHeader } from './SidebarHeader.jsx';
 import styles from './RightSidebar.module.css';
 import placeholder from '../../assets/music-placeholder.jpg';
@@ -57,6 +58,7 @@ export function RightSidebar() {
         <NowPlayingCard song={songData} />
         <AboutArtistCard artist={songData.artistInfo} />
         <CreditsCard credits={songData.credits} />
+        <RecommendationCard />
       </div>
     </aside>
   );

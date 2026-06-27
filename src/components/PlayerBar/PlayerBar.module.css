@@ -218,3 +218,11 @@
   cursor: not-allowed !important;
   pointer-events: none;
 }
+
+.activeControl {
+  color: #1db954 !important;
+}
+
+.activeControl:hover {
+  color: #1ed760 !important;
+}

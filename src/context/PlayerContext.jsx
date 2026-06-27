@@ -28,6 +28,9 @@ export function PlayerProvider({ children }) {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const [isShuffle, setIsShuffle] = useState(() => localStorage.getItem('is_shuffle') === 'true');
+    const [isRepeat, setIsRepeat] = useState(() => localStorage.getItem('is_repeat') === 'true');
+
     const toggleExpand = () => {
         setIsExpanded(prev => !prev);
     };
@@ -35,6 +38,26 @@ export function PlayerProvider({ children }) {
     // Keep mutable refs of state to avoid stale closure issues in event listeners
     const queueRef = useRef([]);
     const currentSongRef = useRef(null);
+    const isShuffleRef = useRef(localStorage.getItem('is_shuffle') === 'true');
+    const isRepeatRef = useRef(localStorage.getItem('is_repeat') === 'true');
+
+    const toggleShuffle = () => {
+        setIsShuffle(prev => {
+            const next = !prev;
+            isShuffleRef.current = next;
+            localStorage.setItem('is_shuffle', next.toString());
+            return next;
+        });
+    };
+
+    const toggleRepeat = () => {
+        setIsRepeat(prev => {
+            const next = !prev;
+            isRepeatRef.current = next;
+            localStorage.setItem('is_repeat', next.toString());
+            return next;
+        });
+    };
 
     useEffect(() => {
 
@@ -56,7 +79,12 @@ export function PlayerProvider({ children }) {
 
         audio.onended = () => {
 
-            nextSong();
+            if (isRepeatRef.current) {
+                audio.currentTime = 0;
+                audio.play().catch(err => console.error("Repeat play failed:", err));
+            } else {
+                nextSong();
+            }
 
         };
 
@@ -176,19 +204,29 @@ export function PlayerProvider({ children }) {
         console.log("Queue:", q);
         console.log("Current Song:", curr);
 
-        if (!curr) return;
+        if (!curr || q.length === 0) return;
 
-        const index = q.findIndex(
-            song => song.id === curr.id
-        );
+        if (isShuffleRef.current) {
+            let randomIndex = Math.floor(Math.random() * q.length);
+            if (q.length > 1) {
+                while (q[randomIndex]?.id === curr.id) {
+                    randomIndex = Math.floor(Math.random() * q.length);
+                }
+            }
+            playSong(q[randomIndex], q);
+        } else {
+            const index = q.findIndex(
+                song => song.id === curr.id
+            );
 
-        console.log("Index:", index);
+            console.log("Index:", index);
 
-        if (index === -1) return;
+            if (index === -1) return;
 
-        if (index === q.length - 1) return;
+            if (index === q.length - 1) return;
 
-        playSong(q[index + 1], q);
+            playSong(q[index + 1], q);
+        }
     };
 
     const previousSong = () => {
@@ -279,6 +317,10 @@ export function PlayerProvider({ children }) {
                 toggleLike,
                 isExpanded,
                 toggleExpand,
+                isShuffle,
+                toggleShuffle,
+                isRepeat,
+                toggleRepeat,
             }}
         >
 

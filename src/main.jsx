@@ -10,7 +10,7 @@ import { PlayerProvider } from "./context/PlayerContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter basename="/spotify-ghostt">
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <PlayerProvider>
         <App />
       </PlayerProvider>

@@ -18,10 +18,11 @@ export async function getSongs() {
     return data.songs;
 }
 
-export async function searchSongs(query) {
+export async function searchSongs(query, options = {}) {
 
     const response = await fetch(
-        `${API_URL}/songs/search?q=${encodeURIComponent(query)}`
+        `${API_URL}/songs/search?q=${encodeURIComponent(query)}`,
+        options
     );
 
     if (!response.ok) {
@@ -30,7 +31,7 @@ export async function searchSongs(query) {
 
     const data = await response.json();
 
-    return data.songs;
+    return Array.isArray(data.songs) ? data.songs : [];
 }
 
 export async function getSongStream(songId) {

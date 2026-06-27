@@ -50,8 +50,8 @@ const QUICK_PICKS = [
 // ];
 
 export function MainPage({
-    searchQuery,
-    searchResults,
+    searchQuery = "",
+    searchResults = [],
 }) {
   const [showRecentLeftArrow, setShowRecentLeftArrow] = useState(false);
   const [showMixesLeftArrow, setShowMixesLeftArrow] = useState(false);
@@ -98,10 +98,7 @@ const MusicCard = ({ song }) => (
   <div
     className={styles.musicCard}
     onClick={() => {
-      console.log("Card Clicked");
-      console.log(song);
-
-      playSong(song, songs);
+      playSong(song, displayedSongs);
     }}
   >
     <img

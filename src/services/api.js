@@ -19,9 +19,15 @@ export async function getSongs() {
 }
 
 export async function searchSongs(query) {
+    const token = localStorage.getItem('token');
+    const headers = {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
 
     const response = await fetch(
-        `${API_URL}/songs/search?q=${encodeURIComponent(query)}`
+        `${API_URL}/songs/search?q=${encodeURIComponent(query)}`,
+        { headers }
     );
 
     if (!response.ok) {

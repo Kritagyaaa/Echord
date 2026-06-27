@@ -31,30 +31,30 @@ function App() {
 
   useEffect(() => {
 
-  const timer = setTimeout(async () => {
+    const timer = setTimeout(async () => {
 
-    if (!searchQuery.trim()) {
-      setSearchResults([]);
-      return;
-    }
+      if (!searchQuery.trim()) {
+        setSearchResults([]);
+        return;
+      }
 
-    try {
+      try {
 
-      const results = await searchSongs(searchQuery);
+        const results = await searchSongs(searchQuery);
 
-      setSearchResults(results);
+        setSearchResults(results);
 
-    } catch (err) {
+      } catch (err) {
 
-      console.error(err);
+        console.error(err);
 
-    }
+      }
 
-  }, 300);
+    }, 300);
 
-  return () => clearTimeout(timer);
+    return () => clearTimeout(timer);
 
-}, [searchQuery]);
+  }, [searchQuery]);
   const handleLoginSuccess = (token, loggedInUser) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(loggedInUser));
@@ -67,8 +67,7 @@ function App() {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-        await fetch(`${apiUrl}/auth/logout`, {
+        await fetch('http://localhost:5000/api/auth/logout', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -91,18 +90,18 @@ function App() {
 
     return (
       <div className={styles.appFrame}>
-      <Header
-  onHomeClick={() => {
-    setSelectedPlaylist(null);
-    setSearchQuery("");
-    navigate("/");
-  }}
-  user={user}
-  onLogout={handleLogout}
-  onAccountClick={() => navigate("/profile")}
-  searchQuery={searchQuery}
-  setSearchQuery={setSearchQuery}
-/>
+        <Header
+          onHomeClick={() => {
+            setSelectedPlaylist(null);
+            setSearchQuery("");
+            navigate("/");
+          }}
+          user={user}
+          onLogout={handleLogout}
+          onAccountClick={() => navigate("/profile")}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
 
         <div className={styles.appShell}>
           <LibrarySidebar
@@ -170,10 +169,10 @@ function App() {
             selectedPlaylist ? (
               <PlaylistView playlist={selectedPlaylist} />
             ) : (
-             <MainPage
-    searchQuery={searchQuery}
-    searchResults={searchResults}
-/>
+              <MainPage
+                searchQuery={searchQuery}
+                searchResults={searchResults}
+              />
             )
           }
         />

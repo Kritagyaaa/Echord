@@ -36,11 +36,66 @@ export function PlayerBar() {
   if (!currentSong) {
     return (
       <footer className={styles.playerBar}>
+        {/* LEFT – empty state */}
         <div className={styles.track}>
           <div className={styles.songInfo}>
             <h2>No song selected</h2>
             <p>Select a song to play</p>
           </div>
+        </div>
+
+        {/* CENTER – controls (disabled look) */}
+        <div className={styles.playerCenter}>
+          <div className={styles.controls}>
+            <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+              <Shuffle size={18} />
+            </button>
+            <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+              <SkipBack size={22} fill="currentColor" />
+            </button>
+            <button className={`${styles.playButton} ${styles.disabled}`} disabled>
+              <Play size={18} fill="black" color="black" strokeWidth={2.5} className={styles.playIcon} />
+            </button>
+            <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+              <SkipForward size={22} fill="currentColor" />
+            </button>
+            <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+              <Repeat2 size={18} />
+            </button>
+          </div>
+          <div className={styles.progressSection}>
+            <span>0:00</span>
+            <input type="range" min={0} max={0} value={0} disabled />
+            <span>0:00</span>
+          </div>
+        </div>
+
+        {/* RIGHT – extras (disabled look) */}
+        <div className={styles.extras}>
+          <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+            <Mic2 size={18} />
+          </button>
+          <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+            <ListMusic size={18} />
+          </button>
+          <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+            <MonitorSpeaker size={18} />
+          </button>
+          <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+            <Volume2 size={18} />
+          </button>
+          <input
+            className={styles.volumeSlider}
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={(e) => setVolume(Number(e.target.value))}
+          />
+          <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
+            <Maximize2 size={17} />
+          </button>
         </div>
       </footer>
     );

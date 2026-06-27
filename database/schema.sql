@@ -75,6 +75,8 @@ CREATE TABLE songs (
 
     play_count INT DEFAULT 0,
 
+    like_count INT DEFAULT 0,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

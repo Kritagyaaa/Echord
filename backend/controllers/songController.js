@@ -85,6 +85,18 @@ async function searchSongs(req, res) {
             });
         }
 
+        let userId = null;
+        const authHeader = req.headers['authorization'];
+        if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
+            const token = authHeader.split(' ')[1];
+            try {
+                const decoded = jwt.verify(token, JWT_SECRET);
+                userId = decoded.id;
+            } catch (e) {
+                // Ignore token errors and treat as guest
+            }
+        }
+
         const keyword = `%${query}%`;
 
         console.log("Running SQL...");
@@ -103,7 +115,9 @@ async function searchSongs(req, res) {
                 s.b2_key,
                 s.cover_url,
                 s.play_count,
-                s.created_at
+                s.like_count AS like_count,
+                s.created_at,
+                IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
 
             LEFT JOIN artists a
@@ -123,6 +137,8 @@ async function searchSongs(req, res) {
             ORDER BY s.title ASC
             `,
             [
+                userId,
+                userId,
                 keyword,
                 keyword,
                 keyword,

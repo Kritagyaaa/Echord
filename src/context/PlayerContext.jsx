@@ -26,7 +26,7 @@ export function PlayerProvider({ children }) {
 
     const [duration, setDuration] = useState(0);
 
-    const [volume, setVolumeState] = useState(0.3);
+    const [volume, setVolumeState] = useState(0.20);
 
     useEffect(() => {
 
@@ -69,7 +69,7 @@ export function PlayerProvider({ children }) {
 
             const streamUrl = await getSongStream(song.id);
 
-console.log("STREAM URL:", streamUrl);
+            console.log("STREAM URL:", streamUrl);
             audioRef.current.src = streamUrl;
             audioRef.current.volume = volume;
 

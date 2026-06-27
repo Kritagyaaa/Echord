@@ -7,7 +7,7 @@ import { usePlayer } from "../../context/playercontext";
 
 
 const QUICK_PICKS = [
-  { id: 1, img: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0NDQ0NDQ0NDQ0NDQ0HDQ8NDQ0NFREWFiARExYYHSggGCYxGxUVITchJSkrMDouFyAzODcsOSgtLisBCgoKDQ0NFQ8PFSsdFR0rLTcrLysrLSsrLSsrNzAtLCstNysrLisxKzcrLS0tKystLS0tLTAtKystKy0rN//AABEIAOEA4QMBIgACEQEDEQH/xAAbAAEBAAIDAQAAAAAAAAAAAAACAAEDBQYHBP/EADQQAQEAAgADBAgEBgMBAAAAAAEAAgMEESEFMVPRBhJBUVJhkpMTcYGRBxQiMrHBQ1ShQv/EABsBAAMBAQEBAQAAAAAAAAAAAAECAwAEBgUH/8QAJhEBAQACAQMDBAMBAAAAAAAAAAECAxEEUpExMlESEyFBYWKhBf/aAAwDAQACEQMRAD8A85NePw4/sSNWPw4/STCQX6jdWvtnh0cQTTj8OP0kjTh8OP0kwmEl1a+2eG/AGjD4MfpJGjD4MPpLYEgp3Xr7Z4DgDRh8GH0kjh9fh4fSWwJhJdevtngGs4fX4eH04yOG1+Hh9GNtCQSXXh2zwDWcNr8PD6MZHC6vD1/Rj5W0JhTuvDtngGo4XV4ev6MfKRwurwtf0Y+VuCQSXDDtnhmo4TV4Wv6MfKZwurwtf0Y+VuCQSXDDtnhmo4TV4Wv6MfKZwGjwNP2sPK2hMKdww7YDScHp8LV9vHymcHp8LV9vHytwTCS4YfEBoOC0+Dq+3j5TOC0+Dq+3h5W8JBJcMPiA0HA6fB1fbw8pnA6PB0/aw8reEwp3DD4B85wOjwdP2sPKZwGjwNP2sPK3hMJLjj8A+c4DR4Gn7WHlM7P4fwNP2sPK+gJhJccfgHzHZ/D+Bp+1h5Tx7O4f/AK+j7WHlfQFsxOtO44/AcvL/AMHD4MfpLM6vk8QTCYUEwv0O11IJhQSCnaCCYUEwv0O11IJhQSCnaCCYUEgt2ggmFBMKdoIJhQTCS0GAmFkJBTtBBMKCYSWsgkFBMKdoIJhQTCnaCCYUEgktBBMKCYU7QQTCgmEloIJhQTCnaCCYUEwktBBMKCYU7QQTCgmEloIJhQTCnaCCYUEwktBBMKCYU7QQTCgmFO1kE8TrQTxOsloPKKqzfOM+0JhQTC95a6UEwoJBTtBBMKCYU7QQTCgmEloIJBQTCnaCCYT4fRnsyMNeGWeeXdjqxcsn9C7HwnoP2lsPWdevVz9nE7Qy/bHnyufb1GvX78pAdcCQXY+J9CO0dRzNeG33/yuwX9suXP9LgtunPXk4Z45YZHfjsHHI/Rkw369nsylAAmE9GrLPIwwxyzye7HWKv6XP8ACehvaGw9Z14ah7v5nYD+xzT9ZNm7DD3ZcM4AJhc/xHoZ2hrOZhr2cvZw+wX9suVwu3RnrycNmGWGZ347BEp47tefty5KATCgmEbQQTCwEwp2sgmFBMJLQqCYWAmFO0qC2YlgJ4nUp2s8kqzVwnckEwoJBe5tdCCYUEwp2ggmFBIJLQQTCgmFO0EF9vZXZ+zit+vRqOeex5c3uxDq5Py5Xyheifwu4A9TiOKT+pzNGD7sQMnl+5+1x9Z1H2dVynr+gdn7A7B0cDrMNWI7EPxN2Yevsf8AR8rlQqzeTyyyztyyvNoMcri+2+weH43D1duPLM/s26wNmP6+0+VytWxyuN5xvFZxXYfYOjgcOWs9bN/v27A/Ey/X2HyuVqrZZXK85Xmsrje2ex9PGYOO3E9Y5+psxP68H5Pt/K5KrY243merPIO0OA2cNuz07D+', label: 'Liked Songs' },
+  { id: 1, img: 'https://i1.sndcdn.com/artworks-y6qitUuZoS6y8LQo-5s2pPA-t500x500.jpg', label: 'Liked Songs' },
   { id: 2, img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop', label: 'Arijit Singh' },
   { id: 3, img: 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=60&h=60&fit=crop', label: 'Desi Boyz' },
   { id: 4, img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=60&h=60&fit=crop', label: 'Cigarettes After Sex' },
@@ -49,10 +49,7 @@ const QUICK_PICKS = [
 //   { id: 6, img: 'https://i.pinimg.com/736x/4f/02/ec/4f02ec86a0cb37e6f64c319e9c874252.jpg', title: 'Featured 6', artist: 'Artist Name' },
 // ];
 
-export function MainPage({
-    searchQuery,
-    searchResults,
-}) {
+export function MainPage() {
   const [showRecentLeftArrow, setShowRecentLeftArrow] = useState(false);
   const [showMixesLeftArrow, setShowMixesLeftArrow] = useState(false);
   const [showFeaturedLeftArrow, setShowFeaturedLeftArrow] = useState(false);
@@ -60,21 +57,21 @@ export function MainPage({
   const mixesRef = useRef(null);
   const featuredRef = useRef(null);
   const [songs, setSongs] = useState([]);
- 
+
   const { playSong } = usePlayer();
 
-useEffect(() => {
+  useEffect(() => {
     async function loadSongs() {
-        try {
-            const data = await getSongs();
-            setSongs(data);
-        } catch (err) {
-            console.error(err);
-        }
+      try {
+        const data = await getSongs();
+        setSongs(data);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     loadSongs();
-}, []);
+  }, []);
 
   const scrollRight = (ref) => {
     if (ref.current) {
@@ -88,32 +85,27 @@ useEffect(() => {
     }
   };
 
-const displayedSongs =
-    searchQuery.trim() !== ""
-        ? searchResults
-        : songs;
+  //   
+  const MusicCard = ({ song }) => (
+    <div
+      className={styles.musicCard}
+      onClick={() => {
+        console.log("Card Clicked");
+        console.log(song);
 
-//   
-const MusicCard = ({ song }) => (
-  <div
-    className={styles.musicCard}
-    onClick={() => {
-      console.log("Card Clicked");
-      console.log(song);
+        playSong(song, songs);
+      }}
+    >
+      <img
+        src={song.cover_url || placeholder}
+        alt={song.title}
+      />
 
-      playSong(song, songs);
-    }}
-  >
-    <img
-      src={song.cover_url || placeholder}
-      alt={song.title}
-    />
+      <h3>{song.title}</h3>
 
-    <h3>{song.title}</h3>
-
-    <p>{song.artist}</p>
-  </div>
-);
+      <p>{song.artist}</p>
+    </div>
+  );
 
   return (
     <div className={styles.mainContent}>
@@ -133,20 +125,16 @@ const MusicCard = ({ song }) => (
       </div>
 
       <div className={styles.sectionHeader}>
-        <h2>
-    {searchQuery
-        ? `Search Results (${displayedSongs.length})`
-        : "Popular with listeners of MJ"}
-</h2>
+        <h2>Popular with listeners of Mahabharat</h2>
         <span>Show all</span>
       </div>
       <div className={styles.cardsRow}>
-        {displayedSongs.slice(0,3).map(song => (
-    <MusicCard
-        key={song.id}
-        song={song}
-    />
-))}
+        {songs.slice(0, 3).map(song => (
+          <MusicCard
+            key={song.id}
+            song={song}
+          />
+        ))}
       </div>
 
       <div className={styles.sectionHeader}>
@@ -163,12 +151,12 @@ const MusicCard = ({ song }) => (
           <ChevronRight size={20} />
         </button>
         <div className={styles.cardsRow} ref={recentRef}>
-          {displayedSongs.slice(0,7).map(song => (
-    <MusicCard
-        key={song.id}
-        song={song}
-    />
-))}
+          {songs.slice(0, 7).map(song => (
+            <MusicCard
+              key={song.id}
+              song={song}
+            />
+          ))}
         </div>
       </div>
 
@@ -186,14 +174,14 @@ const MusicCard = ({ song }) => (
           <ChevronRight size={20} />
         </button>
         <div className={styles.cardsRow} ref={mixesRef}>
-          {displayedSongs.slice(2,9).map(song => (
-    <MusicCard
-        key={song.id}
-        song={song}
-    />
-))}
-          </div>
-          </div>
+          {songs.slice(2, 9).map(song => (
+            <MusicCard
+              key={song.id}
+              song={song}
+            />
+          ))}
+        </div>
+      </div>
 
       <div className={styles.sectionHeader}>
         <h2>Featured now</h2>
@@ -209,12 +197,12 @@ const MusicCard = ({ song }) => (
           <ChevronRight size={20} />
         </button>
         <div className={styles.cardsRow} ref={featuredRef}>
-         {displayedSongs.slice(1,7).map(song => (
-    <MusicCard
-        key={song.id}
-        song={song}
-    />
-))}
+          {songs.slice(1, 7).map(song => (
+            <MusicCard
+              key={song.id}
+              song={song}
+            />
+          ))}
         </div>
       </div>
     </div>

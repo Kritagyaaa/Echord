@@ -37,14 +37,14 @@ VALUES
 -- ARTISTS
 -- =====================================
 
-INSERT INTO artists (id, name, bio) VALUES
-(1, 'Michael Jackson', 'King of Pop'),
-(2, 'Guns N'' Roses', 'American hard rock band from Los Angeles'),
-(3, 'The Beatles', 'Legendary British rock band from Liverpool'),
-(4, 'Yo Yo Honey Singh', 'Indian rapper, singer and music producer'),
-(5, 'Lady Gaga', 'American singer, songwriter and actress'),
-(6, 'Frank Sinatra', 'Iconic American singer and actor'),
-(7, 'Miles Davis', 'American jazz trumpeter and composer');
+INSERT INTO artists (id, name, bio, cover_url) VALUES
+(1, 'Michael Jackson', 'King of Pop', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(2, 'Guns N'' Roses', 'American hard rock band from Los Angeles', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/GNR_Belgrade_2025_05_%28cropped%29.jpg/500px-GNR_Belgrade_2025_05_%28cropped%29.jpg'),
+(3, 'The Beatles', 'Legendary British rock band from Liverpool', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg/500px-The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg'),
+(4, 'Yo Yo Honey Singh', 'Indian rapper, singer and music producer', 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Yo_Yo_Honey_Singh_%282014%29_04.jpg/500px-Yo_Yo_Honey_Singh_%282014%29_04.jpg'),
+(5, 'Lady Gaga', 'American singer, songwriter and actress', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg/500px-Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg'),
+(6, 'Frank Sinatra', 'Iconic American singer and actor', 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Frank_Sinatra_1961.jpg/500px-Frank_Sinatra_1961.jpg'),
+(7, 'Miles Davis', 'American jazz trumpeter and composer', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Miles_Davis_1987.png/500px-Miles_Davis_1987.png');
 
 -- =====================================
 -- GENRES
@@ -84,55 +84,37 @@ INSERT INTO albums (id, title, artist_id) VALUES
 -- SONGS (Existing: IDs 1-12, Michael Jackson)
 -- =====================================
 
-INSERT INTO songs (id, title, artist_id, album_id, genre_id, duration, b2_key, uploaded_by, play_count) VALUES
-(1, 'Billie Jean', 1, 1, 1, 294, '1.mp3', 1, 0),
-(2, 'Smooth Criminal', 1, 1, 1, 257, '2.mp3', 1, 0),
-(3, 'Don''t Stop ''Til You Get Enough', 1, 1, 1, 366, '3.mp3', 1, 0),
-(4, 'Dirty Diana', 1, 1, 1, 282, '4.mp3', 1, 0),
-(5, 'Human Nature', 1, 1, 1, 245, '5.mp3', 1, 0),
-(6, 'Thriller', 1, 1, 1, 358, '6.mp3', 1, 0),
-(7, 'Wanna Be Startin'' Somethin''', 1, 1, 1, 362, '7.mp3', 1, 0),
-(8, 'Liberian Girl', 1, 1, 1, 231, '8.mp3', 1, 0),
-(9, 'Smooth Criminal (Version 2)', 1, 1, 1, 257, '9.mp3', 1, 0),
-(10, 'Bad', 1, 1, 1, 247, '10.mp3', 1, 0),
-(11, 'Man in the Mirror', 1, 1, 1, 320, '11.mp3', 1, 0),
-(12, 'Who Is It', 1, 1, 1, 391, '12.mp3', 1, 0),
-
--- =====================================
--- NEW SONGS (IDs 13-30)
--- =====================================
-
--- Rock (Songs 13-16)
-(13, 'Sweet Child O'' Mine', 2, 2, 2, 356, '13.mp3', 1, 0),
-(14, 'November Rain', 2, 3, 2, 536, '14.mp3', 1, 0),
-(15, 'Come Together - Remastered 2009', 3, 4, 2, 259, '15.mp3', 1, 0),
-(16, 'Revolution 1 - Remastered 2009', 3, 5, 2, 255, '16.mp3', 1, 0),
-
--- Folk (Songs 17-19)
-(17, 'Norwegian Wood (This Bird Has Flown)', 3, 6, 3, 124, '17.mp3', 1, 0),
-(18, 'Blackbird - Remastered 2009', 3, 5, 3, 138, '18.mp3', 1, 0),
-(19, 'You''ve Got To Hide Your Love Away', 3, 7, 3, 129, '19.mp3', 1, 0),
-
--- Hip Hop (Songs 20-22)
-(20, 'Blue Eyes', 4, 8, 4, 220, '20.mp3', 1, 0),
-(21, 'Brown Rang', 4, 9, 4, 179, '21.mp3', 1, 0),
-(22, 'Angreji Beat', 4, 9, 4, 256, '22.mp3', 1, 0),
-
--- Pop (Songs 23-25)
-(23, 'Bad Romance', 5, 10, 1, 294, '23.mp3', 1, 0),
-(24, 'Poker Face', 5, 11, 1, 237, '24.mp3', 1, 0),
-(25, 'Just Dance', 5, 11, 1, 241, '25.mp3', 1, 0),
-
--- Country (Song 26)
-(26, 'Million Reasons', 5, 12, 5, 205, '26.mp3', 1, 0),
-
--- Jazz (Songs 27-29)
-(27, 'Cheek To Cheek - 1998 Remastered', 6, 13, 6, 186, '27.mp3', 1, 0),
-(28, 'So What', 7, 14, 6, 565, '28.mp3', 1, 0),
-(29, 'Fly Me To The Moon - 2008 Remastered', 6, 15, 6, 147, '29.mp3', 1, 0),
-
--- Hip Hop (Song 30)
-(30, 'Love Dose', 4, 16, 4, 224, '30.mp3', 1, 0);
+INSERT INTO songs (id, title, artist_id, album_id, genre_id, duration, b2_key, uploaded_by, play_count, like_count, cover_url) VALUES
+(1, 'Billie Jean', 1, 1, 1, 294, '1.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(2, 'Smooth Criminal', 1, 1, 1, 257, '2.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(3, 'Don''t Stop ''Til You Get Enough', 1, 1, 1, 366, '3.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(4, 'Dirty Diana', 1, 1, 1, 282, '4.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(5, 'Human Nature', 1, 1, 1, 245, '5.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(6, 'Thriller', 1, 1, 1, 358, '6.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(7, 'Wanna Be Startin'' Somethin''', 1, 1, 1, 362, '7.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(8, 'Liberian Girl', 1, 1, 1, 231, '8.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(9, 'Smooth Criminal (Version 2)', 1, 1, 1, 257, '9.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(10, 'Bad', 1, 1, 1, 247, '10.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(11, 'Man in the Mirror', 1, 1, 1, 320, '11.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(12, 'Who Is It', 1, 1, 1, 391, '12.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg/500px-Michael_Jackson_1983_%283x4_cropped%29_%28contrast%29.jpg'),
+(13, 'Sweet Child O'' Mine', 2, 2, 2, 356, '13.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/GNR_Belgrade_2025_05_%28cropped%29.jpg/500px-GNR_Belgrade_2025_05_%28cropped%29.jpg'),
+(14, 'November Rain', 2, 3, 2, 536, '14.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/GNR_Belgrade_2025_05_%28cropped%29.jpg/500px-GNR_Belgrade_2025_05_%28cropped%29.jpg'),
+(15, 'Come Together - Remastered 2009', 3, 4, 2, 259, '15.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg/500px-The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg'),
+(16, 'Revolution 1 - Remastered 2009', 3, 5, 2, 255, '16.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg/500px-The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg'),
+(17, 'Norwegian Wood (This Bird Has Flown)', 3, 6, 3, 124, '17.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg/500px-The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg'),
+(18, 'Blackbird - Remastered 2009', 3, 5, 3, 138, '18.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg/500px-The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg'),
+(19, 'You''ve Got To Hide Your Love Away', 3, 7, 3, 129, '19.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg/500px-The_Beatles_1963_Dezo_Hoffman_Capitol_Records_press_photo_2.jpg'),
+(20, 'Blue Eyes', 4, 8, 4, 220, '20.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Yo_Yo_Honey_Singh_%282014%29_04.jpg/500px-Yo_Yo_Honey_Singh_%282014%29_04.jpg'),
+(21, 'Brown Rang', 4, 9, 4, 179, '21.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Yo_Yo_Honey_Singh_%282014%29_04.jpg/500px-Yo_Yo_Honey_Singh_%282014%29_04.jpg'),
+(22, 'Angreji Beat', 4, 9, 4, 256, '22.mp3', 1, 2, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Yo_Yo_Honey_Singh_%282014%29_04.jpg/500px-Yo_Yo_Honey_Singh_%282014%29_04.jpg'),
+(23, 'Bad Romance', 5, 10, 1, 294, '23.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg/500px-Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg'),
+(24, 'Poker Face', 5, 11, 1, 237, '24.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg/500px-Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg'),
+(25, 'Just Dance', 5, 11, 1, 241, '25.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg/500px-Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg'),
+(26, 'Million Reasons', 5, 12, 5, 205, '26.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg/500px-Lady_Gaga_at_Joe_Biden%27s_inauguration_%28cropped_5%29.jpg'),
+(27, 'Cheek To Cheek - 1998 Remastered', 6, 13, 6, 186, '27.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Frank_Sinatra_1961.jpg/500px-Frank_Sinatra_1961.jpg'),
+(28, 'So What', 7, 14, 6, 565, '28.mp3', 1, 0, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Miles_Davis_1987.png/500px-Miles_Davis_1987.png'),
+(29, 'Fly Me To The Moon - 2008 Remastered', 6, 15, 6, 147, '29.mp3', 1, 2, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Frank_Sinatra_1961.jpg/500px-Frank_Sinatra_1961.jpg'),
+(30, 'Love Dose', 4, 16, 4, 224, '30.mp3', 1, 1, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Yo_Yo_Honey_Singh_%282014%29_04.jpg/500px-Yo_Yo_Honey_Singh_%282014%29_04.jpg');
 
 -- =====================================
 -- VERIFY

@@ -9,7 +9,7 @@ import { usePlayer } from "../../context/PlayerContext";
 const QUICK_PICKS = [
   { id: 1, img: 'https://i1.sndcdn.com/artworks-y6qitUuZoS6y8LQo-5s2pPA-t500x500.jpg', label: 'Liked Songs' },
   { id: 2, img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop', label: 'Arijit Singh' },
-  { id: 3, img: 'https://www.google.com/imgres?q=DESI%20BOYS&imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fen%2Ff%2Ff5%2F11nov_desiboyz-poster01.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FDesi_Boyz&docid=_KeXgXpd4fjxgM&tbnid=n27RLih6Cddu7M&vet=12ahUKEwjgh_HA6qaVAxWbaHADHYsNK0gQnPAOegQIPhAA..i&w=263&h=379&hcb=2&ved=2ahUKEwjgh_HA6qaVAxWbaHADHYsNK0gQnPAOegQIPhAA?w=60&h=60&fit=crop', label: 'Desi Boyz' },
+  { id: 3, img: 'https://upload.wikimedia.org/wikipedia/en/f/f5/11nov_desiboyz-poster01.jpg', label: 'Desi Boyz' },
   { id: 4, img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=60&h=60&fit=crop', label: 'Cigarettes After Sex' },
   { id: 5, img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=60&h=60&fit=crop', label: 'The Weeknd' },
 ];

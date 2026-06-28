@@ -1,7 +1,10 @@
 import styles from './App.module.css';
 import { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
-import { searchSongs } from "./services/api";
+import {
+  searchSongs,
+  getPlaylist,
+} from "./services/api";
 import { Header } from './components/Header/Header.jsx';
 import { LibrarySidebar } from './components/LibrarySidebar/LibrarySidebar.jsx';
 import { PlayerBar } from './components/PlayerBar/PlayerBar.jsx';
@@ -19,6 +22,7 @@ function ProtectedLayout({
   isAuthenticated,
   selectedPlaylist,
   setSelectedPlaylist,
+  handlePlaylistSelect,
   user,
   handleLogout,
   navigate,
@@ -57,13 +61,9 @@ function ProtectedLayout({
       ) : (
         <div className={styles.appShell}>
           <LibrarySidebar
-            onPlaylistSelect={(playlist) => {
-              setSelectedPlaylist(playlist);
-              setSearchQuery("");
-              navigate('/');
-            }}
-            selectedPlaylist={selectedPlaylist}
-          />
+  onPlaylistSelect={handlePlaylistSelect}
+  selectedPlaylist={selectedPlaylist}
+/>
           <main
             className={styles.mainPlaceholder}
             aria-label="Main content"
@@ -84,7 +84,7 @@ function App() {
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+  
 
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const [user, setUser] = useState(() => {
@@ -96,7 +96,28 @@ function App() {
   });
 
   const navigate = useNavigate();
+  const handlePlaylistSelect = async (playlist) => {
 
+  try {
+
+    const fullPlaylist = await getPlaylist(
+      playlist.id
+    );
+
+    setSelectedPlaylist(fullPlaylist);
+
+    setSearchQuery("");
+
+    navigate("/");
+
+  } catch (err) {
+
+    console.error(err);
+    alert("Failed to load playlist.");
+
+  }
+
+};
   useEffect(() => {
 
     const timer = setTimeout(async () => {
@@ -235,18 +256,19 @@ function App() {
       {/* Protected Routes inside the App Layout */}
       <Route
         element={
-          <ProtectedLayout
-            isAuthenticated={isAuthenticated}
-            selectedPlaylist={selectedPlaylist}
-            setSelectedPlaylist={setSelectedPlaylist}
-            user={user}
-            handleLogout={handleLogout}
-            navigate={navigate}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-          />
+       <ProtectedLayout
+    isAuthenticated={isAuthenticated}
+    selectedPlaylist={selectedPlaylist}
+    setSelectedPlaylist={setSelectedPlaylist}
+    handlePlaylistSelect={handlePlaylistSelect}
+    user={user}
+    handleLogout={handleLogout}
+    navigate={navigate}
+    searchQuery={searchQuery}
+    setSearchQuery={setSearchQuery}
+    searchResults={searchResults}
+    setSearchResults={setSearchResults}
+/>
         }
       >
         <Route

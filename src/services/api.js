@@ -115,3 +115,113 @@ export async function toggleLikeSong(songId) {
 
     return await response.json();
 }
+export async function getPlaylists() {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) return [];
+
+    const response = await fetch(
+        `${API_URL}/playlists`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch playlists");
+    }
+
+    const data = await response.json();
+
+    return data.playlists;
+}
+export async function createPlaylist(playlistData) {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error("Please login first.");
+    }
+
+    const response = await fetch(`${API_URL}/playlists`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(playlistData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Failed to create playlist.");
+    }
+
+    return data.playlist;
+}
+export async function addSongToPlaylist(
+    playlistId,
+    songId
+) {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error("Please login first.");
+    }
+
+    const response = await fetch(
+        `${API_URL}/playlists/${playlistId}/songs`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                songId,
+            }),
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Failed to add song to playlist."
+        );
+    }
+
+    return data;
+}
+export async function getPlaylist(playlistId) {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error("Please login first.");
+    }
+
+    const response = await fetch(
+        `${API_URL}/playlists/${playlistId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Failed to load playlist."
+        );
+    }
+
+    return data.playlist;
+}

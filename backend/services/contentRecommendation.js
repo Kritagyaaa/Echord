@@ -66,7 +66,7 @@ const recommendations = songs.map((candidate) => {
 recommendations.sort((a, b) => b.score - a.score);
 
 // Return top 10
-return recommendations.slice(0, 10);
+return recommendations.slice(0, 5);
 }
 
 module.exports = {

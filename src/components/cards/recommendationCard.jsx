@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { usePlayer } from "../../context/playercontext";
 import { getContentRecommendations } from "../../services/api";
+import styles from "./RecommendationCard.module.css";
 
 export function RecommendationCard() {
 
@@ -38,7 +39,10 @@ export function RecommendationCard() {
 
         <section>
 
-            <h3>Recommended Songs</h3>
+            <div className={styles.heading}>
+    <h3>Recommended </h3>
+    <p>Based on what's playing</p>
+             </div>
 
             {recommendations.length === 0 ? (
 

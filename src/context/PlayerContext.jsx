@@ -387,7 +387,7 @@ export function PlayerProvider({ children }) {
             localStorage.setItem('last_queue', JSON.stringify(updated));
             return updated;
         });
-        alert(`Added "${song.title}" to queue.`);
+        // Silent: no alert when adding to queue
     };
 
     const addToUserQueue = (song) => {

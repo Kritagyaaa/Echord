@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Play, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Heart, ListPlus } from 'lucide-react';
 import styles from './MainPage.module.css';
 import placeholder from "../../assets/music-placeholder.jpg";
 import { getSongs, getListeningHistory, toggleLikeSong } from "../../services/api";
@@ -23,7 +23,7 @@ export function MainPage({
   const [localSearchResults, setLocalSearchResults] = useState([]);
 
   const { playlists, selectPlaylist } = usePlaylists();
-  const { playSong, initializeQueue, currentSong, isPlaying } = usePlayer();
+  const { playSong, initializeQueue, currentSong, isPlaying, addToUserQueue } = usePlayer();
 
   const displayedSongs = songs;
 
@@ -207,6 +207,13 @@ export function MainPage({
                           fill={song.is_liked ? "#1db954" : "none"}
                           color={song.is_liked ? "#1db954" : "#b3b3b3"}
                         />
+                      </button>
+                      <button
+                        className={styles.searchLikeButton}
+                        title="Add to queue"
+                        onClick={(e) => { e.stopPropagation(); addToUserQueue(song); }}
+                      >
+                        <ListPlus size={18} color="#b3b3b3" />
                       </button>
                       <span className={styles.searchSongDuration}>
                         {formatDuration(song.duration)}

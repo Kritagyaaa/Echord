@@ -15,6 +15,7 @@ import Login from './components/Auth/Login.jsx';
 import SignUp from './components/Auth/SignUp.jsx';
 import AccountPage from './components/Auth/AccountPage.jsx';
 import { HistoryView } from './components/HistoryView/HistoryView.jsx';
+import { QueueView } from "./components/QueueView/QueueView.jsx";
 import { usePlayer } from './context/PlayerContext.jsx';
 import { ExpandedPlayer } from './components/ExpandedPlayer/ExpandedPlayer.jsx';
 import { usePlaylists } from './context/playlistcontext.jsx';
@@ -301,6 +302,12 @@ function App() {
                 navigate('/');
               }}
             />
+          }
+        />
+        <Route
+          path="/queue"
+          element={
+            <QueueView />
           }
         />
       </Route>

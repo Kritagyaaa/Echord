@@ -15,6 +15,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import styles from "./PlayerBar.module.css";
 import { usePlayer } from "../../context/PlayerContext";
@@ -24,25 +25,30 @@ import { addSongToPlaylist } from "../../services/api";
 import placeholder from "../../assets/music-placeholder.jpg";
 
 export function PlayerBar() {
-  const {
-    currentSong,
-    isPlaying,
-    togglePlay,
-    nextSong,
-    previousSong,
-    currentTime,
-    duration,
-    seek,
-    volume,
-    setVolume,
-    toggleLike,
-    isExpanded,
-    toggleExpand,
-    isShuffle,
-    toggleShuffle,
-    isRepeat,
-    toggleRepeat,
-  } = usePlayer();
+    const {
+        currentSong,
+        isPlaying,
+        togglePlay,
+        nextSong,
+        previousSong,
+        currentTime,
+        duration,
+        seek,
+        volume,
+        setVolume,
+        toggleLike,
+        isExpanded,
+        toggleExpand,
+        isShuffle,
+        toggleShuffle,
+        isRepeat,
+        toggleRepeat,
+        addToUserQueue,
+    } = usePlayer();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isQueueActive = location.pathname === "/queue";
 
   const { playlists, loadPlaylists, refreshSelectedPlaylist } = usePlaylists();
   const [showAddToPlaylistDropdown, setShowAddToPlaylistDropdown] = useState(false);
@@ -310,7 +316,12 @@ export function PlayerBar() {
           )}
         </div>
 
-        <button className={styles.controlButton}>
+        <button
+          className={styles.controlButton}
+          onClick={() => navigate(isQueueActive ? "/" : "/queue")}
+          title="Queue"
+          style={isQueueActive ? { color: "#1db954" } : {}}
+        >
           <ListMusic size={18} />
         </button>
 

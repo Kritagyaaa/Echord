@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Music, Heart } from "lucide-react";
+import { Music, Heart, ListPlus } from "lucide-react";
 import styles from "./SongsList.module.css";
 
 import { getSongs, toggleLikeSong } from "../../services/api";
@@ -10,7 +10,7 @@ export function SongsList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const { playSong, currentSong, isPlaying } = usePlayer();
+  const { playSong, currentSong, isPlaying, addToUserQueue } = usePlayer();
 
   useEffect(() => {
     async function fetchSongs() {
@@ -126,6 +126,15 @@ export function SongsList() {
                   onClick={(e) => handleLikeToggle(e, song.id)}
                 >
                   <Heart size={18} fill={song.is_liked ? "#1db954" : "none"} color={song.is_liked ? "#1db954" : "#b3b3b3"} />
+                </button>
+
+                <button
+                  className={styles.playButton}
+                  title="Add to queue"
+                  onClick={(e) => { e.stopPropagation(); addToUserQueue(song); }}
+                  style={{ color: "#b3b3b3" }}
+                >
+                  <ListPlus size={18} />
                 </button>
 
                 <button

@@ -1,0 +1,425 @@
+.container {
+  position: relative;
+  background: linear-gradient(180deg, #1a1a2e 0%, #121212 100%);
+  min-height: 100%;
+  overflow-y: auto;
+  color: #fff;
+  padding-bottom: 80px;
+}
+
+.headerGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 280px;
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.25) 0%, rgba(18, 18, 18, 0) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 32px 24px;
+  z-index: 1;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.clearBtn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #b3b3b3;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clearBtn:hover {
+  border-color: white;
+  color: white;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 0 32px;
+}
+
+.sectionLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #b3b3b3;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0 0 12px;
+}
+
+.nowPlayingCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 40px;
+  border-left: 3px solid #1db954;
+}
+
+.nowPlayingCard img {
+  width: 52px;
+  height: 52px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.nowPlayingInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.nowPlayingInfo strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nowPlayingInfo span {
+  font-size: 13px;
+  color: #b3b3b3;
+}
+
+.playingBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #1db954;
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.emptyNow {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  color: #b3b3b3;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.queueCount {
+  font-size: 12px;
+  color: #b3b3b3;
+  background: rgba(255,255,255,0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.emptyQueue {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+}
+
+.emptyQueue p {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.emptyQueue span {
+  font-size: 13px;
+  color: #b3b3b3;
+}
+
+.songRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: grab;
+  transition: background 0.15s;
+  user-select: none;
+  position: relative;
+}
+
+.songRow:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.songRow.dragging {
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px dashed rgba(99,102,241,0.6);
+  opacity: 0.65;
+  cursor: grabbing;
+}
+
+.songRow.dragOver {
+  background: rgba(29, 185, 84, 0.12);
+  border-top: 2px solid #1db954;
+}
+
+.dragHandle {
+  color: #444;
+  cursor: grab;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 4px 2px;
+  transition: color 0.15s;
+}
+
+.songRow:hover .dragHandle {
+  color: #888;
+}
+
+.songIndex {
+  color: #b3b3b3;
+  font-size: 13px;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.songImg {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.songInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.songTitle {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.songArtist {
+  display: block;
+  font-size: 12px;
+  color: #b3b3b3;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.songDuration {
+  font-size: 13px;
+  color: #b3b3b3;
+  min-width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.rowControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.songRow:hover .rowControls {
+  opacity: 1;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.iconBtn:hover {
+  color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+.iconBtn.liked {
+  color: #1db954;
+}
+
+.removeBtn:hover {
+  color: #ff4d4d !important;
+  background: rgba(255, 77, 77, 0.1) !important;
+}
+
+.contextRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.contextRow:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.contextRowImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.contextSongIndex {
+  color: #555;
+  font-size: 13px;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.addSection {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.addSection h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 0 14px;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.searchBar:focus-within {
+  border-color: #535353;
+}
+
+.searchBar svg {
+  color: #b3b3b3;
+  flex-shrink: 0;
+}
+
+.searchBar input {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+  padding: 12px 0;
+  flex: 1;
+}
+
+.searchBar input::placeholder {
+  color: #555;
+}
+
+.searchResults {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.searchResult {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.searchResult:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.searchResult img {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.addToQueueBtn {
+  background: rgba(29,185,84,0.15);
+  border: 1px solid rgba(29,185,84,0.4);
+  color: #1db954;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.addToQueueBtn:hover {
+  background: rgba(29,185,84,0.3);
+  border-color: #1db954;
+}

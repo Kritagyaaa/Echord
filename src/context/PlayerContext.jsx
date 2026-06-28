@@ -34,6 +34,9 @@ export function PlayerProvider({ children }) {
     const [isShuffle, setIsShuffle] = useState(() => localStorage.getItem('is_shuffle') === 'true');
     const [isRepeat, setIsRepeat] = useState(() => localStorage.getItem('is_repeat') === 'true');
 
+    const [userQueue, setUserQueueState] = useState([]);
+    const [lastContextSong, setLastContextSongState] = useState(null);
+
     const toggleExpand = () => {
         setIsExpanded(prev => !prev);
     };
@@ -43,6 +46,20 @@ export function PlayerProvider({ children }) {
     const currentSongRef = useRef(null);
     const isShuffleRef = useRef(localStorage.getItem('is_shuffle') === 'true');
     const isRepeatRef = useRef(localStorage.getItem('is_repeat') === 'true');
+    const userQueueRef = useRef([]);
+    const lastContextSongRef = useRef(null);
+
+    const setUserQueue = (updatedQueue) => {
+        setUserQueueState(updatedQueue);
+        userQueueRef.current = updatedQueue;
+        localStorage.setItem("user_queue", JSON.stringify(updatedQueue));
+    };
+
+    const setLastContextSong = (song) => {
+        setLastContextSongState(song);
+        lastContextSongRef.current = song;
+        localStorage.setItem("last_context_song", JSON.stringify(song));
+    };
 
     const toggleShuffle = () => {
         setIsShuffle(prev => {
@@ -97,6 +114,20 @@ export function PlayerProvider({ children }) {
                 const savedSongStr = localStorage.getItem('last_song');
                 const savedQueueStr = localStorage.getItem('last_queue');
                 const savedTimeStr = localStorage.getItem('playback_time');
+                const savedUserQueueStr = localStorage.getItem('user_queue');
+                const savedLastContextSongStr = localStorage.getItem('last_context_song');
+
+                if (savedUserQueueStr) {
+                    const savedUserQueue = JSON.parse(savedUserQueueStr);
+                    setUserQueueState(savedUserQueue);
+                    userQueueRef.current = savedUserQueue;
+                }
+
+                if (savedLastContextSongStr) {
+                    const savedLastContextSong = JSON.parse(savedLastContextSongStr);
+                    setLastContextSongState(savedLastContextSong);
+                    lastContextSongRef.current = savedLastContextSong;
+                }
 
                 if (savedSongStr) {
                     const savedSong = JSON.parse(savedSongStr);
@@ -147,6 +178,12 @@ export function PlayerProvider({ children }) {
                 setQueue(playlist);
                 queueRef.current = playlist;
                 localStorage.setItem('last_queue', JSON.stringify(playlist));
+                setLastContextSong(song);
+            } else {
+                const isInContext = queueRef.current.some(s => s.id === song.id);
+                if (isInContext) {
+                    setLastContextSong(song);
+                }
             }
 
             const streamUrl = await getSongStream(song.id);
@@ -198,45 +235,79 @@ export function PlayerProvider({ children }) {
     };
 
     const nextSong = () => {
-
+        const uq = userQueueRef.current;
         const q = queueRef.current;
         const curr = currentSongRef.current;
 
         console.log("========== NEXT ==========");
-        console.log("Queue:", q);
+        console.log("User Queue:", uq);
+        console.log("Playback Context Queue:", q);
         console.log("Current Song:", curr);
 
+        if (uq.length > 0) {
+            const nextFromUserQueue = uq[0];
+            const updatedUserQueue = uq.slice(1);
+            setUserQueue(updatedUserQueue);
+            playSong(nextFromUserQueue);
+            return;
+        }
+
         if (!curr || q.length === 0) return;
+
+        const refSong = q.some(s => s.id === curr.id) ? curr : lastContextSongRef.current;
+
+        if (!refSong) {
+            playSong(q[0], q);
+            return;
+        }
 
         if (isShuffleRef.current) {
             let randomIndex = Math.floor(Math.random() * q.length);
             if (q.length > 1) {
-                while (q[randomIndex]?.id === curr.id) {
+                while (q[randomIndex]?.id === refSong.id) {
                     randomIndex = Math.floor(Math.random() * q.length);
                 }
             }
             playSong(q[randomIndex], q);
         } else {
             const index = q.findIndex(
-                song => song.id === curr.id
+                song => song.id === refSong.id
             );
 
-            console.log("Index:", index);
+            if (index === -1) {
+                playSong(q[0], q);
+                return;
+            }
 
-            if (index === -1) return;
-
-            if (index === q.length - 1) return;
+            if (index === q.length - 1) {
+                if (isRepeatRef.current) {
+                    playSong(q[0], q);
+                } else {
+                    setIsPlaying(false);
+                    audioRef.current.pause();
+                }
+                return;
+            }
 
             playSong(q[index + 1], q);
         }
     };
 
     const previousSong = () => {
-
         const q = queueRef.current;
         const curr = currentSongRef.current;
 
         if (!curr || q.length === 0) return;
+
+        const isCurrentInContext = q.some(s => s.id === curr.id);
+        if (!isCurrentInContext) {
+            if (lastContextSongRef.current) {
+                playSong(lastContextSongRef.current, q);
+            } else {
+                playSong(q[0], q);
+            }
+            return;
+        }
 
         const index = q.findIndex(
             song => song.id === curr.id
@@ -245,7 +316,6 @@ export function PlayerProvider({ children }) {
         if (index <= 0) return;
 
         playSong(q[index - 1], q);
-
     };
 
     const seek = (value) => {
@@ -320,6 +390,28 @@ export function PlayerProvider({ children }) {
         alert(`Added "${song.title}" to queue.`);
     };
 
+    const addToUserQueue = (song) => {
+        if (!song) return;
+        const updated = [...userQueueRef.current, song];
+        setUserQueue(updated);
+    };
+
+    const removeFromUserQueue = (indexToRemove) => {
+        const updated = userQueueRef.current.filter((_, idx) => idx !== indexToRemove);
+        setUserQueue(updated);
+    };
+
+    const reorderUserQueue = (startIndex, endIndex) => {
+        const updated = [...userQueueRef.current];
+        const [movedItem] = updated.splice(startIndex, 1);
+        updated.splice(endIndex, 0, movedItem);
+        setUserQueue(updated);
+    };
+
+    const clearUserQueue = () => {
+        setUserQueue([]);
+    };
+
     return (
 
         <playercontext.Provider
@@ -345,6 +437,12 @@ export function PlayerProvider({ children }) {
                 toggleRepeat,
                 initializeQueue,
                 addToQueue,
+                userQueue,
+                addToUserQueue,
+                removeFromUserQueue,
+                reorderUserQueue,
+                clearUserQueue,
+                setUserQueue,
             }}
         >
 

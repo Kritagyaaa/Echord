@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./PlaylistView.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
-import { Play, Shuffle, Heart, Search, Check, Plus, Pencil, Trash2 } from "lucide-react";
+import { Play, Shuffle, Heart, Search, Check, Plus, Pencil, Trash2, ListPlus } from "lucide-react";
 import { usePlayer } from "../../context/PlayerContext";
 import { usePlaylists } from "../../context/playlistcontext";
 import { searchSongs, addSongToPlaylist, toggleLikeSong, removeSongFromPlaylist, deletePlaylist } from "../../services/api";
@@ -9,7 +9,7 @@ import { EditPlaylistModel } from "../EditPlaylistModel/EditPlaylistModel";
 
 export function PlaylistView({ playlist }) {
 
-    const { playSong, isShuffle, toggleShuffle } = usePlayer();
+    const { playSong, isShuffle, toggleShuffle, addToUserQueue } = usePlayer();
     const { refreshSelectedPlaylist, loadPlaylists, selectPlaylist } = usePlaylists();
 
     const [addSearchQuery, setAddSearchQuery] = useState("");
@@ -300,6 +300,14 @@ export function PlaylistView({ playlist }) {
                         </span>
 
                         <span className={styles.songRemoveCol}>
+                            <button
+                                className={styles.removeSongButton}
+                                onClick={(e) => { e.stopPropagation(); addToUserQueue(song); }}
+                                title="Add to queue"
+                                style={{ color: "#b3b3b3", marginRight: 4 }}
+                            >
+                                <ListPlus size={16} />
+                            </button>
                             {!isSystemPlaylist && (
                                 <button
                                     className={styles.removeSongButton}

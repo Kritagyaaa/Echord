@@ -232,7 +232,7 @@ INSERT INTO
     genres (id, name)
 VALUES (1, 'Pop'),
     (2, 'Rock'),
-    (3, 'Folk'),
+    (3, 'Fol]k'),
     (4, 'Hip Hop'),
     (5, 'Country'),
     (6, 'Jazz');

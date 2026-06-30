@@ -288,3 +288,33 @@
 .activePlaylist:hover {
   background: rgba(255, 255, 255, 0.18);
 }
+
+/* Force collapse styling */
+.sidebar.collapsed {
+  padding: 12px 8px;
+}
+
+.sidebar.collapsed .libraryTitle h2,
+.sidebar.collapsed .createButton span,
+.sidebar.collapsed .filterButtons,
+.sidebar.collapsed .sidebarControls,
+.sidebar.collapsed .itemInfo {
+  display: none !important;
+}
+
+.sidebar.collapsed .sidebarHeader {
+  justify-content: center;
+}
+
+.sidebar.collapsed .createButton {
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar.collapsed .libraryItem {
+  justify-content: center;
+  padding: 8px 0;
+}
+

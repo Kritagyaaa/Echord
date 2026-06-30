@@ -14,6 +14,7 @@ const filters = ["Playlists", "Artists", "Albums", "Podcasts"];
 export function LibrarySidebar({
     onPlaylistSelect,
     selectedPlaylist,
+    collapsed,
 }) {
 
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ export function LibrarySidebar({
     return (
 
         <aside
-            className={styles.sidebar}
+            className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}
             aria-label="Your library"
         >
 

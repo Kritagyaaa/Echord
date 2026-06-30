@@ -1,6 +1,6 @@
 import styles from './App.module.css';
 import { useState, useEffect } from "react";
-import { Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import {
   searchSongs,
   getPlaylist,
@@ -17,6 +17,7 @@ import CreatorSignUp from './components/Auth/CreatorSignUp.jsx';
 import CreatorDashboard from './components/Auth/CreatorDashboard.jsx';
 import ResetPasswordPage from './components/Auth/ResetPasswordPage.jsx';
 import AccountPage from './components/Auth/AccountPage.jsx';
+import ProfilePage from './components/Profile/ProfilePage.jsx';
 import { HistoryView } from './components/HistoryView/HistoryView.jsx';
 import { QueueView } from "./components/QueueView/QueueView.jsx";
 import { usePlayer } from './context/PlayerContext.jsx';
@@ -38,6 +39,8 @@ function ProtectedLayout({
   setSearchResults,
 }) {
   const { isExpanded } = usePlayer();
+  const location = useLocation();
+  const isProfilePage = location.pathname === '/profile';
 
   if (!isAuthenticated) {
     return <Navigate to="/signup" replace />;
@@ -53,7 +56,8 @@ function ProtectedLayout({
         }}
         user={user}
         onLogout={handleLogout}
-        onAccountClick={() => navigate("/profile")}
+        onAccountClick={() => navigate("/account")}
+        onProfileClick={() => navigate("/profile")}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         searchResults={searchResults}
@@ -65,11 +69,12 @@ function ProtectedLayout({
           <ExpandedPlayer />
         </div>
       ) : (
-        <div className={styles.appShell}>
+        <div className={`${styles.appShell} ${isProfilePage ? styles.sidebarCollapsed : ''}`}>
           <LibrarySidebar
-  onPlaylistSelect={handlePlaylistSelect}
-  selectedPlaylist={selectedPlaylist}
-/>
+            onPlaylistSelect={handlePlaylistSelect}
+            selectedPlaylist={selectedPlaylist}
+            collapsed={isProfilePage}
+          />
           <main
             className={styles.mainPlaceholder}
             aria-label="Main content"
@@ -173,6 +178,9 @@ function App() {
 
   // Protected Layout component that renders the full Spotify layout
   const AppLayout = () => {
+    const location = useLocation();
+    const isProfilePage = location.pathname === '/profile';
+
     if (!isAuthenticated) {
       return <Navigate to="/signup" replace />;
     }
@@ -187,18 +195,20 @@ function App() {
           }}
           user={user}
           onLogout={handleLogout}
-          onAccountClick={() => navigate("/profile")}
+          onAccountClick={() => navigate("/account")}
+          onProfileClick={() => navigate("/profile")}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
 
-        <div className={styles.appShell}>
+        <div className={`${styles.appShell} ${isProfilePage ? styles.sidebarCollapsed : ''}`}>
           <LibrarySidebar
             onPlaylistSelect={(playlist) => {
               setSelectedPlaylist(playlist);
               navigate('/');
             }}
             selectedPlaylist={selectedPlaylist}
+            collapsed={isProfilePage}
           />
           <main
             className={styles.mainPlaceholder}
@@ -325,6 +335,18 @@ function App() {
         />
         <Route
           path="/profile"
+          element={
+            <ProfilePage
+              user={user}
+              onBackToMain={() => {
+                setSelectedPlaylist(null);
+                navigate('/');
+              }}
+            />
+          }
+        />
+        <Route
+          path="/account"
           element={
             <AccountPage
               user={user}

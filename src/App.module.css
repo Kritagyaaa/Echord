@@ -65,3 +65,14 @@
     display: none;
   }
 }
+
+.sidebarCollapsed {
+  grid-template-columns: 88px minmax(0, 1fr) 380px !important;
+}
+
+@media (max-width: 860px) {
+  .sidebarCollapsed {
+    grid-template-columns: 1fr !important;
+  }
+}
+

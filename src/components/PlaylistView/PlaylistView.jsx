@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./PlaylistView.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
+import { PlaylistCover } from "../PlaylistCover/PlaylistCover";
 import { Play, Shuffle, Heart, Search, Check, Plus, Pencil, Trash2, ListPlus } from "lucide-react";
 import { usePlayer } from "../../context/PlayerContext";
 import { usePlaylists } from "../../context/playlistcontext";
@@ -147,12 +148,10 @@ export function PlaylistView({ playlist }) {
                         onClick={() => setShowEditModel(true)}
                         title="Change Cover Image"
                     >
-                        <img
-                            src={playlist.cover_url || placeholder}
-                            alt={playlist.name}
-                            onError={(e) => {
-                                e.target.src = placeholder;
-                            }}
+                        <PlaylistCover
+                            playlist={playlist}
+                            className={styles.playlistCollage}
+                            fallbackPlaceholder={placeholder}
                         />
                         <div className={styles.coverOverlay}>
                             <Pencil size={36} />

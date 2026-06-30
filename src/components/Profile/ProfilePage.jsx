@@ -5,6 +5,7 @@ import styles from './ProfilePage.module.css';
 import { getArtists, getListeningHistory } from '../../services/api';
 import { usePlayer } from '../../context/PlayerContext';
 import { usePlaylists } from '../../context/playlistcontext';
+import { PlaylistCover } from '../PlaylistCover/PlaylistCover';
 
 const FALLBACK_AVATAR = "https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg";
 
@@ -250,10 +251,10 @@ export function ProfilePage({ user, onBackToMain }) {
                   className={styles.playlistCard}
                   onClick={() => selectPlaylist && selectPlaylist(playlist)}
                 >
-                  <img
-                    src={playlist.cover_url || FALLBACK_AVATAR}
-                    alt={playlist.name}
+                  <PlaylistCover
+                    playlist={playlist}
                     className={styles.playlistCover}
+                    fallbackPlaceholder={FALLBACK_AVATAR}
                   />
                   <h3>{playlist.name}</h3>
                   <p>{playlist.song_count || 0} songs</p>

@@ -5,6 +5,7 @@ import { useRef } from "react";
 
 import styles from "./LibrarySidebar.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
+import { PlaylistCover } from "../PlaylistCover/PlaylistCover";
 
 import { usePlaylists } from "../../context/playlistcontext";
 import { CreatePlaylistModel } from "../CreatePlaylistModel/CreatePlaylistModel";
@@ -211,12 +212,10 @@ export function LibrarySidebar({
                                 onClick={() => onPlaylistSelect(playlist)}
                             >
 
-                                <img
-                                    src={
-                                        playlist.cover_url ||
-                                        placeholder
-                                    }
-                                    alt=""
+                                <PlaylistCover
+                                    playlist={playlist}
+                                    className={styles.playlistCollage}
+                                    fallbackPlaceholder={placeholder}
                                 />
 
                                 <span className={styles.itemInfo}>

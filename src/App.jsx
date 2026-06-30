@@ -37,7 +37,7 @@ function ProtectedLayout({
   const { isExpanded } = usePlayer();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/signup" replace />;
   }
 
   return (
@@ -167,7 +167,7 @@ function App() {
   // Protected Layout component that renders the full Spotify layout
   const AppLayout = () => {
     if (!isAuthenticated) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/signup" replace />;
     }
 
     return (

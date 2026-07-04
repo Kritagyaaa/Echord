@@ -5,6 +5,7 @@ require("dotenv").config({
 
 const { authenticateRequest } = require('./authMiddleware');
 const auth = require('./authController');
+const database = require('./db');
 
 const express = require("express");
 const cors = require("cors");
@@ -21,12 +22,14 @@ console.log("DB_NAME:", process.env.DB_NAME);
 const songRoutes = require("./routes/songRoutes");
 const recommendationRoutes = require("./routes/recommendationRoutes");
 const playlistRoutes = require("./routes/playlistRoutes");
+const fileRoutes = require("./routes/fileRoutes");
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/files', fileRoutes);
 
 // Health Check
 app.get("/api/health", (req, res) => {
@@ -35,6 +38,47 @@ app.get("/api/health", (req, res) => {
         message: "Spotify Backend Running"
     });
 });
+
+// Startup schema validation for users role constraint & new session columns
+(async function ensureSchemaUpdates() {
+    try {
+        const [rows] = await database.query(
+            "SELECT CONSTRAINT_NAME, CHECK_CLAUSE FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS WHERE CONSTRAINT_SCHEMA = ? AND CONSTRAINT_NAME = 'users_chk_1'",
+            [process.env.DB_NAME]
+        );
+
+        if (rows.length > 0) {
+            const checkClause = rows[0].CHECK_CLAUSE;
+            if (!checkClause.includes("'creator'")) {
+                console.warn('users_chk_1 does not include creator; updating constraint.');
+                await database.query('ALTER TABLE users DROP CHECK users_chk_1');
+                await database.query("ALTER TABLE users ADD CONSTRAINT users_chk_1 CHECK (role IN ('user', 'admin', 'creator'))");
+            }
+        }
+
+        // Ensure session_timeout_seconds in users table
+        const [userCols] = await database.query(
+            "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'users' AND COLUMN_NAME = 'session_timeout_seconds'",
+            [process.env.DB_NAME]
+        );
+        if (userCols.length === 0) {
+            console.log('Adding session_timeout_seconds column to users table...');
+            await database.query("ALTER TABLE users ADD COLUMN session_timeout_seconds INT DEFAULT 604800");
+        }
+
+        // Ensure last_used_at in sessions table
+        const [sessionCols] = await database.query(
+            "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'sessions' AND COLUMN_NAME = 'last_used_at'",
+            [process.env.DB_NAME]
+        );
+        if (sessionCols.length === 0) {
+            console.log('Adding last_used_at column to sessions table...');
+            await database.query("ALTER TABLE sessions ADD COLUMN last_used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+        }
+    } catch (error) {
+        console.warn('Failed schema updates check:', error.message);
+    }
+})();
 
 // Express middleware to authenticate requests using the existing authenticateRequest helper
 const expressAuth = async (req, res, next) => {
@@ -54,13 +98,18 @@ app.post("/api/auth/logout", expressAuth, (req, res) => auth.handleLogout(req, r
 app.post("/api/auth/send-otp", (req, res) => auth.handleSendOtp(req, res));
 app.post("/api/auth/verify-otp", (req, res) => auth.handleVerifyOtp(req, res));
 app.post("/api/auth/reset-password", (req, res) => auth.handleResetPassword(req, res));
+app.post("/api/auth/forgot-password", (req, res) => auth.handleForgotPasswordLink(req, res));
+app.get("/api/auth/verify-reset-token", (req, res) => auth.handleVerifyResetToken(req, res));
+app.post("/api/auth/reset-password-with-token", (req, res) => auth.handleResetPasswordWithToken(req, res));
 app.post("/api/auth/refresh-token", expressAuth, (req, res) => auth.handleRefreshToken(req, res));
 
 app.get("/api/user/profile", expressAuth, (req, res) => auth.handleGetProfile(req, res));
 app.put("/api/user/profile", expressAuth, (req, res) => auth.handleUpdateProfile(req, res));
 app.put("/api/user/change-password", expressAuth, (req, res) => auth.handleChangePassword(req, res));
+app.put("/api/user/session-timeout", expressAuth, (req, res) => auth.handleUpdateSessionTimeout(req, res));
 app.get("/api/user/dashboard", expressAuth, (req, res) => auth.handleGetDashboard(req, res));
 app.get("/api/user/sessions", expressAuth, (req, res) => auth.handleGetSessions(req, res));
+app.delete("/api/user/sessions", expressAuth, (req, res) => auth.handleRevokeAllSessions(req, res));
 app.delete("/api/user/sessions/:sessionId", expressAuth, (req, res) => auth.handleRevokeSession(req, res, req.params.sessionId));
 
 // ==================== ADMIN ROUTES ====================

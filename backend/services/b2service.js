@@ -1,6 +1,5 @@
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-// require("dotenv").config();
 
 const s3 = new S3Client({
     endpoint: process.env.B2_ENDPOINT,
@@ -9,16 +8,10 @@ const s3 = new S3Client({
         accessKeyId: process.env.B2_ACCESS_KEY,
         secretAccessKey: process.env.B2_SECRET_KEY,
     },
+    forcePathStyle: true,
 });
 
 async function getSignedStreamUrl(key) {
-
-    console.log("========== B2 DEBUG ==========");
-    console.log("Bucket :", process.env.B2_BUCKET);
-    console.log("Endpoint :", process.env.B2_ENDPOINT);
-    console.log("Region :", process.env.B2_REGION);
-    console.log("Key :", key);
-
     const command = new GetObjectCommand({
         Bucket: process.env.B2_BUCKET,
         Key: key,
@@ -28,13 +21,40 @@ async function getSignedStreamUrl(key) {
         expiresIn: 3600,
     });
 
-    console.log("Generated URL:");
-    console.log(url);
-    console.log("==============================");
-
     return url;
+}
+
+async function uploadFile(key, body, contentType) {
+    const command = new PutObjectCommand({
+        Bucket: process.env.B2_BUCKET,
+        Key: key,
+        Body: body,
+        ContentType: contentType,
+    });
+
+    await s3.send(command);
+    return key;
+}
+
+async function getObject(key) {
+    const command = new GetObjectCommand({
+        Bucket: process.env.B2_BUCKET,
+        Key: key,
+    });
+
+    const resp = await s3.send(command);
+    return resp; // contains Body (stream), ContentType, ContentLength
+}
+
+function getPublicUrl(key) {
+    const endpoint = process.env.B2_ENDPOINT.replace(/\/$/, '');
+    const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+    return `${endpoint}/${process.env.B2_BUCKET}/${encodedKey}`;
 }
 
 module.exports = {
     getSignedStreamUrl,
+    uploadFile,
+    getPublicUrl,
+    getObject,
 };

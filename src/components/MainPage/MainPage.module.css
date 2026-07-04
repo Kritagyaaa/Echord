@@ -55,6 +55,13 @@
   border-radius: 4px;
 }
 
+.playlistCollage {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
 .pickCard span {
   font-weight: 500;
   font-size: 14px;

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Play, Heart, ListPlus } from 'lucide-react';
 import styles from './MainPage.module.css';
 import placeholder from "../../assets/music-placeholder.jpg";
+import { PlaylistCover } from "../PlaylistCover/PlaylistCover";
 import { getSongs, getListeningHistory, toggleLikeSong } from "../../services/api";
 import { usePlayer } from "../../context/PlayerContext";
 import { usePlaylists } from "../../context/playlistcontext";
@@ -266,7 +267,11 @@ export function MainPage({
             className={styles.pickCard}
             onClick={() => selectPlaylist(playlist)}
           >
-            <img src={playlist.cover_url || placeholder} alt={playlist.name} />
+            <PlaylistCover
+              playlist={playlist}
+              className={styles.playlistCollage}
+              fallbackPlaceholder={placeholder}
+            />
             <span>{playlist.name}</span>
           </div>
         ))}

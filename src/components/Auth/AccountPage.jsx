@@ -4,7 +4,7 @@ import './AccountPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-function AccountPage({ user, onProfileUpdate, onBackToMain }) {
+function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'edit', 'password', 'notifications', 'sessions'
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -26,6 +26,12 @@ function AccountPage({ user, onProfileUpdate, onBackToMain }) {
   });
 
   const [sessions, setSessions] = useState([]);
+  const [sessionTimeoutSeconds, setSessionTimeoutSeconds] = useState(604800);
+  const [customValue, setCustomValue] = useState('15');
+  const [customUnit, setCustomUnit] = useState('seconds');
+  const [timeoutMessage, setTimeoutMessage] = useState('');
+  const [timeoutError, setTimeoutError] = useState('');
+  const [updatingTimeout, setUpdatingTimeout] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -45,9 +51,83 @@ function AccountPage({ user, onProfileUpdate, onBackToMain }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to fetch sessions');
       setSessions(data.sessions || []);
+      if (data.session_timeout_seconds) {
+        setSessionTimeoutSeconds(data.session_timeout_seconds);
+      }
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const formatTimeoutLabel = (seconds) => {
+    const secs = Number(seconds);
+    if (!secs || secs <= 0) return '7 Days';
+    if (secs < 60) return `${secs} Second${secs === 1 ? '' : 's'}`;
+    if (secs < 3600) {
+      const mins = Math.floor(secs / 60);
+      const remSecs = secs % 60;
+      return `${mins} Minute${mins === 1 ? '' : 's'}${remSecs ? ` ${remSecs}s` : ''}`;
+    }
+    if (secs < 86400) {
+      const hrs = Math.floor(secs / 3600);
+      const remMins = Math.floor((secs % 3600) / 60);
+      return `${hrs} Hour${hrs === 1 ? '' : 's'}${remMins ? ` ${remMins}m` : ''}`;
+    }
+    const days = Math.floor(secs / 86400);
+    const remHrs = Math.floor((secs % 86400) / 3600);
+    return `${days} Day${days === 1 ? '' : 's'}${remHrs ? ` ${remHrs}h` : ''}`;
+  };
+
+  const handleSaveSessionTimeout = async (targetSeconds) => {
+    const seconds = Number(targetSeconds);
+    if (isNaN(seconds) || seconds < 15) {
+      setTimeoutError('Minimum inactivity timeout is 15 seconds.');
+      return;
+    }
+    if (seconds > 604800) {
+      setTimeoutError('Maximum inactivity timeout is 7 days (604,800 seconds).');
+      return;
+    }
+
+    try {
+      setUpdatingTimeout(true);
+      setTimeoutError('');
+      setTimeoutMessage('');
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/user/session-timeout`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ timeout_seconds: seconds })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update session timeout.');
+      setSessionTimeoutSeconds(seconds);
+      setTimeoutMessage(`Inactivity timeout saved: ${formatTimeoutLabel(seconds)}`);
+      setTimeout(() => setTimeoutMessage(''), 4000);
+    } catch (err) {
+      setTimeoutError(err.message);
+    } finally {
+      setUpdatingTimeout(false);
+    }
+  };
+
+  const handleCustomTimeoutSubmit = (e) => {
+    e.preventDefault();
+    const val = Number(customValue);
+    if (isNaN(val) || val <= 0) {
+      setTimeoutError('Please enter a valid positive number.');
+      return;
+    }
+    let multiplier = 1;
+    if (customUnit === 'minutes') multiplier = 60;
+    if (customUnit === 'hours') multiplier = 3600;
+    if (customUnit === 'days') multiplier = 86400;
+
+    const totalSeconds = val * multiplier;
+    handleSaveSessionTimeout(totalSeconds);
   };
 
   const handleUpdateProfile = async (e) => {
@@ -126,7 +206,13 @@ function AccountPage({ user, onProfileUpdate, onBackToMain }) {
     setTimeout(() => setMessage(''), 3000);
   };
 
-  const handleRevokeSession = async (sessionId) => {
+  const handleRevokeSession = async (sessionId, isCurrent) => {
+    const confirmMsg = isCurrent 
+      ? 'Are you sure you want to end your CURRENT session? This will immediately log you out of the application.'
+      : 'Are you sure you want to terminate this remote session?';
+      
+    if (!window.confirm(confirmMsg)) return;
+
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/user/sessions/${sessionId}`, {
@@ -135,8 +221,32 @@ function AccountPage({ user, onProfileUpdate, onBackToMain }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to revoke session');
-      setMessage('Session terminated successfully.');
-      fetchSessions();
+      
+      if (isCurrent) {
+        onLogout?.();
+      } else {
+        setMessage('Session terminated successfully.');
+        fetchSessions();
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleRevokeAllSessions = async () => {
+    const confirmMsg = 'Are you sure you want to log out of ALL devices and sessions? This will immediately log you out of this device as well.';
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/user/sessions`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to revoke all sessions');
+      
+      onLogout?.();
     } catch (err) {
       setError(err.message);
     }
@@ -195,7 +305,7 @@ function AccountPage({ user, onProfileUpdate, onBackToMain }) {
             onClick={() => { setActiveTab('sessions'); setError(''); setMessage(''); }}
           >
             <Monitor size={18} />
-            Active Sessions
+            Session Management
           </button>
         </nav>
       </div>
@@ -417,31 +527,155 @@ function AccountPage({ user, onProfileUpdate, onBackToMain }) {
           </div>
         )}
 
-        {/* Tab 5: Active Sessions */}
+        {/* Tab 5: Session Management */}
         {activeTab === 'sessions' && (
           <div className="account-pane">
-            <h2>Active Sessions</h2>
-            <p className="section-description">Manage all device connections linked to your account. You can log out of any remote session.</p>
-            
-            <div className="sessions-list">
+            <div className="sessions-header-row">
+              <div>
+                <h2>Session Management</h2>
+                <p className="section-description">
+                  Track all device connections and set how long an account can remain idle before automatically timing out.
+                </p>
+              </div>
+              {sessions.length > 0 && (
+                <button className="revoke-all-btn" onClick={handleRevokeAllSessions}>
+                  Log Out of All Devices
+                </button>
+              )}
+            </div>
+
+            {/* Inactivity Timeout Config Card */}
+            <div className="timeout-config-card">
+              <div className="timeout-config-info">
+                <div className="timeout-title-row">
+                  <h3>Automatic Inactivity Logout Timeout</h3>
+                  <span className="active-timeout-pill">
+                    Current Setting: {formatTimeoutLabel(sessionTimeoutSeconds)}
+                  </span>
+                </div>
+                <p>
+                  Choose how long your account can remain unused before your session automatically expires (minimum 15 seconds, maximum 7 days).
+                </p>
+              </div>
+
+              {timeoutError && <div className="card-feedback card-error-msg">{timeoutError}</div>}
+              {timeoutMessage && <div className="card-feedback card-success-msg">{timeoutMessage}</div>}
+
+              <div className="timeout-presets">
+                {[
+                  { label: '15 Sec', value: 15 },
+                  { label: '1 Min', value: 60 },
+                  { label: '1 Hour', value: 3600 },
+                  { label: '1 Day', value: 86400 },
+                  { label: '7 Days', value: 604800 }
+                ].map(preset => (
+                  <button
+                    key={preset.value}
+                    type="button"
+                    className={`timeout-preset-btn ${sessionTimeoutSeconds === preset.value ? 'active' : ''}`}
+                    onClick={() => handleSaveSessionTimeout(preset.value)}
+                    disabled={updatingTimeout}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+
+              <form onSubmit={handleCustomTimeoutSubmit} className="custom-timeout-row">
+                <label htmlFor="customValue">Custom duration:</label>
+                <input
+                  id="customValue"
+                  type="number"
+                  min="1"
+                  value={customValue}
+                  onChange={(e) => setCustomValue(e.target.value)}
+                  className="timeout-input"
+                  placeholder="e.g. 15"
+                  required
+                />
+                <select
+                  value={customUnit}
+                  onChange={(e) => setCustomUnit(e.target.value)}
+                  className="timeout-unit-select"
+                >
+                  <option value="seconds">Seconds</option>
+                  <option value="minutes">Minutes</option>
+                  <option value="hours">Hours</option>
+                  <option value="days">Days</option>
+                </select>
+                <button
+                  type="submit"
+                  className="save-timeout-btn"
+                  disabled={updatingTimeout}
+                >
+                  {updatingTimeout ? 'Saving...' : 'Save Timeout'}
+                </button>
+              </form>
+            </div>
+
+            {/* Active Sessions Table */}
+            <div className="sessions-table-container">
+              <h3>Active Device Sessions</h3>
+              <p className="table-subtitle">
+                Older sessions are protected and cannot be logged out by newer login sessions.
+              </p>
+
               {sessions.length === 0 ? (
-                <p style={{ color: '#b3b3b3' }}>No other active sessions found.</p>
+                <p style={{ color: '#b3b3b3', marginTop: '12px' }}>No active sessions found.</p>
               ) : (
-                sessions.map((s) => (
-                  <div key={s.id} className="session-item">
-                    <div className="session-icon">
-                      <Monitor size={22} color="#1db954" />
-                    </div>
-                    <div className="session-details">
-                      <h4>{s.device_info}</h4>
-                      <p>IP Address: {s.ip_address}</p>
-                      <span className="session-meta">Created at: {new Date(s.created_at).toLocaleString()}</span>
-                    </div>
-                    <button className="revoke-btn" onClick={() => handleRevokeSession(s.id)}>
-                      End Session
-                    </button>
-                  </div>
-                ))
+                <table className="sessions-table">
+                  <thead>
+                    <tr>
+                      <th>Device & IP</th>
+                      <th>First Logged In</th>
+                      <th>Last Active</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sessions.map((s) => (
+                      <tr key={s.id} className={s.is_current ? 'current-row' : ''}>
+                        <td>
+                          <div className="device-cell">
+                            <Monitor size={18} color={s.is_current ? "#1db954" : "#b3b3b3"} />
+                            <div>
+                              <div className="device-name">{s.device_info}</div>
+                              <div className="device-ip">{s.ip_address}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{new Date(s.created_at).toLocaleString()}</td>
+                        <td>{s.last_used_at ? new Date(s.last_used_at).toLocaleString() : 'Just now'}</td>
+                        <td>
+                          {s.is_current ? (
+                            <span className="current-badge">Current Device</span>
+                          ) : (
+                            <span className="active-status-badge">Active</span>
+                          )}
+                        </td>
+                        <td>
+                          {s.can_revoke === false ? (
+                            <button
+                              className="revoke-btn disabled-revoke"
+                              disabled
+                              title="Protected: Cannot revoke a session created earlier than your current login."
+                            >
+                              Protected
+                            </button>
+                          ) : (
+                            <button
+                              className="revoke-btn"
+                              onClick={() => handleRevokeSession(s.id, s.is_current)}
+                            >
+                              End Session
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               )}
             </div>
           </div>

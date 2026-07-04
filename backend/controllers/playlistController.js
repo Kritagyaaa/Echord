@@ -213,11 +213,15 @@ exports.getUserPlaylists = async (req, res) => {
                 p.name,
                 p.cover_url,
                 p.created_at,
-                COUNT(ps.song_id) AS song_count
+                COUNT(ps.song_id) AS song_count,
+                GROUP_CONCAT(s.cover_url ORDER BY ps.id ASC SEPARATOR '|||') AS song_covers
             FROM playlists p
 
             LEFT JOIN playlist_songs ps
                 ON p.id = ps.playlist_id
+
+            LEFT JOIN songs s
+                ON ps.song_id = s.id
 
             WHERE p.user_id = ?
 
@@ -230,9 +234,21 @@ exports.getUserPlaylists = async (req, res) => {
 
         );
 
+        const playlists = rows.map(row => {
+            const song_covers = row.song_covers ? row.song_covers.split('|||') : [];
+            return {
+                id: row.id,
+                name: row.name,
+                cover_url: row.cover_url,
+                created_at: row.created_at,
+                song_count: row.song_count,
+                song_covers: song_covers.filter(Boolean)
+            };
+        });
+
         res.json({
             success: true,
-            playlists: rows,
+            playlists,
         });
 
     } catch (err) {

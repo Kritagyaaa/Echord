@@ -4,6 +4,8 @@ const { authenticateRequest } = require("../authMiddleware");
 
 const {
     getAllSongs,
+    getCreatorSongs,
+    uploadCreatorSong,
     searchSongs,
     streamSong,
     toggleLikeSong,
@@ -31,6 +33,8 @@ const expressAuth = async (req, res, next) => {
 };
 
 router.get("/", getAllSongs);
+router.get("/creator/me", expressAuth, getCreatorSongs);
+router.post("/creator/me", expressAuth, uploadCreatorSong);
 router.get("/history", expressAuth, getListeningHistory);
 router.get("/liked", expressAuth, getLikedSongs);
 

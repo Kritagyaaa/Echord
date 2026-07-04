@@ -11,6 +11,7 @@ const {
     updatePlaylist,
     deletePlaylist,
     removeSongFromPlaylist,
+    addSongsToPlaylistBulk,
 } = require("../controllers/playlistController");
 
 const expressAuth = async (req, res, next) => {
@@ -62,6 +63,16 @@ router.post(
     "/:playlistId/songs",
     expressAuth,
     addSongToPlaylist
+);
+
+// ==============================
+// ADD MULTIPLE SONGS TO PLAYLIST (BULK)
+// ==============================
+
+router.post(
+    "/:playlistId/songs/bulk",
+    expressAuth,
+    addSongsToPlaylistBulk
 );
 
 // ==============================

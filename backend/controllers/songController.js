@@ -346,6 +346,8 @@ async function searchSongs(req, res) {
         }
 
         const keyword = `%${query}%`;
+        const exactMatch = query;
+        const startsWith = `${query}%`;
 
         console.log("Running SQL...");
 
@@ -382,13 +384,22 @@ async function searchSongs(req, res) {
                 OR a.name LIKE ?
                 OR al.title LIKE ?
 
-            ORDER BY s.title ASC
+            ORDER BY
+                CASE WHEN s.title = ? THEN 0 ELSE 1 END,
+                CASE WHEN s.title LIKE ? THEN 0 ELSE 1 END,
+                CASE WHEN a.name LIKE ? THEN 0 ELSE 1 END,
+                CASE WHEN s.title LIKE ? THEN 0 ELSE 1 END,
+                s.title ASC
             `,
             [
                 userId,
                 userId,
                 keyword,
                 keyword,
+                keyword,
+                exactMatch,
+                startsWith,
+                startsWith,
                 keyword,
             ]
         );

@@ -116,9 +116,6 @@ INSERT INTO songs (id, title, artist_id, album_id, genre_id, duration, b2_key, u
 (29, 'Fly Me To The Moon - 2008 Remastered', 6, 15, 6, 147, '29.mp3', 1, 2, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Frank_Sinatra_1961.jpg/500px-Frank_Sinatra_1961.jpg'),
 (30, 'Love Dose', 4, 16, 4, 224, '30.mp3', 1, 1, 0, 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Yo_Yo_Honey_Singh_%282014%29_04.jpg/500px-Yo_Yo_Honey_Singh_%282014%29_04.jpg');
 
--- =====================================
--- VERIFY
--- =====================================
 
 SELECT COUNT(*) AS artists FROM artists;
 SELECT COUNT(*) AS albums FROM albums;
@@ -129,11 +126,4 @@ SELECT COUNT(*) AS songs FROM songs;
 FROM songs;
 UPDATE songs
 SET b2_key = CONCAT(id, '.mp3');
-
-ALTER TABLE artists
-ADD COLUMN cover_url VARCHAR(500);
-
-ALTER TABLE songs
-ADD COLUMN cover_url VARCHAR(500),
-ADD COLUMN like_count INT DEFAULT 0;
 

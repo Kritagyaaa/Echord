@@ -618,7 +618,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             <div className="sessions-table-container">
               <h3>Active Device Sessions</h3>
               <p className="table-subtitle">
-                Older sessions are protected and cannot be logged out by newer login sessions.
+                View all devices currently logged into your account. Click "End Session" on any device to log out that session.
               </p>
 
               {sessions.length === 0 ? (
@@ -656,22 +656,12 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                           )}
                         </td>
                         <td>
-                          {s.can_revoke === false ? (
-                            <button
-                              className="revoke-btn disabled-revoke"
-                              disabled
-                              title="Protected: Cannot revoke a session created earlier than your current login."
-                            >
-                              Protected
-                            </button>
-                          ) : (
-                            <button
-                              className="revoke-btn"
-                              onClick={() => handleRevokeSession(s.id, s.is_current)}
-                            >
-                              End Session
-                            </button>
-                          )}
+                          <button
+                            className="revoke-btn"
+                            onClick={() => handleRevokeSession(s.id, s.is_current)}
+                          >
+                            {s.is_current ? 'End Session' : 'Log Out Device'}
+                          </button>
                         </td>
                       </tr>
                     ))}

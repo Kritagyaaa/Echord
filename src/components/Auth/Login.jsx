@@ -17,6 +17,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingAction, setLoadingAction] = useState('');
   const [pendingGoogleUser, setPendingGoogleUser] = useState(null);
 
   const triggerGoogleAuth = useGoogleLogin({
@@ -132,7 +133,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
         throw new Error(data.error || 'Failed to send OTP.');
       }
       setDummyOtp(data.otp);
-      setMessage(`OTP sent! Testing OTP: ${data.otp}`);
+      setMessage('OTP sent successfully!');
       setLoginMethod('otp');
     } catch (err) {
       setError(err.message);
@@ -176,6 +177,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
     setError('');
     setMessage('');
     setLoading(true);
+    setLoadingAction('reset_link');
     try {
       const res = await fetch(`${API_URL}/auth/forgot-password`, {
         method: 'POST',
@@ -192,6 +194,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
       setError(err.message);
     } finally {
       setLoading(false);
+      setLoadingAction('');
     }
   };
 
@@ -204,6 +207,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
     setError('');
     setMessage('');
     setLoading(true);
+    setLoadingAction('reset_otp');
     try {
       const res = await fetch(`${API_URL}/auth/send-otp`, {
         method: 'POST',
@@ -215,7 +219,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
         throw new Error(data.error || 'Failed to send reset OTP.');
       }
       setDummyOtp(data.otp);
-      setMessage(`Reset OTP sent! Testing OTP: ${data.otp}`);
+      setMessage('Reset OTP sent! Please check your email.');
       setLoginMethod('forgot_reset');
       setOtp('');
       setPassword('');
@@ -223,6 +227,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
       setError(err.message);
     } finally {
       setLoading(false);
+      setLoadingAction('');
     }
   };
 
@@ -397,21 +402,6 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                 />
               </div>
 
-              {dummyOtp && (
-                <div style={{
-                  background: 'rgba(29, 185, 84, 0.1)',
-                  border: '1px solid #1db954',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  marginBottom: '20px',
-                  fontSize: '12px',
-                  color: '#1db954',
-                  textAlign: 'left'
-                }}>
-                  <strong>Testing Box:</strong> Dummy OTP generated is <strong>{dummyOtp}</strong>. You can enter it above to log in.
-                </div>
-              )}
-
               <button className="auth-btn" type="submit" disabled={loading}>
                 {loading ? 'Verifying...' : 'Verify & Log In'}
               </button>
@@ -454,7 +444,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                   disabled={loading}
                   style={{ marginBottom: 0 }}
                 >
-                  {loading ? 'Sending Reset Link...' : 'Send Reset Link'}
+                  {loadingAction === 'reset_link' ? 'Sending Reset Link...' : 'Send Reset Link'}
                 </button>
                 
                 <button
@@ -463,24 +453,9 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                   disabled={loading}
                   style={{ background: 'transparent', border: '1px solid #1db954', color: '#1db954', marginBottom: 0 }}
                 >
-                  {loading ? 'Requesting OTP...' : 'Send Reset OTP'}
+                  {loadingAction === 'reset_otp' ? 'Requesting OTP...' : 'Send Reset OTP'}
                 </button>
               </div>
-
-              {dummyOtp && (
-                <div style={{
-                  background: 'rgba(29, 185, 84, 0.1)',
-                  border: '1px solid #1db954',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  marginTop: '20px',
-                  fontSize: '12px',
-                  color: '#1db954',
-                  textAlign: 'left'
-                }}>
-                  <strong>Testing Box:</strong> {dummyOtp}
-                </div>
-              )}
 
               <p style={{ marginTop: '20px', fontSize: '13px' }}>
                 <a
@@ -531,21 +506,6 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                 />
               </div>
 
-              {dummyOtp && (
-                <div style={{
-                  background: 'rgba(29, 185, 84, 0.1)',
-                  border: '1px solid #1db954',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  marginBottom: '20px',
-                  fontSize: '12px',
-                  color: '#1db954',
-                  textAlign: 'left'
-                }}>
-                  <strong>Testing Box:</strong> Reset OTP generated is <strong>{dummyOtp}</strong>. You can enter it above to reset password.
-                </div>
-              )}
-
               <button className="auth-btn" type="submit" disabled={loading}>
                 {loading ? 'Resetting Password...' : 'Reset Password'}
               </button>
@@ -585,21 +545,6 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                   required
                 />
               </div>
-
-              {dummyOtp && (
-                <div style={{
-                  background: 'rgba(29, 185, 84, 0.1)',
-                  border: '1px solid #1db954',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  marginBottom: '20px',
-                  fontSize: '12px',
-                  color: '#1db954',
-                  textAlign: 'left'
-                }}>
-                  <strong>Testing Box:</strong> Dummy verification OTP is <strong>{dummyOtp}</strong>.
-                </div>
-              )}
 
               <button className="auth-btn" type="submit" disabled={loading}>
                 {loading ? 'Verifying...' : 'Verify Code'}

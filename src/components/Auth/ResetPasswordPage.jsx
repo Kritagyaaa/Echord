@@ -20,7 +20,7 @@ function ResetPasswordPage() {
   useEffect(() => {
     if (!token) {
       setIsValidToken(false);
-      setError('Invalid reset link. Missing token.');
+      setError('Invalid password reset link. Missing security token.');
       return;
     }
 
@@ -32,11 +32,11 @@ function ResetPasswordPage() {
           setIsValidToken(true);
         } else {
           setIsValidToken(false);
-          setError(data.error || 'This reset link has expired or is invalid.');
+          setError(data.error || 'This password reset link has expired or is invalid.');
         }
       } catch (err) {
         setIsValidToken(false);
-        setError('Failed to connect to the authentication server.');
+        setError('Failed to connect to the authentication server. Please try again.');
       }
     };
 
@@ -77,7 +77,7 @@ function ResetPasswordPage() {
       setMessage('Password reset successful! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
-      }, 3000);
+      }, 2500);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -96,14 +96,31 @@ function ResetPasswordPage() {
           <h1>Reset Password</h1>
 
           {isValidToken === null && (
-            <div style={{ color: '#b3b3b3', margin: '20px 0', fontSize: '16px' }}>
-              Verifying your reset link...
+            <div style={{ padding: '30px 0', textAlign: 'center' }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                border: '3px solid rgba(255,255,255,0.1)',
+                borderTop: '3px solid #1db954',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite',
+                margin: '0 auto 16px auto'
+              }} />
+              <style>{`
+                @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+              `}</style>
+              <div style={{ color: '#b3b3b3', fontSize: '15px', fontWeight: '500' }}>
+                Verifying reset link security token...
+              </div>
             </div>
           )}
 
           {isValidToken === false && (
-            <div>
-              <div style={{ color: '#ff4444', marginBottom: '20px', fontSize: '14px', fontWeight: 'bold' }}>
+            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+              <div style={{ color: '#ff4444', marginBottom: '20px', fontSize: '14px', fontWeight: 'bold', lineHeight: '1.5' }}>
                 {error}
               </div>
               <button className="auth-btn" onClick={() => navigate('/login')}>
@@ -140,7 +157,7 @@ function ResetPasswordPage() {
               </div>
 
               <button className="auth-btn" type="submit" disabled={loading || !!message}>
-                {loading ? 'Updating Password...' : 'Save New Password'}
+                {loading ? 'Saving New Password...' : 'Save New Password'}
               </button>
             </form>
           )}

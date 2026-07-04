@@ -551,17 +551,13 @@ async function handleGetSessions(request, response) {
     const currentSession = sessions.find(s => s.id === request.sessionId);
     const currentCreatedAt = currentSession ? new Date(currentSession.created_at).getTime() : 0;
 
-    // Map sessions to include is_current and can_revoke flag (older sessions cannot be revoked by newer sessions)
+    // Map sessions to include is_current and can_revoke flag (all active user sessions can be revoked)
     const sessionsWithMetadata = sessions.map(s => {
       const isCurrent = s.id === request.sessionId;
-      const sessionCreatedAt = new Date(s.created_at).getTime();
-      // Current session can always end itself. Otherwise, target session must NOT be created earlier than current session.
-      const canRevoke = isCurrent || (currentCreatedAt > 0 && sessionCreatedAt >= currentCreatedAt);
-
       return {
         ...s,
         is_current: isCurrent,
-        can_revoke: canRevoke
+        can_revoke: true
       };
     });
 
@@ -597,27 +593,6 @@ async function handleRevokeSession(request, response, sessionId) {
 
     if (!targetSession) {
       return sendJson(response, 404, { error: 'Session not found or already inactive.' });
-    }
-
-    // Older Session Protection Rule:
-    // A session created later cannot revoke a session created earlier than itself.
-    if (targetSession.id !== request.sessionId) {
-      const [currentSessions] = await database.query(
-        'SELECT created_at FROM sessions WHERE id = ?',
-        [request.sessionId]
-      );
-      const currentSession = currentSessions[0];
-
-      if (currentSession) {
-        const targetTime = new Date(targetSession.created_at).getTime();
-        const currentTime = new Date(currentSession.created_at).getTime();
-
-        if (targetTime < currentTime) {
-          return sendJson(response, 403, {
-            error: 'Protection Rule Violation: Your current login session cannot end a session that was created before it.'
-          });
-        }
-      }
     }
 
     // Invalidate the session
@@ -959,9 +934,15 @@ async function handleForgotPasswordLink(request, response) {
  */
 async function handleVerifyResetToken(request, response) {
   try {
-    // Parse query params from request URL
-    const url = new URL(request.url, `http://${request.headers.host}`);
-    const token = url.searchParams.get('token');
+    let token = request.query?.token;
+    if (!token && request.url) {
+      try {
+        const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
+        token = url.searchParams.get('token');
+      } catch (e) {
+        token = null;
+      }
+    }
 
     if (!token) {
       return sendJson(response, 400, { error: 'Token is required.' });

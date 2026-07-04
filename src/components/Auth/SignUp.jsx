@@ -193,21 +193,6 @@ function SignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onCreatorSignUpC
                   />
                 </div>
 
-                {dummyOtp && (
-                  <div style={{
-                    background: 'rgba(29, 185, 84, 0.1)',
-                    border: '1px solid #1db954',
-                    borderRadius: '4px',
-                    padding: '10px',
-                    marginBottom: '20px',
-                    fontSize: '12px',
-                    color: '#1db954',
-                    textAlign: 'left'
-                  }}>
-                    <strong>Testing Box:</strong> Dummy Verification OTP is <strong>{dummyOtp}</strong>.
-                  </div>
-                )}
-
                 <button className="auth-btn" type="submit" disabled={loading}>
                   {loading ? 'Verifying...' : 'Verify Code'}
                 </button>

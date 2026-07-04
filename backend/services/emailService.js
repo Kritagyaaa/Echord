@@ -2,10 +2,14 @@ const nodemailer = require('nodemailer');
 
 // Create transporter from environment variables
 function getTransporter() {
-  const host = process.env.SMTP_HOST;
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = process.env.SMTP_PORT || 587;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const user = process.env.SMTP_USER || process.env.EMAIL_USER;
+  let pass = process.env.SMTP_PASS;
+
+  if (pass) {
+    pass = pass.replace(/\s+/g, ''); // Strip spaces from Gmail App Password
+  }
 
   // If credentials are not set or contain placeholders, return null (triggers Mock Mode)
   if (!user || !pass || user.includes('your-gmail') || pass.includes('your-gmail')) {
@@ -194,7 +198,7 @@ async function sendMail(to, subject, html, logMessage) {
     };
   }
 
-  const fromEmail = process.env.SMTP_FROM_EMAIL || 'no-reply@spotify-clone.com';
+  const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || 'no-reply@spotify-clone.com';
   
   const mailOptions = {
     from: `"Spotify Clone" <${fromEmail}>`,

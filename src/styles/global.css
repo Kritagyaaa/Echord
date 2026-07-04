@@ -23,3 +23,25 @@ body {
 button {
   font: inherit;
 }
+
+/* Playlist Collage Grid */
+.playlist-collage-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
+  overflow: hidden !important;
+  aspect-ratio: 1 / 1 !important;
+  gap: 1px !important;
+  background: #282828 !important;
+}
+
+.playlist-collage-grid img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+

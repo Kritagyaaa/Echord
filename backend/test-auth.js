@@ -434,23 +434,22 @@ async function runTests() {
   const oldSessionMeta = sessionsFromNew.find(s => s.id === oldSessionId);
   const newSessionMeta = sessionsFromNew.find(s => s.id === newSessionId);
 
-  assert.equal(oldSessionMeta.can_revoke, false, 'Newer session should NOT be allowed to revoke older session');
+  assert.equal(oldSessionMeta.can_revoke, true, 'Remote active session should be allowed to be revoked');
   assert.equal(newSessionMeta.can_revoke, true, 'Current session can revoke itself');
 
-  // 4. Attempt to revoke older session from newer session (backend 403 test)
+  // 4. Attempt to revoke remote session (should succeed)
   const revokeAttemptReq = {
     user: { id: sessionUserId },
     sessionId: newSessionId
   };
   let revokeAttemptCode = null;
-  let revokeAttemptError = null;
+  let revokeAttemptMessage = null;
   await authController.handleRevokeSession(revokeAttemptReq, {
     writeHead: (code) => { revokeAttemptCode = code; },
-    end: (str) => { revokeAttemptError = JSON.parse(str).error; }
+    end: (str) => { revokeAttemptMessage = JSON.parse(str).message; }
   }, oldSessionId);
 
-  assert.equal(revokeAttemptCode, 403, 'Attempting to revoke an older session should return 403 Forbidden');
-  assert.ok(revokeAttemptError.includes('Protection Rule Violation'), 'Error message should explain older session protection');
+  assert.equal(revokeAttemptCode, 200, 'Attempting to revoke a remote session should return 200 OK');
 
   // 5. Test handleUpdateSessionTimeout
   const updateTimeoutReq = {

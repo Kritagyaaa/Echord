@@ -110,10 +110,15 @@ async function getAllSongs(req, res) {
             ORDER BY s.id DESC
         `, [userId, userId]);
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.status(200).json({
             success: true,
-            count: songs.length,
-            songs,
+            count: formattedSongs.length,
+            songs: formattedSongs,
         });
 
     } catch (error) {
@@ -161,7 +166,12 @@ async function getCreatorSongs(req, res) {
             ORDER BY s.created_at DESC
         `, [creator.id]);
 
-        res.status(200).json({ success: true, count: songs.length, songs });
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
+        res.status(200).json({ success: true, count: formattedSongs.length, songs: formattedSongs });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -207,7 +217,7 @@ async function uploadCreatorSong(req, res) {
             const coverKey = `covers/${Date.now()}_${safeTitle}${coverExtension}`;
             const coverBuffer = Buffer.from(coverBase64, 'base64');
             await b2Service.uploadFile(coverKey, coverBuffer, coverFileType || 'image/jpeg');
-            coverUrl = b2Service.getPublicUrl(coverKey);
+            coverUrl = coverKey;
         }
 
         const [result] = await pool.query(
@@ -240,7 +250,12 @@ async function uploadCreatorSong(req, res) {
             [result.insertId]
         );
 
-        res.status(201).json({ success: true, song: rows[0] });
+        const formattedSong = {
+            ...rows[0],
+            cover_url: b2Service.formatCoverUrl(rows[0].cover_url, req)
+        };
+
+        res.status(201).json({ success: true, song: formattedSong });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Unable to upload song.' });
@@ -356,10 +371,15 @@ async function searchSongs(req, res) {
         console.log("Search Success!");
         console.log("Songs Found:", songs.length);
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.json({
             success: true,
-            count: songs.length,
-            songs,
+            count: formattedSongs.length,
+            songs: formattedSongs,
         });
 
     } catch (error) {
@@ -541,10 +561,15 @@ async function getListeningHistory(req, res) {
             LIMIT 50
         `, [userId, userId]);
 
+        const formattedHistory = history.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.status(200).json({
             success: true,
-            count: history.length,
-            songs: history,
+            count: formattedHistory.length,
+            songs: formattedHistory,
         });
     } catch (error) {
         console.error(error);
@@ -583,10 +608,15 @@ async function getLikedSongs(req, res) {
             ORDER BY l.liked_at DESC
         `, [userId]);
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.status(200).json({
             success: true,
-            count: songs.length,
-            songs,
+            count: formattedSongs.length,
+            songs: formattedSongs,
         });
     } catch (error) {
         console.error(error);

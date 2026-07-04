@@ -22,6 +22,7 @@ async function getContentRecommendations(songId, recentSongs = []) {
 
     // Get all other songs
    const excludedSongs = [...new Set(recentSongs)];
+   if (excludedSongs.length === 0) excludedSongs.push(-1);
 
    const placeholders = excludedSongs
     .map(() => "?")

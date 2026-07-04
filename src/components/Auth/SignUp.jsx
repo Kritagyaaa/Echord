@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './auth.css';
 import { FaSpotify } from 'react-icons/fa';
 import { SocialButtons } from './SocialButtons';
+import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleNameModal } from './GoogleNameModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -17,25 +19,58 @@ function SignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onCreatorSignUpC
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationOtp, setVerificationOtp] = useState('');
   const [dummyOtp, setDummyOtp] = useState('');
+  const [pendingGoogleUser, setPendingGoogleUser] = useState(null);
 
-  const handleGoogleSignUp = async () => {
+  const triggerGoogleAuth = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setLoading(true);
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const profile = await res.json();
+        setPendingGoogleUser({
+          email: profile.email,
+          name: profile.name || 'Google User',
+          google_id: profile.sub,
+          profile_picture: profile.picture,
+        });
+      } catch (err) {
+        setError('Failed to fetch Google user profile.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setError('Google Sign-Up was cancelled or failed.');
+    },
+  });
+
+  const handleGoogleSignUp = () => {
     setError('');
+    triggerGoogleAuth();
+  };
+
+  const handleGoogleModalConfirm = async ({ displayName, shareName }) => {
+    if (!pendingGoogleUser) return;
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/auth/social-login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: 'dummygoogle@example.com',
-          name: 'Dummy Google User',
-          google_id: 'g-123456',
-          profile_picture: 'https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg'
+          email: pendingGoogleUser.email,
+          name: displayName,
+          google_id: pendingGoogleUser.google_id,
+          profile_picture: pendingGoogleUser.profile_picture,
+          share_name: shareName,
         }),
       });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || 'Google Sign Up failed.');
       }
+      setPendingGoogleUser(null);
       onLoginSuccess?.(data.token, data.user);
     } catch (err) {
       setError(err.message);
@@ -43,6 +78,7 @@ function SignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onCreatorSignUpC
       setLoading(false);
     }
   };
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -286,8 +322,17 @@ function SignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onCreatorSignUpC
           )}
         </div>
       </div>
+
+      {pendingGoogleUser && (
+        <GoogleNameModal
+          googleUser={pendingGoogleUser}
+          onConfirm={handleGoogleModalConfirm}
+          onCancel={() => setPendingGoogleUser(null)}
+        />
+      )}
     </div>
   );
 }
 
 export default SignUp;
+

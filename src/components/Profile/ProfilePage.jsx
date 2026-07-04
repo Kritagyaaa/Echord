@@ -121,6 +121,7 @@ export function ProfilePage({ user, onBackToMain }) {
             src={user?.profile_picture || FALLBACK_AVATAR}
             alt="Profile Avatar"
             className={styles.avatar}
+            referrerPolicy="no-referrer"
           />
         </div>
         <div className={styles.bannerInfo}>

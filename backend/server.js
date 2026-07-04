@@ -39,8 +39,8 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-// Startup schema validation for users role constraint
-(async function ensureUsersConstraint() {
+// Startup schema validation for users role constraint & new session columns
+(async function ensureSchemaUpdates() {
     try {
         const [rows] = await database.query(
             "SELECT CONSTRAINT_NAME, CHECK_CLAUSE FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS WHERE CONSTRAINT_SCHEMA = ? AND CONSTRAINT_NAME = 'users_chk_1'",
@@ -55,8 +55,28 @@ app.get("/api/health", (req, res) => {
                 await database.query("ALTER TABLE users ADD CONSTRAINT users_chk_1 CHECK (role IN ('user', 'admin', 'creator'))");
             }
         }
+
+        // Ensure session_timeout_seconds in users table
+        const [userCols] = await database.query(
+            "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'users' AND COLUMN_NAME = 'session_timeout_seconds'",
+            [process.env.DB_NAME]
+        );
+        if (userCols.length === 0) {
+            console.log('Adding session_timeout_seconds column to users table...');
+            await database.query("ALTER TABLE users ADD COLUMN session_timeout_seconds INT DEFAULT 604800");
+        }
+
+        // Ensure last_used_at in sessions table
+        const [sessionCols] = await database.query(
+            "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'sessions' AND COLUMN_NAME = 'last_used_at'",
+            [process.env.DB_NAME]
+        );
+        if (sessionCols.length === 0) {
+            console.log('Adding last_used_at column to sessions table...');
+            await database.query("ALTER TABLE sessions ADD COLUMN last_used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+        }
     } catch (error) {
-        console.warn('Failed to validate/update users role constraint:', error.message);
+        console.warn('Failed schema updates check:', error.message);
     }
 })();
 
@@ -86,8 +106,10 @@ app.post("/api/auth/refresh-token", expressAuth, (req, res) => auth.handleRefres
 app.get("/api/user/profile", expressAuth, (req, res) => auth.handleGetProfile(req, res));
 app.put("/api/user/profile", expressAuth, (req, res) => auth.handleUpdateProfile(req, res));
 app.put("/api/user/change-password", expressAuth, (req, res) => auth.handleChangePassword(req, res));
+app.put("/api/user/session-timeout", expressAuth, (req, res) => auth.handleUpdateSessionTimeout(req, res));
 app.get("/api/user/dashboard", expressAuth, (req, res) => auth.handleGetDashboard(req, res));
 app.get("/api/user/sessions", expressAuth, (req, res) => auth.handleGetSessions(req, res));
+app.delete("/api/user/sessions", expressAuth, (req, res) => auth.handleRevokeAllSessions(req, res));
 app.delete("/api/user/sessions/:sessionId", expressAuth, (req, res) => auth.handleRevokeSession(req, res, req.params.sessionId));
 
 // ==================== ADMIN ROUTES ====================

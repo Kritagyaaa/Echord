@@ -43,7 +43,7 @@ function ProtectedLayout({
   const isProfilePage = location.pathname === '/profile';
 
   if (!isAuthenticated) {
-    return <Navigate to="/signup" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return (
@@ -142,6 +142,55 @@ function App() {
     return () => clearTimeout(timer);
 
   }, [searchQuery]);
+
+  // Global 401 Interceptor: Immediately log out and redirect to login if session expires or times out
+  useEffect(() => {
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args);
+      if (response.status === 401 && isAuthenticated) {
+        console.warn('Session expired or unauthorized. Clearing session and redirecting to login...');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('last_song');
+        localStorage.removeItem('last_queue');
+        localStorage.removeItem('playback_time');
+        setIsAuthenticated(false);
+        setUser(null);
+        navigate('/login', { replace: true });
+      }
+      return response;
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, [isAuthenticated, navigate]);
+
+  // Periodic session heartbeat to detect inactivity timeout even if user is idle
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const interval = setInterval(async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsAuthenticated(false);
+        setUser(null);
+        navigate('/login', { replace: true });
+        return;
+      }
+      try {
+        await fetch(`${API_URL}/user/profile`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      } catch (err) {
+        // Ignored; fetch interceptor will handle 401 automatically
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated, navigate]);
   const handleLoginSuccess = (token, loggedInUser) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(loggedInUser));
@@ -182,7 +231,7 @@ function App() {
     const isProfilePage = location.pathname === '/profile';
 
     if (!isAuthenticated) {
-      return <Navigate to="/signup" replace />;
+      return <Navigate to="/login" replace />;
     }
 
     return (
@@ -289,7 +338,13 @@ function App() {
       />
       <Route
         path="/creator/dashboard"
-        element={<CreatorDashboard user={user} onLogout={handleLogout} />}
+        element={
+          isAuthenticated && user?.role === 'creator' ? (
+            <CreatorDashboard user={user} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
       />
 
       {/* Legacy auth route compatibility */}
@@ -351,6 +406,7 @@ function App() {
             <AccountPage
               user={user}
               onProfileUpdate={(updated) => setUser(updated)}
+              onLogout={handleLogout}
               onBackToMain={() => {
                 setSelectedPlaylist(null);
                 navigate('/');

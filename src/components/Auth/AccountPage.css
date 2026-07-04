@@ -376,6 +376,7 @@
   position: relative;
   cursor: pointer;
   -webkit-appearance: none;
+  appearance: none;
   transition: background 0.3s;
   outline: none;
 }
@@ -464,3 +465,304 @@
   background: #ff4444;
   color: black;
 }
+
+/* Enhancements for Session Management */
+.sessions-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.revoke-all-btn {
+  background: transparent;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px 20px;
+  border-radius: 500px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.revoke-all-btn:hover {
+  background: #ff4444;
+  color: black;
+}
+
+.current-session-item {
+  border-color: rgba(29, 185, 84, 0.4) !important;
+  background: #15241b !important;
+}
+
+.session-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.session-title-row h4 {
+  margin-bottom: 0 !important;
+}
+
+.current-badge {
+  background: #1db954;
+  color: black;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+/* Timeout Config Card */
+.timeout-config-card {
+  background: #181818;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #282828;
+  margin-bottom: 28px;
+}
+
+.timeout-config-info h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.timeout-config-info p {
+  font-size: 13px;
+  color: #b3b3b3;
+  line-height: 1.4;
+}
+
+.timeout-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 14px;
+}
+
+.timeout-preset-btn {
+  padding: 8px 16px;
+  border-radius: 500px;
+  background: #282828;
+  border: 1px solid #3e3e3e;
+  color: #b3b3b3;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.timeout-preset-btn:hover {
+  background: #383838;
+  color: white;
+}
+
+.timeout-preset-btn.active {
+  background: #1db954;
+  color: black;
+  border-color: #1db954;
+  font-weight: 700;
+}
+
+.custom-timeout-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #b3b3b3;
+}
+
+.timeout-input {
+  width: 110px;
+  padding: 8px 12px;
+  background: #282828;
+  border: 1px solid #3e3e3e;
+  border-radius: 4px;
+  color: white;
+  font-size: 13px;
+}
+
+.timeout-input:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+.timeout-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.timeout-title-row h3 {
+  margin-bottom: 0 !important;
+}
+
+.active-timeout-pill {
+  background: rgba(29, 185, 84, 0.15);
+  color: #1db954;
+  border: 1px solid rgba(29, 185, 84, 0.4);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  display: inline-block;
+}
+
+.card-feedback {
+  margin: 12px 0 6px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.card-error-msg {
+  background: rgba(255, 68, 68, 0.15);
+  border: 1px solid #ff4444;
+  color: #ff6b6b;
+}
+
+.card-success-msg {
+  background: rgba(29, 185, 84, 0.15);
+  border: 1px solid #1db954;
+  color: #1db954;
+}
+
+.timeout-unit-select {
+  padding: 8px 12px;
+  background: #282828;
+  border: 1px solid #3e3e3e;
+  border-radius: 4px;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.timeout-unit-select:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+.save-timeout-btn {
+  padding: 8px 18px;
+  background: #1db954;
+  color: black;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  border-radius: 500px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.save-timeout-btn:hover {
+  transform: scale(1.03);
+}
+
+/* Sessions Table Container */
+.sessions-table-container {
+  margin-top: 10px;
+}
+
+.sessions-table-container h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.table-subtitle {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #181818;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #282828;
+}
+
+.sessions-table th {
+  background: #222222;
+  padding: 14px 16px;
+  text-align: left;
+  color: #b3b3b3;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid #282828;
+}
+
+.sessions-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #242424;
+  font-size: 13px;
+  color: #fff;
+  vertical-align: middle;
+}
+
+.sessions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.current-row {
+  background: rgba(29, 185, 84, 0.05);
+}
+
+.device-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.device-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+
+.device-ip {
+  font-size: 12px;
+  color: #888;
+}
+
+.active-status-badge {
+  background: #282828;
+  color: #b3b3b3;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+  text-transform: uppercase;
+}
+
+.disabled-revoke {
+  border-color: #444 !important;
+  color: #666 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.disabled-revoke:hover {
+  background: transparent !important;
+  color: #666 !important;
+}
+
+

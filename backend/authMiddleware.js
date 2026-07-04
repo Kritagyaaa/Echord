@@ -22,8 +22,14 @@ async function authenticateRequest(request) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Verify session in the database is active and has not expired
     const now = new Date();
+    // Mark expired sessions as inactive to preserve history
+    await pool.query(
+      'UPDATE sessions SET is_active = 0 WHERE expires_at <= ? AND is_active = 1',
+      [now]
+    );
+
+    // Verify session in the database is active and has not expired
     const [sessions] = await pool.query(
       'SELECT * FROM sessions WHERE token = ? AND is_active = 1 AND expires_at > ?',
       [token, now]
@@ -36,9 +42,9 @@ async function authenticateRequest(request) {
       throw error;
     }
 
-    // Retrieve user profile details (excluding password)
+    // Retrieve user profile details (including session_timeout_seconds)
     const [users] = await pool.query(
-      'SELECT id, name, email, phone_number, role, profile_picture FROM users WHERE id = ?',
+      'SELECT id, name, email, phone_number, role, profile_picture, session_timeout_seconds FROM users WHERE id = ?',
       [session.user_id]
     );
     const user = users[0];
@@ -48,6 +54,21 @@ async function authenticateRequest(request) {
       error.statusCode = 401;
       throw error;
     }
+
+    // Enforce user inactivity timeout
+    const timeoutSeconds = user.session_timeout_seconds || 604800;
+    const lastUsed = session.last_used_at ? new Date(session.last_used_at) : new Date(session.created_at);
+    const inactiveSeconds = (now.getTime() - lastUsed.getTime()) / 1000;
+
+    if (inactiveSeconds > timeoutSeconds) {
+      await pool.query('UPDATE sessions SET is_active = 0 WHERE id = ?', [session.id]);
+      const error = new Error('Unauthorized: Session has expired due to inactivity.');
+      error.statusCode = 401;
+      throw error;
+    }
+
+    // Update last_used_at for active session
+    await pool.query('UPDATE sessions SET last_used_at = ? WHERE id = ?', [now, session.id]);
 
     // Attach verified user and session metadata to request
     request.user = user;

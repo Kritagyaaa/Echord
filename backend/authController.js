@@ -172,9 +172,9 @@ async function handleLogin(request, response) {
       });
     }
 
-    // Success - Create JWT & Session
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    // Success - Create JWT & Session (7 days expiry)
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     // Store session in DB
     await database.query(
@@ -356,8 +356,8 @@ async function handleVerifyOtp(request, response) {
       const fullUser = users[0];
       const { ip, device } = getClientMeta(request);
       
-      const token = jwt.sign({ id: fullUser.id, email: fullUser.email, role: fullUser.role }, JWT_SECRET, { expiresIn: '24h' });
-      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const token = jwt.sign({ id: fullUser.id, email: fullUser.email, role: fullUser.role }, JWT_SECRET, { expiresIn: '7d' });
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
       await database.query(
         'INSERT INTO sessions (user_id, token, device_info, ip_address, expires_at) VALUES (?, ?, ?, ?, ?)',
@@ -401,8 +401,8 @@ async function handleRefreshToken(request, response) {
     }
 
     const now = new Date();
-    const token = jwt.sign({ id: request.user.id, email: request.user.email, role: request.user.role }, JWT_SECRET, { expiresIn: '24h' });
-    const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const token = jwt.sign({ id: request.user.id, email: request.user.email, role: request.user.role }, JWT_SECRET, { expiresIn: '7d' });
+    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
     // Update session table with the new token and new expiry
     await database.query(
@@ -533,12 +533,42 @@ async function handleGetSessions(request, response) {
       return sendJson(response, 401, { error: 'Unauthorized.' });
     }
 
+    const timeoutSeconds = request.user.session_timeout_seconds || 604800;
+    const now = new Date();
+
+    // Invalidate sessions that have exceeded the user inactivity timeout
+    await database.query(
+      'UPDATE sessions SET is_active = 0 WHERE user_id = ? AND is_active = 1 AND TIMESTAMPDIFF(SECOND, COALESCE(last_used_at, created_at), ?) > ?',
+      [request.user.id, now, timeoutSeconds]
+    );
+
     const [sessions] = await database.query(
-      'SELECT id, device_info, ip_address, is_active, expires_at, created_at FROM sessions WHERE user_id = ? AND is_active = 1 ORDER BY id DESC',
+      'SELECT id, device_info, ip_address, is_active, expires_at, created_at, last_used_at FROM sessions WHERE user_id = ? AND is_active = 1 ORDER BY created_at DESC',
       [request.user.id]
     );
 
-    sendJson(response, 200, { sessions });
+    // Find current session object
+    const currentSession = sessions.find(s => s.id === request.sessionId);
+    const currentCreatedAt = currentSession ? new Date(currentSession.created_at).getTime() : 0;
+
+    // Map sessions to include is_current and can_revoke flag (older sessions cannot be revoked by newer sessions)
+    const sessionsWithMetadata = sessions.map(s => {
+      const isCurrent = s.id === request.sessionId;
+      const sessionCreatedAt = new Date(s.created_at).getTime();
+      // Current session can always end itself. Otherwise, target session must NOT be created earlier than current session.
+      const canRevoke = isCurrent || (currentCreatedAt > 0 && sessionCreatedAt >= currentCreatedAt);
+
+      return {
+        ...s,
+        is_current: isCurrent,
+        can_revoke: canRevoke
+      };
+    });
+
+    sendJson(response, 200, {
+      sessions: sessionsWithMetadata,
+      session_timeout_seconds: timeoutSeconds
+    });
   } catch (error) {
     sendJson(response, 500, { error: error.message });
   }
@@ -558,17 +588,99 @@ async function handleRevokeSession(request, response, sessionId) {
       return sendJson(response, 400, { error: 'Invalid session ID.' });
     }
 
-    // Invalidate the session (make sure it belongs to the user)
-    const [result] = await database.query(
+    // Lookup target session
+    const [targetSessions] = await database.query(
+      'SELECT id, created_at FROM sessions WHERE id = ? AND user_id = ? AND is_active = 1',
+      [sId, request.user.id]
+    );
+    const targetSession = targetSessions[0];
+
+    if (!targetSession) {
+      return sendJson(response, 404, { error: 'Session not found or already inactive.' });
+    }
+
+    // Older Session Protection Rule:
+    // A session created later cannot revoke a session created earlier than itself.
+    if (targetSession.id !== request.sessionId) {
+      const [currentSessions] = await database.query(
+        'SELECT created_at FROM sessions WHERE id = ?',
+        [request.sessionId]
+      );
+      const currentSession = currentSessions[0];
+
+      if (currentSession) {
+        const targetTime = new Date(targetSession.created_at).getTime();
+        const currentTime = new Date(currentSession.created_at).getTime();
+
+        if (targetTime < currentTime) {
+          return sendJson(response, 403, {
+            error: 'Protection Rule Violation: Your current login session cannot end a session that was created before it.'
+          });
+        }
+      }
+    }
+
+    // Invalidate the session
+    await database.query(
       'UPDATE sessions SET is_active = 0 WHERE id = ? AND user_id = ?',
       [sId, request.user.id]
     );
 
-    if (result.affectedRows === 0) {
-      return sendJson(response, 404, { error: 'Session not found or already inactive.' });
+    sendJson(response, 200, { message: 'Session revoked successfully.' });
+  } catch (error) {
+    sendJson(response, 500, { error: error.message });
+  }
+}
+
+/**
+ * DELETE /api/user/sessions
+ */
+async function handleRevokeAllSessions(request, response) {
+  try {
+    if (!request.user) {
+      return sendJson(response, 401, { error: 'Unauthorized.' });
     }
 
-    sendJson(response, 200, { message: 'Session revoked successfully.' });
+    // Invalidate all active sessions for this user
+    await database.query(
+      'UPDATE sessions SET is_active = 0 WHERE user_id = ? AND is_active = 1',
+      [request.user.id]
+    );
+
+    sendJson(response, 200, { message: 'All sessions revoked successfully.' });
+  } catch (error) {
+    sendJson(response, 500, { error: error.message });
+  }
+}
+
+/**
+ * PUT /api/user/session-timeout
+ */
+async function handleUpdateSessionTimeout(request, response) {
+  try {
+    if (!request.user) {
+      return sendJson(response, 401, { error: 'Unauthorized.' });
+    }
+
+    const body = await readBody(request);
+    const { timeout_seconds } = body;
+    const timeoutVal = Number(timeout_seconds);
+
+    if (isNaN(timeoutVal) || timeoutVal < 15 || timeoutVal > 604800) {
+      return sendJson(response, 400, {
+        error: 'Session timeout must be between 15 seconds and 7 days (604,800 seconds).'
+      });
+    }
+
+    await database.query(
+      'UPDATE users SET session_timeout_seconds = ?, updated_at = ? WHERE id = ?',
+      [timeoutVal, new Date(), request.user.id]
+    );
+
+    sendJson(response, 200, {
+      message: 'Inactivity timeout updated successfully.',
+      session_timeout_seconds: timeoutVal
+    });
   } catch (error) {
     sendJson(response, 500, { error: error.message });
   }
@@ -719,20 +831,20 @@ async function handleSocialLogin(request, response) {
       const [newUsers] = await database.query('SELECT * FROM users WHERE id = ?', [userId]);
       user = newUsers[0];
     } else {
-      // User exists, but make sure the google_id is linked if it wasn't
-      if (!user.google_id) {
-        await database.query('UPDATE users SET is_google_user = 1, google_id = ?, profile_picture = COALESCE(profile_picture, ?) WHERE id = ?', [google_id, profile_picture || null, user.id]);
-        user.is_google_user = 1;
-        user.google_id = google_id;
-        if (profile_picture && !user.profile_picture) user.profile_picture = profile_picture;
-      }
+      // User exists - update google_id, profile_picture, and name
+      await database.query(
+        'UPDATE users SET is_google_user = 1, google_id = ?, profile_picture = COALESCE(?, profile_picture), name = COALESCE(?, name) WHERE id = ?',
+        [google_id, profile_picture || null, name || null, user.id]
+      );
+      const [updatedUsers] = await database.query('SELECT * FROM users WHERE id = ?', [user.id]);
+      user = updatedUsers[0];
     }
 
     userIdForLog = user.id;
 
-    // Success - Create JWT & Session
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    // Success - Create JWT & Session (7 days expiry)
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     // Store session in DB
     await database.query(
@@ -928,6 +1040,8 @@ module.exports = {
   handleGetDashboard,
   handleGetSessions,
   handleRevokeSession,
+  handleRevokeAllSessions,
+  handleUpdateSessionTimeout,
   handleAdminListUsers,
   handleAdminDeleteUser,
   handleAdminChangeRole,

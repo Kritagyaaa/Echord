@@ -7,9 +7,10 @@ async function getContentRecommendationsController(req, res) {
     try {
 
         const { songId } = req.params;
+        const { recentSongs = [] } = req.body;
 
         const recommendations =
-            await getContentRecommendations(songId);
+              await getContentRecommendations(songId, recentSongs);
 
         res.status(200).json({
             success: true,

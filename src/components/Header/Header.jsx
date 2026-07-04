@@ -150,6 +150,7 @@ export function Header({
             tabIndex={0}
             aria-expanded={showProfileMenu}
             aria-label="User profile menu"
+            referrerPolicy="no-referrer"
           />
           {showProfileMenu && (
             <div className={styles.profileMenu} role="menu">

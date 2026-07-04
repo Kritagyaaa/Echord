@@ -266,6 +266,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             src={user?.profile_picture || "https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"} 
             alt="User Avatar"
             className="sidebar-avatar" 
+            referrerPolicy="no-referrer"
           />
           <h3>{user?.name}</h3>
           <p>{user?.role?.toUpperCase()}</p>

@@ -2,7 +2,7 @@
 -- CREATORS
 -- =========================
 
-CREATE TABLE creators (
+CREATE TABLE IF NOT EXISTS creators (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE creators (
 -- ARTISTS
 -- =========================
 
-CREATE TABLE artists (
+CREATE TABLE IF NOT EXISTS artists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     bio TEXT,
@@ -27,7 +27,7 @@ CREATE TABLE artists (
 -- ALBUMS
 -- =========================
 
-CREATE TABLE albums (
+CREATE TABLE IF NOT EXISTS albums (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     artist_id INT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE albums (
 -- GENRES
 -- =========================
 
-CREATE TABLE genres (
+CREATE TABLE IF NOT EXISTS genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL
 );
@@ -50,7 +50,7 @@ CREATE TABLE genres (
 -- SONGS
 -- =========================
 
-CREATE TABLE songs (
+CREATE TABLE IF NOT EXISTS songs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     artist_id INT NOT NULL,
@@ -77,7 +77,7 @@ CREATE INDEX idx_song_title ON songs (title);
 -- PLAYLISTS
 -- =========================
 
-CREATE TABLE playlists (
+CREATE TABLE IF NOT EXISTS playlists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE playlists (
 -- PLAYLIST SONGS
 -- =========================
 
-CREATE TABLE playlist_songs (
+CREATE TABLE IF NOT EXISTS playlist_songs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     playlist_id INT NOT NULL,
     song_id INT NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE playlist_songs (
 -- LIKES
 -- =========================
 
-CREATE TABLE likes (
+CREATE TABLE IF NOT EXISTS likes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     song_id INT NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE likes (
 -- HISTORY
 -- =========================
 
-CREATE TABLE history (
+CREATE TABLE IF NOT EXISTS history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     song_id INT NOT NULL,

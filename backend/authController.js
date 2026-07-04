@@ -831,13 +831,13 @@ async function handleSocialLogin(request, response) {
       const [newUsers] = await database.query('SELECT * FROM users WHERE id = ?', [userId]);
       user = newUsers[0];
     } else {
-      // User exists, but make sure the google_id is linked if it wasn't
-      if (!user.google_id) {
-        await database.query('UPDATE users SET is_google_user = 1, google_id = ?, profile_picture = COALESCE(profile_picture, ?) WHERE id = ?', [google_id, profile_picture || null, user.id]);
-        user.is_google_user = 1;
-        user.google_id = google_id;
-        if (profile_picture && !user.profile_picture) user.profile_picture = profile_picture;
-      }
+      // User exists - update google_id, profile_picture, and name
+      await database.query(
+        'UPDATE users SET is_google_user = 1, google_id = ?, profile_picture = COALESCE(?, profile_picture), name = COALESCE(?, name) WHERE id = ?',
+        [google_id, profile_picture || null, name || null, user.id]
+      );
+      const [updatedUsers] = await database.query('SELECT * FROM users WHERE id = ?', [user.id]);
+      user = updatedUsers[0];
     }
 
     userIdForLog = user.id;

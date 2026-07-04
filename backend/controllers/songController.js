@@ -259,11 +259,36 @@ async function deleteCreatorSong(req, res) {
             return res.status(400).json({ success: false, message: 'Invalid song id.' });
         }
 
-        const [rows] = await pool.query('SELECT id, b2_key FROM songs WHERE id = ? AND uploaded_by = ?', [songId, creator.id]);
+        const [rows] = await pool.query('SELECT id, b2_key, cover_url FROM songs WHERE id = ? AND uploaded_by = ?', [songId, creator.id]);
         if (rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Song not found or not owned by creator.' });
         }
 
+        const song = rows[0];
+
+        // 1. Delete audio file from B2
+        if (song.b2_key) {
+            try {
+                await b2Service.deleteFile(song.b2_key);
+                console.log(`Deleted audio file ${song.b2_key} from B2`);
+            } catch (b2Error) {
+                console.error(`Failed to delete audio file ${song.b2_key} from B2:`, b2Error.message);
+            }
+        }
+
+        // 2. Delete cover image from B2 if it exists
+        if (song.cover_url && song.cover_url.includes('/covers/')) {
+            try {
+                const coverKey = 'covers/' + song.cover_url.split('/covers/')[1];
+                const decodedKey = decodeURIComponent(coverKey);
+                await b2Service.deleteFile(decodedKey);
+                console.log(`Deleted cover image ${decodedKey} from B2`);
+            } catch (b2Error) {
+                console.error(`Failed to delete cover image from B2:`, b2Error.message);
+            }
+        }
+
+        // 3. Delete from database
         await pool.query('DELETE FROM songs WHERE id = ? AND uploaded_by = ?', [songId, creator.id]);
 
         res.status(200).json({ success: true, message: 'Song deleted successfully.' });

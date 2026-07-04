@@ -1,4 +1,4 @@
-const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const s3 = new S3Client({
@@ -46,6 +46,16 @@ async function getObject(key) {
     return resp; // contains Body (stream), ContentType, ContentLength
 }
 
+async function deleteFile(key) {
+    const command = new DeleteObjectCommand({
+        Bucket: process.env.B2_BUCKET,
+        Key: key,
+    });
+
+    await s3.send(command);
+    return key;
+}
+
 function getPublicUrl(key) {
     const endpoint = process.env.B2_ENDPOINT.replace(/\/$/, '');
     const encodedKey = key.split('/').map(encodeURIComponent).join('/');
@@ -57,4 +67,5 @@ module.exports = {
     uploadFile,
     getPublicUrl,
     getObject,
+    deleteFile,
 };

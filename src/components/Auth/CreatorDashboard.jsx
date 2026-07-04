@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Music, Heart, Plus, Edit, Trash2, LogOut, ArrowRight, X, Upload, Check } from 'lucide-react';
+import placeholder from '../../assets/music-placeholder.jpg';
 import './CreatorDashboard.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -29,6 +30,7 @@ function CreatorDashboard({ user, onLogout }) {
   const [genre, setGenre] = useState('Pop');
   const [audioFile, setAudioFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
+  const [coverImagePreview, setCoverImagePreview] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -43,6 +45,7 @@ function CreatorDashboard({ user, onLogout }) {
     setGenre('Pop');
     setAudioFile(null);
     setCoverImage(null);
+    setCoverImagePreview('');
     setErrorMsg('');
     setSuccessMsg('');
     setShowUploadModal(true);
@@ -60,7 +63,14 @@ function CreatorDashboard({ user, onLogout }) {
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setCoverImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setCoverImage(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCoverImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -141,12 +151,19 @@ function CreatorDashboard({ user, onLogout }) {
         throw new Error(data.message || 'Upload failed.');
       }
 
-      setSongs((currentSongs) => [data.song, ...currentSongs]);
+      const uploadedSong = {
+        ...data.song,
+        cover_url: data.song?.cover_url || null,
+        coverPreview: data.song?.cover_url ? null : coverImagePreview,
+      };
+
+      setSongs((currentSongs) => [uploadedSong, ...currentSongs]);
       setSuccessMsg('Song uploaded successfully!');
       setLoading(false);
 
       setTimeout(() => {
         setShowUploadModal(false);
+        setCoverImagePreview('');
         setSuccessMsg('');
       }, 1500);
     } catch (err) {
@@ -188,9 +205,30 @@ function CreatorDashboard({ user, onLogout }) {
   };
 
   // Handler for Delete
-  const handleDelete = (songId) => {
-    if (confirm('Are you sure you want to delete this song?')) {
-      setSongs(songs.filter(s => s.id !== songId));
+  const handleDelete = async (songId) => {
+    if (!confirm('Are you sure you want to delete this song?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/songs/creator/me/${songId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Delete failed.');
+      }
+
+      setSongs((currentSongs) => currentSongs.filter((s) => s.id !== songId));
+      setSuccessMsg('Song deleted successfully!');
+      setTimeout(() => setSuccessMsg(''), 2000);
+    } catch (err) {
+      setErrorMsg(err.message);
     }
   };
 
@@ -274,7 +312,12 @@ function CreatorDashboard({ user, onLogout }) {
                   <tr key={song.id}>
                     <td>
                       <div className="creator-song-info">
-                        <img src={song.cover_url} alt={song.title} className="creator-song-cover" />
+                        <img
+                          src={song.cover_url || song.coverPreview || placeholder}
+                          alt={song.title}
+                          className="creator-song-cover"
+                          onError={(e) => { e.target.onerror = null; e.target.src = placeholder; }}
+                        />
                         <div>
                           <div className="creator-song-title">{song.title}</div>
                           <div className="creator-song-genre">{song.genre}</div>
@@ -381,6 +424,15 @@ function CreatorDashboard({ user, onLogout }) {
                       disabled={loading || !!successMsg}
                     />
                     {coverImage && <div className="creator-file-name">{coverImage.name}</div>}
+                    {coverImagePreview && (
+                      <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+                        <img
+                          src={coverImagePreview}
+                          alt="Cover preview"
+                          style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: '8px' }}
+                        />
+                      </div>
+                    )}
                   </label>
                 </div>
               </div>

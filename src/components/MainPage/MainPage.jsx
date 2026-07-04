@@ -134,6 +134,7 @@ export function MainPage({
       <img
         src={song.cover_url || placeholder}
         alt={song.title}
+        onError={(e) => { e.target.onerror = null; e.target.src = placeholder; }}
       />
       <h3>{song.title}</h3>
       <p>{song.artist}</p>

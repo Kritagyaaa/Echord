@@ -110,10 +110,15 @@ async function getAllSongs(req, res) {
             ORDER BY s.id DESC
         `, [userId, userId]);
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.status(200).json({
             success: true,
-            count: songs.length,
-            songs,
+            count: formattedSongs.length,
+            songs: formattedSongs,
         });
 
     } catch (error) {
@@ -161,7 +166,12 @@ async function getCreatorSongs(req, res) {
             ORDER BY s.created_at DESC
         `, [creator.id]);
 
-        res.status(200).json({ success: true, count: songs.length, songs });
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
+        res.status(200).json({ success: true, count: formattedSongs.length, songs: formattedSongs });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -207,7 +217,7 @@ async function uploadCreatorSong(req, res) {
             const coverKey = `covers/${Date.now()}_${safeTitle}${coverExtension}`;
             const coverBuffer = Buffer.from(coverBase64, 'base64');
             await b2Service.uploadFile(coverKey, coverBuffer, coverFileType || 'image/jpeg');
-            coverUrl = b2Service.getPublicUrl(coverKey);
+            coverUrl = coverKey;
         }
 
         const [result] = await pool.query(
@@ -240,10 +250,66 @@ async function uploadCreatorSong(req, res) {
             [result.insertId]
         );
 
-        res.status(201).json({ success: true, song: rows[0] });
+        const formattedSong = {
+            ...rows[0],
+            cover_url: b2Service.formatCoverUrl(rows[0].cover_url, req)
+        };
+
+        res.status(201).json({ success: true, song: formattedSong });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Unable to upload song.' });
+    }
+}
+
+async function deleteCreatorSong(req, res) {
+    try {
+        const creator = await ensureCreatorRecord(req.user);
+        if (!creator) {
+            return res.status(403).json({ success: false, message: 'Creator access required.' });
+        }
+
+        const songId = Number(req.params.id);
+        if (!songId) {
+            return res.status(400).json({ success: false, message: 'Invalid song id.' });
+        }
+
+        const [rows] = await pool.query('SELECT id, b2_key, cover_url FROM songs WHERE id = ? AND uploaded_by = ?', [songId, creator.id]);
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Song not found or not owned by creator.' });
+        }
+
+        const song = rows[0];
+
+        // 1. Delete audio file from B2
+        if (song.b2_key) {
+            try {
+                await b2Service.deleteFile(song.b2_key);
+                console.log(`Deleted audio file ${song.b2_key} from B2`);
+            } catch (b2Error) {
+                console.error(`Failed to delete audio file ${song.b2_key} from B2:`, b2Error.message);
+            }
+        }
+
+        // 2. Delete cover image from B2 if it exists
+        if (song.cover_url && song.cover_url.includes('/covers/')) {
+            try {
+                const coverKey = 'covers/' + song.cover_url.split('/covers/')[1];
+                const decodedKey = decodeURIComponent(coverKey);
+                await b2Service.deleteFile(decodedKey);
+                console.log(`Deleted cover image ${decodedKey} from B2`);
+            } catch (b2Error) {
+                console.error(`Failed to delete cover image from B2:`, b2Error.message);
+            }
+        }
+
+        // 3. Delete from database
+        await pool.query('DELETE FROM songs WHERE id = ? AND uploaded_by = ?', [songId, creator.id]);
+
+        res.status(200).json({ success: true, message: 'Song deleted successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Unable to delete song.' });
     }
 }
 
@@ -280,6 +346,8 @@ async function searchSongs(req, res) {
         }
 
         const keyword = `%${query}%`;
+        const exactMatch = query;
+        const startsWith = `${query}%`;
 
         console.log("Running SQL...");
 
@@ -316,7 +384,12 @@ async function searchSongs(req, res) {
                 OR a.name LIKE ?
                 OR al.title LIKE ?
 
-            ORDER BY s.title ASC
+            ORDER BY
+                CASE WHEN s.title = ? THEN 0 ELSE 1 END,
+                CASE WHEN s.title LIKE ? THEN 0 ELSE 1 END,
+                CASE WHEN a.name LIKE ? THEN 0 ELSE 1 END,
+                CASE WHEN s.title LIKE ? THEN 0 ELSE 1 END,
+                s.title ASC
             `,
             [
                 userId,
@@ -324,16 +397,25 @@ async function searchSongs(req, res) {
                 keyword,
                 keyword,
                 keyword,
+                exactMatch,
+                startsWith,
+                startsWith,
+                keyword,
             ]
         );
 
         console.log("Search Success!");
         console.log("Songs Found:", songs.length);
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.json({
             success: true,
-            count: songs.length,
-            songs,
+            count: formattedSongs.length,
+            songs: formattedSongs,
         });
 
     } catch (error) {
@@ -407,10 +489,11 @@ async function streamSong(req, res) {
             });
         }
 
-        const streamUrl =
-            await b2Service.getSignedStreamUrl(
-                songs[0].b2_key
-            );
+        // Return a server-hosted proxy URL so clients can access audio without
+        // relying on B2 CORS or short-lived signed URLs.
+        const encodedKey = songs[0].b2_key.split('/').map(encodeURIComponent).join('/');
+        const baseUrl = (req.protocol || 'http') + '://' + (req.get('host') || (process.env.SERVER_HOSTPORT || 'localhost:5000'));
+        const streamUrl = `${baseUrl}/files/${encodedKey}`;
 
         res.json({
             success: true,
@@ -514,10 +597,15 @@ async function getListeningHistory(req, res) {
             LIMIT 50
         `, [userId, userId]);
 
+        const formattedHistory = history.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.status(200).json({
             success: true,
-            count: history.length,
-            songs: history,
+            count: formattedHistory.length,
+            songs: formattedHistory,
         });
     } catch (error) {
         console.error(error);
@@ -556,10 +644,15 @@ async function getLikedSongs(req, res) {
             ORDER BY l.liked_at DESC
         `, [userId]);
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.status(200).json({
             success: true,
-            count: songs.length,
-            songs,
+            count: formattedSongs.length,
+            songs: formattedSongs,
         });
     } catch (error) {
         console.error(error);
@@ -574,6 +667,7 @@ module.exports = {
     getAllSongs,
     getCreatorSongs,
     uploadCreatorSong,
+    deleteCreatorSong,
     searchSongs,
     streamSong,
     toggleLikeSong,

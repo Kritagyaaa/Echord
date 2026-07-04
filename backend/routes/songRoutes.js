@@ -6,6 +6,7 @@ const {
     getAllSongs,
     getCreatorSongs,
     uploadCreatorSong,
+    deleteCreatorSong,
     searchSongs,
     streamSong,
     toggleLikeSong,
@@ -35,6 +36,7 @@ const expressAuth = async (req, res, next) => {
 router.get("/", getAllSongs);
 router.get("/creator/me", expressAuth, getCreatorSongs);
 router.post("/creator/me", expressAuth, uploadCreatorSong);
+router.delete("/creator/me/:id", expressAuth, deleteCreatorSong);
 router.get("/history", expressAuth, getListeningHistory);
 router.get("/liked", expressAuth, getLikedSongs);
 

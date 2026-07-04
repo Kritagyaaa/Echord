@@ -1,4 +1,4 @@
-const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const s3 = new S3Client({
@@ -46,15 +46,60 @@ async function getObject(key) {
     return resp; // contains Body (stream), ContentType, ContentLength
 }
 
+async function deleteFile(key) {
+    const command = new DeleteObjectCommand({
+        Bucket: process.env.B2_BUCKET,
+        Key: key,
+    });
+
+    await s3.send(command);
+    return key;
+}
+
 function getPublicUrl(key) {
     const endpoint = process.env.B2_ENDPOINT.replace(/\/$/, '');
     const encodedKey = key.split('/').map(encodeURIComponent).join('/');
-    return `${endpoint}/${process.env.B2_BUCKET}/${encodedKey}`;
+    const bucket = process.env.B2_BUCKET.toLowerCase();
+
+    // Use the bucket as a subdomain for public S3-compatible Backblaze URLs.
+    // This avoids path-style issues with public access on some B2 setups.
+    const urlPrefix = endpoint.replace(/^(https?:\/\/)(.*)$/, `$1${bucket}.$2`);
+
+    return `${urlPrefix}/${encodedKey}`;
+}
+
+function getProxyUrl(key, req) {
+    if (!key) return null;
+    const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+    const baseUrl = (req.protocol || 'http') + '://' + (req.get('host') || (process.env.SERVER_HOSTPORT || 'localhost:5000'));
+    return `${baseUrl}/files/${encodedKey}`;
+}
+
+function formatCoverUrl(coverUrl, req) {
+    if (!coverUrl) return null;
+
+    // If it's already a relative path/key
+    if (coverUrl.startsWith('covers/')) {
+        return getProxyUrl(coverUrl, req);
+    }
+
+    // If it's a B2 public URL
+    if (coverUrl.includes('backblazeb2.com')) {
+        const match = coverUrl.match(/(covers\/.*)$/);
+        if (match) {
+            return getProxyUrl(match[1], req);
+        }
+    }
+
+    return coverUrl;
 }
 
 module.exports = {
     getSignedStreamUrl,
     uploadFile,
     getPublicUrl,
+    getProxyUrl,
+    formatCoverUrl,
     getObject,
+    deleteFile,
 };

@@ -201,7 +201,8 @@
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 24px 0;
   z-index: 1000;
   backdrop-filter: blur(5px);
 }
@@ -210,11 +211,17 @@
   background: #181818;
   width: 100%;
   max-width: 480px;
+  max-height: calc(100vh - 48px);
   border-radius: 8px;
   border: 1px solid #282828;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   animation: modalFadeIn 0.3s ease;
+}
+
+.creator-modal .creator-form {
+  max-height: calc(100vh - 174px);
+  overflow-y: auto;
 }
 
 @keyframes modalFadeIn {

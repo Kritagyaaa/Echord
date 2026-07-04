@@ -5,7 +5,7 @@ import styles from "./CreatePlaylistModel.module.css";
 import {
     createPlaylist,
     searchSongs,
-    addSongToPlaylist,
+    addSongsToPlaylistBulk,
 } from "../../services/api";
 
 import { usePlaylists } from "../../context/playlistcontext";
@@ -96,17 +96,10 @@ export function CreatePlaylistModel({
 
             });
 
-            // Add all selected songs
-            for (const song of selectedSongs) {
-
-                await addSongToPlaylist(
-
-                    playlist.id,
-
-                    song.id
-
-                );
-
+            // Add all selected songs in a single bulk request
+            if (selectedSongs.length > 0) {
+                const songIds = selectedSongs.map(s => s.id);
+                await addSongsToPlaylistBulk(playlist.id, songIds);
             }
 
             await loadPlaylists();

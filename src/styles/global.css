@@ -27,8 +27,8 @@ button {
 /* Playlist Collage Grid */
 .playlist-collage-grid {
   display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  grid-template-rows: repeat(2, 1fr) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
   overflow: hidden !important;
   aspect-ratio: 1 / 1 !important;
   gap: 1px !important;
@@ -38,6 +38,8 @@ button {
 .playlist-collage-grid img {
   width: 100% !important;
   height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   object-fit: cover !important;
   display: block !important;
   border-radius: 0 !important;

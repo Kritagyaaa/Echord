@@ -1,6 +1,7 @@
 const db = require("../db");
 const fs = require("fs");
 const path = require("path");
+const b2Service = require("../services/b2service");
 
 function saveBase64Image(base64String, req) {
     if (!base64String) return null;
@@ -236,13 +237,14 @@ exports.getUserPlaylists = async (req, res) => {
 
         const playlists = rows.map(row => {
             const song_covers = row.song_covers ? row.song_covers.split('|||') : [];
+            const formattedCovers = song_covers.filter(Boolean).map(c => b2Service.formatCoverUrl(c, req));
             return {
                 id: row.id,
                 name: row.name,
                 cover_url: row.cover_url,
                 created_at: row.created_at,
                 song_count: row.song_count,
-                song_covers: song_covers.filter(Boolean)
+                song_covers: formattedCovers
             };
         });
 
@@ -349,6 +351,11 @@ exports.getPlaylistById = async (req, res) => {
 
         );
 
+        const formattedSongs = songs.map(s => ({
+            ...s,
+            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+        }));
+
         res.json({
 
             success: true,
@@ -357,9 +364,9 @@ exports.getPlaylistById = async (req, res) => {
 
                 ...playlistRows[0],
 
-                songs,
+                songs: formattedSongs,
 
-                song_count: songs.length,
+                song_count: formattedSongs.length,
 
                 total_duration: totalDuration,
 
@@ -508,6 +515,59 @@ exports.removeSongFromPlaylist = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Failed to remove song from playlist."
+        });
+    }
+};
+
+exports.addSongsToPlaylistBulk = async (req, res) => {
+    try {
+        const { playlistId } = req.params;
+        const { songIds } = req.body;
+        const userId = req.user.id;
+
+        if (!Array.isArray(songIds) || songIds.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Song IDs must be a non-empty array."
+            });
+        }
+
+        // Verify ownership
+        const [playlist] = await db.execute(
+            "SELECT id FROM playlists WHERE id = ? AND user_id = ?",
+            [playlistId, userId]
+        );
+
+        if (playlist.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Playlist not found or access denied."
+            });
+        }
+
+        // Perform bulk insert, skipping duplicates
+        const values = [];
+        const placeholders = songIds.map(songId => {
+            values.push(playlistId, songId);
+            return "(?, ?)";
+        }).join(", ");
+
+        const query = `
+            INSERT IGNORE INTO playlist_songs (playlist_id, song_id)
+            VALUES ${placeholders}
+        `;
+
+        await db.execute(query, values);
+
+        res.json({
+            success: true,
+            message: `${songIds.length} songs processed successfully.`
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to add songs to playlist in bulk."
         });
     }
 };

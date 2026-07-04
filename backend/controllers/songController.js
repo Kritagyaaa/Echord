@@ -407,10 +407,11 @@ async function streamSong(req, res) {
             });
         }
 
-        const streamUrl =
-            await b2Service.getSignedStreamUrl(
-                songs[0].b2_key
-            );
+        // Return a server-hosted proxy URL so clients can access audio without
+        // relying on B2 CORS or short-lived signed URLs.
+        const encodedKey = songs[0].b2_key.split('/').map(encodeURIComponent).join('/');
+        const baseUrl = (req.protocol || 'http') + '://' + (req.get('host') || (process.env.SERVER_HOSTPORT || 'localhost:5000'));
+        const streamUrl = `${baseUrl}/files/${encodedKey}`;
 
         res.json({
             success: true,

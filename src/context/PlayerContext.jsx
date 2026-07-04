@@ -20,6 +20,8 @@ export function PlayerProvider({ children }) {
     const [queue, setQueue] = useState([]);
     const [allSongs, setAllSongs] = useState([]);
     const [currentSong, setCurrentSong] = useState(null);
+    const [recentSongs, setRecentSongs] = useState([]);
+    
 
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -199,12 +201,25 @@ export function PlayerProvider({ children }) {
                 play_count: (song.play_count || 0) + 1
             };
 
-            // Locally increment play count for immediate feedback
-            setCurrentSong(updatedSong);
-            currentSongRef.current = updatedSong;
-            localStorage.setItem('last_song', JSON.stringify(updatedSong));
+           // Locally increment play count for immediate feedback
+              setCurrentSong(updatedSong);
 
-            setIsPlaying(true);
+       setRecentSongs((prev) => {
+
+      const updated = [
+        updatedSong.id,
+        ...prev.filter((id) => id !== updatedSong.id),
+         ].slice(0, 3);
+
+           console.log("Recent Songs:", updated);
+
+           return updated;
+
+});
+currentSongRef.current = updatedSong;
+localStorage.setItem("last_song", JSON.stringify(updatedSong));
+
+setIsPlaying(true);
 
         } catch (err) {
 
@@ -418,6 +433,7 @@ export function PlayerProvider({ children }) {
             value={{
                 queue,
                 currentSong,
+                recentSongs,
                 isPlaying,
                 currentTime,
                 duration,

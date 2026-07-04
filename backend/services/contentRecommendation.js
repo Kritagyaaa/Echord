@@ -1,6 +1,6 @@
 const pool = require("../db");
 
-async function getContentRecommendations(songId) {
+async function getContentRecommendations(songId, recentSongs = []) {
 
     // Get current song
     const [currentSong] = await pool.query(`
@@ -21,19 +21,29 @@ async function getContentRecommendations(songId) {
     const song = currentSong[0];
 
     // Get all other songs
-    const [songs] = await pool.query(`
-        SELECT
-            s.id,
-            s.title,
-            s.artist_id,
-            s.genre_id,
-            s.play_count,
-            a.name AS artist
-        FROM songs s
-        LEFT JOIN artists a
-            ON s.artist_id = a.id
-        WHERE s.id != ?
-    `,[songId]);
+   const excludedSongs = [...new Set(recentSongs)];
+
+   const placeholders = excludedSongs
+    .map(() => "?")
+    .join(",");
+
+   const [songs] = await pool.query(
+    `
+    SELECT
+        s.id,
+        s.title,
+        s.artist_id,
+        s.genre_id,
+        s.play_count,
+        s.cover_url,
+        a.name AS artist
+    FROM songs s
+    LEFT JOIN artists a
+        ON s.artist_id = a.id
+    WHERE s.id NOT IN (${placeholders})
+    `,
+    excludedSongs
+);
 
     // Calculate similarity score
 const recommendations = songs.map((candidate) => {

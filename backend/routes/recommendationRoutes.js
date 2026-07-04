@@ -7,10 +7,7 @@ const {
     getUserRecommendations
 } = require("../controllers/recommendationController");
 
-router.get(
-    "/content/:songId",
-    getContentRecommendations
-);
+router.post("/content/:songId", getContentRecommendations);
 
 router.get(
     "/user/:userId",

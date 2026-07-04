@@ -57,8 +57,9 @@ export function RightSidebar() {
       <div className={styles.scrollArea}>
         <NowPlayingCard song={songData} />
         <AboutArtistCard artist={songData.artistInfo} />
-        <CreditsCard credits={songData.credits} />
         <RecommendationCard />
+        <CreditsCard credits={songData.credits} />
+    
       </div>
     </aside>
   );

@@ -84,9 +84,20 @@ export async function getListeningHistory() {
     return data.songs;
 }
 
-export async function getContentRecommendations(songId) {
+export async function getContentRecommendations(songId, recentSongs = []) {
 
-    const response = await fetch(`${API_URL}/recommend/content/${songId}`);
+    const response = await fetch(
+    `${API_URL}/recommend/content/${songId}`,
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            recentSongs,
+        }),
+    }
+);
 
     if (!response.ok) {
         throw new Error("Failed to fetch recommendations");

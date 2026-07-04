@@ -518,3 +518,56 @@ exports.removeSongFromPlaylist = async (req, res) => {
         });
     }
 };
+
+exports.addSongsToPlaylistBulk = async (req, res) => {
+    try {
+        const { playlistId } = req.params;
+        const { songIds } = req.body;
+        const userId = req.user.id;
+
+        if (!Array.isArray(songIds) || songIds.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Song IDs must be a non-empty array."
+            });
+        }
+
+        // Verify ownership
+        const [playlist] = await db.execute(
+            "SELECT id FROM playlists WHERE id = ? AND user_id = ?",
+            [playlistId, userId]
+        );
+
+        if (playlist.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Playlist not found or access denied."
+            });
+        }
+
+        // Perform bulk insert, skipping duplicates
+        const values = [];
+        const placeholders = songIds.map(songId => {
+            values.push(playlistId, songId);
+            return "(?, ?)";
+        }).join(", ");
+
+        const query = `
+            INSERT IGNORE INTO playlist_songs (playlist_id, song_id)
+            VALUES ${placeholders}
+        `;
+
+        await db.execute(query, values);
+
+        res.json({
+            success: true,
+            message: `${songIds.length} songs processed successfully.`
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to add songs to playlist in bulk."
+        });
+    }
+};

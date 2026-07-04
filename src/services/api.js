@@ -227,6 +227,42 @@ export async function addSongToPlaylist(
 
     return data;
 }
+
+export async function addSongsToPlaylistBulk(
+    playlistId,
+    songIds
+) {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error("Please login first.");
+    }
+
+    const response = await fetch(
+        `${API_URL}/playlists/${playlistId}/songs/bulk`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                songIds,
+            }),
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Failed to add songs to playlist."
+        );
+    }
+
+    return data;
+}
 export async function getPlaylist(playlistId) {
 
     const token = localStorage.getItem("token");

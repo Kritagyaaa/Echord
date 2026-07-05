@@ -59,8 +59,12 @@ export function Header({
   return (
     <header className={styles.navbar} aria-label="Main navigation">
       <div className={styles.left}>
+        <div className={styles.siteHeader} onClick={onHomeClick} title="Go to Home" role="link" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') onHomeClick(); }}>
+          <img src="/logo.svg" alt="Ghostt Logo" className={styles.titleLogo} />
+          <span className={styles.siteTitle}>Ghostt</span>
+        </div>
         <button 
-          className={styles.iconButton} 
+          className={`${styles.iconButton} ${styles.navButton}`} 
           type="button" 
           aria-label="Go back"
           onClick={() => navigate(-1)}
@@ -68,7 +72,7 @@ export function Header({
           <ChevronLeft size={22} strokeWidth={2.4} />
         </button>
         <button 
-          className={styles.iconButton} 
+          className={`${styles.iconButton} ${styles.navButton}`} 
           type="button" 
           aria-label="Go forward"
           onClick={() => navigate(1)}

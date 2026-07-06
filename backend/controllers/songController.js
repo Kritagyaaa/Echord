@@ -100,6 +100,7 @@ async function getAllSongs(req, res) {
                 s.like_count AS like_count,
                 s.created_at,
                 s.uploaded_by,
+                c.email AS creator_email,
                 IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
             LEFT JOIN artists a
@@ -108,6 +109,8 @@ async function getAllSongs(req, res) {
                 ON s.album_id = al.id
             LEFT JOIN genres g
                 ON s.genre_id = g.id
+            LEFT JOIN creators c
+                ON s.uploaded_by = c.id
             ORDER BY s.id DESC
         `, [userId, userId]);
 
@@ -360,7 +363,7 @@ async function searchSongs(req, res) {
 
         console.log("Running SQL...");
 
-        const [songs] = await pool.query(
+         const [songs] = await pool.query(
             `
             SELECT
                 s.id,
@@ -377,6 +380,7 @@ async function searchSongs(req, res) {
                 s.like_count AS like_count,
                 s.created_at,
                 s.uploaded_by,
+                c.email AS creator_email,
                 IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
 
@@ -388,6 +392,9 @@ async function searchSongs(req, res) {
 
             LEFT JOIN genres g
                 ON s.genre_id = g.id
+
+            LEFT JOIN creators c
+                ON s.uploaded_by = c.id
 
             WHERE
                 s.title LIKE ?
@@ -587,6 +594,7 @@ async function getListeningHistory(req, res) {
                 s.like_count AS like_count,
                 s.created_at,
                 s.uploaded_by,
+                c.email AS creator_email,
                 EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?) AS is_liked
             FROM (
                 SELECT max(id) AS max_id
@@ -604,6 +612,8 @@ async function getListeningHistory(req, res) {
                 ON s.album_id = al.id
             LEFT JOIN genres g
                 ON s.genre_id = g.id
+            LEFT JOIN creators c
+                ON s.uploaded_by = c.id
             ORDER BY h.played_at DESC
             LIMIT 50
         `, [userId, userId]);
@@ -646,12 +656,14 @@ async function getLikedSongs(req, res) {
                 s.like_count AS like_count,
                 s.created_at,
                 s.uploaded_by,
+                c.email AS creator_email,
                 1 AS is_liked
             FROM likes l
             JOIN songs s ON l.song_id = s.id
             LEFT JOIN artists a ON s.artist_id = a.id
             LEFT JOIN albums al ON s.album_id = al.id
             LEFT JOIN genres g ON s.genre_id = g.id
+            LEFT JOIN creators c ON s.uploaded_by = c.id
             WHERE l.user_id = ?
             ORDER BY l.liked_at DESC
         `, [userId]);

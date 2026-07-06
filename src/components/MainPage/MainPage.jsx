@@ -29,8 +29,8 @@ export function MainPage({
   const { playSong, initializeQueue, currentSong, isPlaying, addToUserQueue } = usePlayer();
 
   const displayedSongs = songs;
-  const trendingSongs = songs.filter(s => !s.uploaded_by || s.uploaded_by === 1);
-  const latestSongs = songs.filter(s => s.uploaded_by && s.uploaded_by !== 1);
+  const trendingSongs = songs.filter(s => !s.uploaded_by || s.creator_email === 'admin@spotifyghost.com');
+  const latestSongs = songs.filter(s => s.uploaded_by && s.creator_email !== 'admin@spotifyghost.com');
 
   // Keep search results in local state so we can toggle likes immediately
   useEffect(() => {

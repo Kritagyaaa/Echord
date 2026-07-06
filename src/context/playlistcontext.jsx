@@ -56,7 +56,7 @@ export function PlaylistProvider({ children }) {
                 });
             } else if (playlist.id === "trending") {
                 const allSongs = await getSongs();
-                const trendingSongs = allSongs.filter(s => !s.uploaded_by || s.uploaded_by === 1);
+                const trendingSongs = allSongs.filter(s => !s.uploaded_by || s.creator_email === 'admin@spotifyghost.com');
                 const totalDuration = trendingSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
                 setSelectedPlaylist({
                     id: "trending",
@@ -69,7 +69,7 @@ export function PlaylistProvider({ children }) {
                 });
             } else if (playlist.id === "latest-song") {
                 const allSongs = await getSongs();
-                const latestSongs = allSongs.filter(s => s.uploaded_by && s.uploaded_by !== 1);
+                const latestSongs = allSongs.filter(s => s.uploaded_by && s.creator_email !== 'admin@spotifyghost.com');
                 const totalDuration = latestSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
                 setSelectedPlaylist({
                     id: "latest-song",
@@ -130,7 +130,7 @@ export function PlaylistProvider({ children }) {
                 }));
             } else if (selectedPlaylist.id === "trending") {
                 const allSongs = await getSongs();
-                const trendingSongs = allSongs.filter(s => !s.uploaded_by || s.uploaded_by === 1);
+                const trendingSongs = allSongs.filter(s => !s.uploaded_by || s.creator_email === 'admin@spotifyghost.com');
                 const totalDuration = trendingSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
                 setSelectedPlaylist(prev => ({
                     ...prev,
@@ -140,7 +140,7 @@ export function PlaylistProvider({ children }) {
                 }));
             } else if (selectedPlaylist.id === "latest-song") {
                 const allSongs = await getSongs();
-                const latestSongs = allSongs.filter(s => s.uploaded_by && s.uploaded_by !== 1);
+                const latestSongs = allSongs.filter(s => s.uploaded_by && s.creator_email !== 'admin@spotifyghost.com');
                 const totalDuration = latestSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
                 setSelectedPlaylist(prev => ({
                     ...prev,

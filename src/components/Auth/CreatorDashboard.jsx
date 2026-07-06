@@ -158,6 +158,12 @@ function CreatorDashboard({ user, onLogout }) {
       };
 
       setSongs((currentSongs) => [uploadedSong, ...currentSongs]);
+      try {
+        localStorage.setItem('songs:updated', String(Date.now()));
+      } catch (storageErr) {
+        console.warn('Unable to persist song update signal:', storageErr);
+      }
+      window.dispatchEvent(new Event('songs-updated'));
       setSuccessMsg('Song uploaded successfully!');
       setLoading(false);
 
@@ -225,6 +231,12 @@ function CreatorDashboard({ user, onLogout }) {
       }
 
       setSongs((currentSongs) => currentSongs.filter((s) => s.id !== songId));
+      try {
+        localStorage.setItem('songs:updated', String(Date.now()));
+      } catch (storageErr) {
+        console.warn('Unable to persist song update signal:', storageErr);
+      }
+      window.dispatchEvent(new Event('songs-updated'));
       setSuccessMsg('Song deleted successfully!');
       setTimeout(() => setSuccessMsg(''), 2000);
     } catch (err) {

@@ -38,9 +38,12 @@ export function MainPage({
   }, [searchResults]);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadSongs() {
       try {
         const data = await getSongs();
+        if (!isMounted) return;
         setSongs(data);
         initializeQueue(data);
       } catch (err) {
@@ -51,18 +54,53 @@ export function MainPage({
     async function loadHistory() {
       try {
         const token = localStorage.getItem('token');
-        if (token) {
-          const history = await getListeningHistory();
-          setHistorySongs(history);
+        if (!token) {
+          if (isMounted) {
+            setHistorySongs([]);
+          }
+          return;
         }
+        const history = await getListeningHistory();
+        if (!isMounted) return;
+        setHistorySongs(history);
       } catch (err) {
         console.error("Error loading listening history:", err);
       }
     }
 
-    loadSongs();
-    loadHistory();
-  }, []);
+    const refreshData = () => {
+      loadSongs();
+      loadHistory();
+    };
+
+    refreshData();
+
+    const handleSongUpdate = () => {
+      refreshData();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshData();
+      }
+    };
+
+    window.addEventListener('songs-updated', handleSongUpdate);
+    window.addEventListener('focus', handleSongUpdate);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    const songsInterval = window.setInterval(() => {
+      refreshData();
+    }, 15000);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('songs-updated', handleSongUpdate);
+      window.removeEventListener('focus', handleSongUpdate);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.clearInterval(songsInterval);
+    };
+  }, [initializeQueue]);
 
   const handleLikeToggle = async (e, songId) => {
     e.stopPropagation();

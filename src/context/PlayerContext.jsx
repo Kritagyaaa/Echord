@@ -16,6 +16,7 @@ export function PlayerProvider({ children }) {
     const { refreshSelectedPlaylist } = usePlaylists();
 
     const audioRef = useRef(new Audio());
+    const pendingRestorationTimeRef = useRef(null);
 
     const [queue, setQueue] = useState([]);
     const [allSongs, setAllSongs] = useState([]);
@@ -96,6 +97,11 @@ export function PlayerProvider({ children }) {
         audio.onloadedmetadata = () => {
 
             setDuration(audio.duration);
+            if (pendingRestorationTimeRef.current !== null) {
+                const targetTime = Math.min(pendingRestorationTimeRef.current, audio.duration || Infinity);
+                audio.currentTime = targetTime;
+                pendingRestorationTimeRef.current = null;
+            }
 
         };
 
@@ -150,7 +156,7 @@ export function PlayerProvider({ children }) {
                     if (savedTimeStr) {
                         const savedTime = parseFloat(savedTimeStr);
                         if (!isNaN(savedTime)) {
-                            audio.currentTime = savedTime;
+                            pendingRestorationTimeRef.current = savedTime;
                             setCurrentTime(savedTime);
                         }
                     }
@@ -175,6 +181,7 @@ export function PlayerProvider({ children }) {
     const playSong = async (song, playlist = []) => {
 
         try {
+            pendingRestorationTimeRef.current = null;
 
             if (playlist.length > 0) {
                 setQueue(playlist);
@@ -386,10 +393,30 @@ setIsPlaying(true);
         }
     };
 
+    const selectSongWithoutPlaying = async (song) => {
+        try {
+            setCurrentSong(song);
+            currentSongRef.current = song;
+            localStorage.setItem('last_song', JSON.stringify(song));
+            
+            const streamUrl = await getSongStream(song.id);
+            audioRef.current.src = streamUrl;
+            audioRef.current.volume = volume;
+            audioRef.current.load();
+            setIsPlaying(false);
+        } catch (err) {
+            console.error("Error selecting default song:", err);
+        }
+    };
+
     const initializeQueue = (songs) => {
         setQueue(songs);
         queueRef.current = songs;
         localStorage.setItem('last_queue', JSON.stringify(songs));
+
+        if (!currentSongRef.current && songs && songs.length > 0) {
+            selectSongWithoutPlaying(songs[0]);
+        }
     };
 
     const addToQueue = (song) => {

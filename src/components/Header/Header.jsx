@@ -9,6 +9,7 @@ import {
   UsersRound,
   ExternalLink,
   Check,
+  User,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -59,8 +60,12 @@ export function Header({
   return (
     <header className={styles.navbar} aria-label="Main navigation">
       <div className={styles.left}>
+        <div className={styles.siteHeader} onClick={onHomeClick} title="Go to Home" role="link" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') onHomeClick(); }}>
+          <img src="/logo.svg" alt="Ghostt Logo" className={styles.titleLogo} />
+          <span className={styles.siteTitle}>Ghostt</span>
+        </div>
         <button 
-          className={styles.iconButton} 
+          className={`${styles.iconButton} ${styles.navButton}`} 
           type="button" 
           aria-label="Go back"
           onClick={() => navigate(-1)}
@@ -68,7 +73,7 @@ export function Header({
           <ChevronLeft size={22} strokeWidth={2.4} />
         </button>
         <button 
-          className={styles.iconButton} 
+          className={`${styles.iconButton} ${styles.navButton}`} 
           type="button" 
           aria-label="Go forward"
           onClick={() => navigate(1)}
@@ -141,17 +146,20 @@ export function Header({
           <UsersRound size={22} strokeWidth={2.2} />
         </button>
         <div className={styles.profileWrapper}>
-          <img
-            src={user?.profile_picture || "https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"}
-            alt="Profile"
+          <div
             className={styles.profile}
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             role="button"
             tabIndex={0}
             aria-expanded={showProfileMenu}
             aria-label="User profile menu"
-            referrerPolicy="no-referrer"
-          />
+          >
+            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
+              <img src={user.profile_picture} alt="Profile" className={styles.profileImg} />
+            ) : (
+              <User size={22} strokeWidth={2.2} />
+            )}
+          </div>
           {showProfileMenu && (
             <div className={styles.profileMenu} role="menu">
               <div

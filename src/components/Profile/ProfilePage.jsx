@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, MoreHorizontal, Play, Check } from 'lucide-react';
+import { Settings, MoreHorizontal, Play, Check, User } from 'lucide-react';
 import styles from './ProfilePage.module.css';
 import { getArtists, getListeningHistory } from '../../services/api';
 import { usePlayer } from '../../context/PlayerContext';
@@ -24,7 +24,7 @@ const MOCK_TRACKS = [
   { id: 'mock-t4', title: 'Kahin To', artist: 'Rashid Ali, Vasundhara Das', album: 'Jaane Tu... Ya Jaane Na', duration: 303, cover_url: 'https://i.scdn.co/image/ab67616d0000b2737e90f230da37f2d5f8489dfb' }
 ];
 
-export function ProfilePage({ user, onBackToMain }) {
+export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
   const navigate = useNavigate();
   const { playSong } = usePlayer();
   const { playlists, selectPlaylist } = usePlaylists();
@@ -34,6 +34,64 @@ export function ProfilePage({ user, onBackToMain }) {
   const [isSticky, setIsSticky] = useState(false);
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   const [showToast, setShowToast] = useState(false);
+
+  // Profile Details Edit States
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [modalName, setModalName] = useState(user?.name || '');
+  const [modalPicture, setModalPicture] = useState(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? user.profile_picture : '');
+  const [isSaving, setIsSaving] = useState(false);
+  const [modalError, setModalError] = useState('');
+  const modalFileRef = useRef(null);
+
+  const handleModalFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setModalError('Image file is too large (max 2MB).');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setModalPicture(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleModalSave = async () => {
+    if (!modalName.trim()) {
+      setModalError('Name cannot be empty.');
+      return;
+    }
+    setModalError('');
+    setIsSaving(true);
+    try {
+      const token = localStorage.getItem('token');
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const res = await fetch(`${API_URL}/user/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          name: modalName, 
+          email: user?.email, 
+          phone_number: user?.phone_number, 
+          profile_picture: modalPicture 
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Profile details update failed.');
+      
+      onProfileUpdate?.(data.user);
+      setShowEditModal(false);
+    } catch (err) {
+      setModalError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Load Database Artists and History
   useEffect(() => {
@@ -117,12 +175,25 @@ export function ProfilePage({ user, onBackToMain }) {
       {/* Profile Info Banner */}
       <div className={styles.banner}>
         <div className={styles.avatarContainer}>
-          <img
-            src={user?.profile_picture || FALLBACK_AVATAR}
-            alt="Profile Avatar"
-            className={styles.avatar}
-            referrerPolicy="no-referrer"
-          />
+          <div 
+            className={`${styles.avatar} ${styles.clickableAvatar}`}
+            onClick={() => {
+              setModalName(user?.name || '');
+              setModalPicture(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? user.profile_picture : '');
+              setModalError('');
+              setShowEditModal(true);
+            }}
+            title="Edit profile"
+          >
+            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
+              <img src={user.profile_picture} alt="Profile Avatar" className={styles.avatarImg} />
+            ) : (
+              <User size={120} strokeWidth={1.2} />
+            )}
+            <div className={styles.avatarHoverOverlay}>
+              <span>Edit profile</span>
+            </div>
+          </div>
         </div>
         <div className={styles.bannerInfo}>
           <span className={styles.badge}>Profile</span>
@@ -319,6 +390,79 @@ export function ProfilePage({ user, onBackToMain }) {
         </section>
 
       </div>
+
+      {/* Profile Details Modal */}
+      {showEditModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowEditModal(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Profile details</h3>
+              <button 
+                className={styles.modalCloseBtn} 
+                onClick={() => setShowEditModal(false)}
+                aria-label="Close details"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {modalError && <div className={styles.modalError}>{modalError}</div>}
+            
+            <div className={styles.modalBody}>
+              {/* Left Side: Avatar Click-to-upload */}
+              <div 
+                className={styles.modalAvatarContainer} 
+                onClick={() => modalFileRef.current?.click()}
+                title="Choose photo"
+              >
+                <div className={styles.modalAvatarCircle}>
+                  {modalPicture ? (
+                    <img src={modalPicture} alt="Profile Preview" className={styles.modalAvatarImg} />
+                  ) : (
+                    <User size={80} strokeWidth={1} />
+                  )}
+                  <div className={styles.modalAvatarHover}>
+                    <span>Choose photo</span>
+                  </div>
+                </div>
+                <input 
+                  type="file" 
+                  ref={modalFileRef} 
+                  style={{ display: 'none' }} 
+                  accept="image/*" 
+                  onChange={handleModalFileChange} 
+                />
+              </div>
+
+              {/* Right Side: Name Input & Save Button */}
+              <div className={styles.modalForm}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="modal-name-input" className={styles.visuallyHidden}>Name</label>
+                  <input 
+                    id="modal-name-input"
+                    type="text" 
+                    value={modalName} 
+                    onChange={(e) => setModalName(e.target.value)} 
+                    placeholder="Add a display name"
+                    required
+                  />
+                </div>
+                <button 
+                  className={styles.modalSaveBtn} 
+                  onClick={handleModalSave}
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </div>
+
+            <p className={styles.modalDisclaimer}>
+              By proceeding, you agree to give Spotify access to the image you choose to upload. Please make sure you have the right to upload the image.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -27,7 +27,7 @@ export function PlaylistView({ playlist }) {
         );
     }
 
-    const isSystemPlaylist = ["liked-songs", "trending", "mixes", "featured"].includes(playlist.id);
+    const isSystemPlaylist = ["liked-songs", "trending", "mixes", "featured", "latest-song"].includes(playlist.id);
 
     const songs = playlist.songs || [];
 
@@ -132,6 +132,10 @@ export function PlaylistView({ playlist }) {
                     </div>
                 ) : playlist.id === "trending" ? (
                     <div className={styles.likedSongsCover} style={{ background: "linear-gradient(135deg,#ff5722,#ff9800)" }}>
+                        <Play size={80} fill="white" />
+                    </div>
+                ) : playlist.id === "latest-song" ? (
+                    <div className={styles.likedSongsCover} style={{ background: "linear-gradient(135deg,#3f51b5,#00bcd4)" }}>
                         <Play size={80} fill="white" />
                     </div>
                 ) : playlist.id === "mixes" ? (

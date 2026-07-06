@@ -90,7 +90,7 @@ function ResetPasswordPage() {
       <div className="auth-wrapper">
         <div className="auth-card">
           <div className="logo">
-            <FaSpotify size={40} color="#1ED760" aria-label="Spotify" />
+            <img src="/logo.svg" alt="Ghostt Logo" />
           </div>
 
           <h1>Reset Password</h1>

@@ -99,6 +99,7 @@ async function getAllSongs(req, res) {
                 s.play_count,
                 s.like_count AS like_count,
                 s.created_at,
+                s.uploaded_by,
                 IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
             LEFT JOIN artists a
@@ -292,14 +293,22 @@ async function deleteCreatorSong(req, res) {
         }
 
         // 2. Delete cover image from B2 if it exists
-        if (song.cover_url && song.cover_url.includes('/covers/')) {
-            try {
-                const coverKey = 'covers/' + song.cover_url.split('/covers/')[1];
-                const decodedKey = decodeURIComponent(coverKey);
-                await b2Service.deleteFile(decodedKey);
-                console.log(`Deleted cover image ${decodedKey} from B2`);
-            } catch (b2Error) {
-                console.error(`Failed to delete cover image from B2:`, b2Error.message);
+        if (song.cover_url) {
+            let coverKey = null;
+            if (song.cover_url.startsWith('covers/')) {
+                coverKey = song.cover_url;
+            } else if (song.cover_url.includes('covers/')) {
+                coverKey = 'covers/' + song.cover_url.split('covers/')[1];
+            }
+
+            if (coverKey) {
+                try {
+                    const decodedKey = decodeURIComponent(coverKey);
+                    await b2Service.deleteFile(decodedKey);
+                    console.log(`Deleted cover image ${decodedKey} from B2`);
+                } catch (b2Error) {
+                    console.error(`Failed to delete cover image from B2:`, b2Error.message);
+                }
             }
         }
 
@@ -367,6 +376,7 @@ async function searchSongs(req, res) {
                 s.play_count,
                 s.like_count AS like_count,
                 s.created_at,
+                s.uploaded_by,
                 IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?), 0) AS is_liked
             FROM songs s
 
@@ -576,6 +586,7 @@ async function getListeningHistory(req, res) {
                 s.play_count,
                 s.like_count AS like_count,
                 s.created_at,
+                s.uploaded_by,
                 EXISTS(SELECT 1 FROM likes WHERE song_id = s.id AND user_id = ?) AS is_liked
             FROM (
                 SELECT max(id) AS max_id
@@ -634,6 +645,7 @@ async function getLikedSongs(req, res) {
                 s.play_count,
                 s.like_count AS like_count,
                 s.created_at,
+                s.uploaded_by,
                 1 AS is_liked
             FROM likes l
             JOIN songs s ON l.song_id = s.id

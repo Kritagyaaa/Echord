@@ -8,3 +8,8 @@ ananya
 Shubham
 shubham
 my-app
+
+# Environment variables
+.env
+*.env
+backend/.env

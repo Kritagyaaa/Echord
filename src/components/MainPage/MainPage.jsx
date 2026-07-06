@@ -15,9 +15,11 @@ export function MainPage({
   const [showRecentLeftArrow, setShowRecentLeftArrow] = useState(false);
   const [showMixesLeftArrow, setShowMixesLeftArrow] = useState(false);
   const [showFeaturedLeftArrow, setShowFeaturedLeftArrow] = useState(false);
+  const [showLatestLeftArrow, setShowLatestLeftArrow] = useState(false);
   const recentRef = useRef(null);
   const mixesRef = useRef(null);
   const featuredRef = useRef(null);
+  const latestRef = useRef(null);
   const navigate = useNavigate();
   const [songs, setSongs] = useState([]);
   const [historySongs, setHistorySongs] = useState([]);
@@ -27,6 +29,8 @@ export function MainPage({
   const { playSong, initializeQueue, currentSong, isPlaying, addToUserQueue } = usePlayer();
 
   const displayedSongs = songs;
+  const trendingSongs = songs.filter(s => !s.uploaded_by || s.uploaded_by === 1);
+  const latestSongs = songs.filter(s => s.uploaded_by && s.uploaded_by !== 1);
 
   // Keep search results in local state so we can toggle likes immediately
   useEffect(() => {
@@ -283,12 +287,37 @@ export function MainPage({
         <span style={{ cursor: "pointer" }} onClick={() => selectPlaylist({ id: "trending", name: "Trending" })}>Show all</span>
       </div>
       <div className={styles.cardsRow}>
-        {displayedSongs.slice(0, 3).map(song => (
+        {trendingSongs.slice(0, 3).map(song => (
           <MusicCard
             key={song.id}
             song={song}
+            playlist={trendingSongs}
           />
         ))}
+      </div>
+
+      <div className={styles.sectionHeader}>
+        <h2>Latest song</h2>
+        <span style={{ cursor: "pointer" }} onClick={() => selectPlaylist({ id: "latest-song", name: "Latest song" })}>Show all</span>
+      </div>
+      <div className={styles.cardsContainer}>
+        {showLatestLeftArrow && (
+          <button className={styles.spotifyArrowLeft} onClick={() => { scrollLeft(latestRef); setShowLatestLeftArrow(false); }}>
+            <ChevronLeft size={20} />
+          </button>
+        )}
+        <button className={styles.spotifyArrow} onClick={() => { scrollRight(latestRef); setShowLatestLeftArrow(true); }}>
+          <ChevronRight size={20} />
+        </button>
+        <div className={styles.cardsRow} ref={latestRef}>
+          {latestSongs.map(song => (
+            <MusicCard
+              key={song.id}
+              song={song}
+              playlist={latestSongs}
+            />
+          ))}
+        </div>
       </div>
 
       <div className={styles.sectionHeader}>

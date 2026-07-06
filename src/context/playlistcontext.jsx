@@ -55,7 +55,8 @@ export function PlaylistProvider({ children }) {
                     isLikedSongs: true,
                 });
             } else if (playlist.id === "trending") {
-                const trendingSongs = await getSongs();
+                const allSongs = await getSongs();
+                const trendingSongs = allSongs.filter(s => !s.uploaded_by || s.uploaded_by === 1);
                 const totalDuration = trendingSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
                 setSelectedPlaylist({
                     id: "trending",
@@ -64,6 +65,19 @@ export function PlaylistProvider({ children }) {
                     cover_url: null,
                     songs: trendingSongs,
                     song_count: trendingSongs.length,
+                    total_duration: totalDuration,
+                });
+            } else if (playlist.id === "latest-song") {
+                const allSongs = await getSongs();
+                const latestSongs = allSongs.filter(s => s.uploaded_by && s.uploaded_by !== 1);
+                const totalDuration = latestSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
+                setSelectedPlaylist({
+                    id: "latest-song",
+                    name: "Latest song",
+                    description: "Latest songs uploaded by creators",
+                    cover_url: null,
+                    songs: latestSongs,
+                    song_count: latestSongs.length,
                     total_duration: totalDuration,
                 });
             } else if (playlist.id === "mixes") {
@@ -115,12 +129,23 @@ export function PlaylistProvider({ children }) {
                     total_duration: totalDuration,
                 }));
             } else if (selectedPlaylist.id === "trending") {
-                const trendingSongs = await getSongs();
+                const allSongs = await getSongs();
+                const trendingSongs = allSongs.filter(s => !s.uploaded_by || s.uploaded_by === 1);
                 const totalDuration = trendingSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
                 setSelectedPlaylist(prev => ({
                     ...prev,
                     songs: trendingSongs,
                     song_count: trendingSongs.length,
+                    total_duration: totalDuration,
+                }));
+            } else if (selectedPlaylist.id === "latest-song") {
+                const allSongs = await getSongs();
+                const latestSongs = allSongs.filter(s => s.uploaded_by && s.uploaded_by !== 1);
+                const totalDuration = latestSongs.reduce((sum, s) => sum + (s.duration || 0), 0);
+                setSelectedPlaylist(prev => ({
+                    ...prev,
+                    songs: latestSongs,
+                    song_count: latestSongs.length,
                     total_duration: totalDuration,
                 }));
             } else if (selectedPlaylist.id === "mixes") {
@@ -157,6 +182,28 @@ export function PlaylistProvider({ children }) {
         loadPlaylists();
 
     }, []);
+
+    useEffect(() => {
+        const handleFocus = () => {
+            if (localStorage.getItem('token')) {
+                loadPlaylists();
+            }
+        };
+        window.addEventListener('focus', handleFocus);
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (localStorage.getItem('token')) {
+                loadPlaylists();
+                refreshSelectedPlaylist();
+            }
+        }, 10000); // 10 seconds
+        return () => clearInterval(interval);
+    }, [selectedPlaylist]);
 
     return (
 

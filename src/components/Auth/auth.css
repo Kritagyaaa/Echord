@@ -42,9 +42,10 @@
   justify-content: center;
 }
 
-.logo svg {
-  width: 40px;
-  height: 40px;
+.logo svg,
+.logo img {
+  height: 80px;
+  width: auto;
 }
 
 .auth-card h1 {

@@ -92,11 +92,7 @@ function ProtectedLayout({
 }
 
 function App() {
-  const { selectedPlaylist, setSelectedPlaylist, selectPlaylist } = usePlaylists();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  
-
+  const { selectedPlaylist, setSelectedPlaylist, selectPlaylist, loadPlaylists, setPlaylists } = usePlaylists();
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const [user, setUser] = useState(() => {
     try {
@@ -105,6 +101,17 @@ function App() {
       return null;
     }
   });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadPlaylists();
+    } else {
+      setPlaylists([]);
+      setSelectedPlaylist(null);
+    }
+  }, [isAuthenticated]);
 
   const navigate = useNavigate();
   const handlePlaylistSelect = async (playlist) => {

@@ -183,6 +183,28 @@ export function PlaylistProvider({ children }) {
 
     }, []);
 
+    useEffect(() => {
+        const handleFocus = () => {
+            if (localStorage.getItem('token')) {
+                loadPlaylists();
+            }
+        };
+        window.addEventListener('focus', handleFocus);
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+        };
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (localStorage.getItem('token')) {
+                loadPlaylists();
+                refreshSelectedPlaylist();
+            }
+        }, 10000); // 10 seconds
+        return () => clearInterval(interval);
+    }, [selectedPlaylist]);
+
     return (
 
         <playlistcontext.Provider

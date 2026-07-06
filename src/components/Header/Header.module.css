@@ -203,7 +203,7 @@
     gap: 10px;
   }
 
-  .left {
+  .navButton {
     display: none;
   }
 
@@ -262,4 +262,51 @@
 
 .briefcaseButton:active {
   transform: scale(0.95);
+}
+
+.siteHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  user-select: none;
+  margin-right: 12px;
+}
+
+.siteHeader:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: scale(1.02);
+}
+
+.siteHeader:active {
+  transform: scale(0.98);
+}
+
+.titleLogo {
+  height: 38px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.siteTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 60%, #a61c3c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 620px) {
+  .siteTitle {
+    display: none;
+  }
+  .siteHeader {
+    margin-right: 4px;
+    padding: 4px;
+  }
 }

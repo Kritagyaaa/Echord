@@ -9,6 +9,7 @@ import {
   UsersRound,
   ExternalLink,
   Check,
+  User,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -145,17 +146,20 @@ export function Header({
           <UsersRound size={22} strokeWidth={2.2} />
         </button>
         <div className={styles.profileWrapper}>
-          <img
-            src={user?.profile_picture || "https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg"}
-            alt="Profile"
+          <div
             className={styles.profile}
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             role="button"
             tabIndex={0}
             aria-expanded={showProfileMenu}
             aria-label="User profile menu"
-            referrerPolicy="no-referrer"
-          />
+          >
+            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
+              <img src={user.profile_picture} alt="Profile" className={styles.profileImg} />
+            ) : (
+              <User size={22} strokeWidth={2.2} />
+            )}
+          </div>
           {showProfileMenu && (
             <div className={styles.profileMenu} role="menu">
               <div

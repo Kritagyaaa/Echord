@@ -251,7 +251,7 @@ function App() {
           }}
           user={user}
           onLogout={handleLogout}
-          onAccountClick={() => navigate("/account")}
+          onAccountClick={() => window.open("/account", "_blank")}
           onProfileClick={() => navigate("/profile")}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -400,6 +400,7 @@ function App() {
           element={
             <ProfilePage
               user={user}
+              onProfileUpdate={(updated) => setUser(updated)}
               onBackToMain={() => {
                 setSelectedPlaylist(null);
                 navigate('/');

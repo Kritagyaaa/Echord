@@ -4,6 +4,29 @@ const database = require('./db');
 const { JWT_SECRET } = require('./authMiddleware');
 const crypto = require('crypto');
 const emailService = require('./services/emailService');
+const fs = require('fs');
+const path = require('path');
+
+function saveBase64Image(base64String, req) {
+  if (!base64String) return null;
+  const matches = base64String.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+  if (!matches) {
+    return base64String;
+  }
+  const type = matches[1];
+  const buffer = Buffer.from(matches[2], 'base64');
+  const extension = type.split('/')[1] || 'png';
+  const filename = `profile-${Date.now()}-${Math.floor(Math.random() * 10000)}.${extension}`;
+  const uploadsDir = path.join(__dirname, 'uploads');
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+  
+  const protocol = req.protocol || (req.connection && req.connection.encrypted ? 'https' : 'http');
+  const host = req.get ? req.get('host') : (req.headers.host || 'localhost:5000');
+  return `${protocol}://${host}/uploads/${filename}`;
+}
 
 // Helper to read JSON request body
 function readBody(request) {
@@ -452,14 +475,19 @@ async function handleUpdateProfile(request, response) {
       return sendJson(response, 409, { error: 'Email is already taken by another user.' });
     }
 
+    let finalProfilePicture = profile_picture;
+    if (profile_picture && profile_picture.startsWith('data:image/')) {
+      finalProfilePicture = saveBase64Image(profile_picture, request);
+    }
+
     await database.query(
       'UPDATE users SET name = ?, email = ?, phone_number = ?, profile_picture = ?, updated_at = ? WHERE id = ?',
-      [name, email, phone_number || null, profile_picture || null, new Date(), request.user.id]
+      [name, email, phone_number || null, finalProfilePicture || null, new Date(), request.user.id]
     );
 
     sendJson(response, 200, {
       message: 'Profile updated successfully.',
-      user: { id: request.user.id, name, email, phone_number, profile_picture, role: request.user.role }
+      user: { id: request.user.id, name, email, phone_number, profile_picture: finalProfilePicture, role: request.user.role }
     });
   } catch (error) {
     sendJson(response, 500, { error: error.message });

@@ -7,6 +7,7 @@ import { getSongs, getListeningHistory, toggleLikeSong } from "../../services/ap
 import { usePlayer } from "../../context/PlayerContext";
 import { usePlaylists } from "../../context/playlistcontext";
 import { useNavigate } from "react-router-dom";
+import ShaderBackground from "../shaderBackground/ShaderBackground";
 
 export function MainPage({
   searchQuery = "",
@@ -188,8 +189,10 @@ export function MainPage({
     const topResult = localSearchResults[0];
     const otherSongs = localSearchResults.slice(0, 5);
 
-    return (
-      <div className={styles.mainContent}>
+   return (
+    <div className={styles.mainContent}>
+
+        <div className={styles.pageContent}>
         <h2>Search Results for "{searchQuery}"</h2>
 
         {localSearchResults.length === 0 ? (
@@ -269,9 +272,11 @@ export function MainPage({
             </div>
           </div>
         )}
-      </div>
-    );
-  }
+           </div>
+
+    </div>
+);
+}
 
   // Normal Home Page View
   return (

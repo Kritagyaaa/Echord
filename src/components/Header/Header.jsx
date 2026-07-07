@@ -6,7 +6,6 @@ import {
   Home,
   Search,
   ExternalLink,
-  Check,
   User,
 } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -199,10 +198,16 @@ export function Header({
                   <span>Creator Dashboard</span>
                 </div>
               )}
-              <div className={styles.menuItem} role="menuitem">Recents</div>
-              <div className={styles.menuItem} role="menuitem">
-                <span>Support</span>
-                <ExternalLink size={16} />
+              <div
+                className={styles.menuItem}
+                role="menuitem"
+                onClick={() => {
+                  setShowProfileMenu(false);
+                  navigate("/history");
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                Recents
               </div>
               <div className={styles.menuItem} role="menuitem">
                 <span>Download</span>
@@ -210,18 +215,6 @@ export function Header({
               </div>
               <div className={styles.menuItem} role="menuitem">Settings</div>
               <div className={styles.menuItem} role="menuitem" onClick={onLogout} style={{ cursor: 'pointer' }}>Log out</div>
-              <hr className={styles.divider} />
-              <div className={styles.updatesSection}>
-                <h3>Your Updates</h3>
-                <div className={styles.checkIcon}>
-                  <Check size={60} strokeWidth={2.5} />
-                </div>
-                <h4 className={styles.updateTitle}>You're all caught up</h4>
-                <p className={styles.updateText}>
-                  Watch this space for news on your followers,
-                  playlists, events and more.
-                </p>
-              </div>
             </div>
           )}
         </div>

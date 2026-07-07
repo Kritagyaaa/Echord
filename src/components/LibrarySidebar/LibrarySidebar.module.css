@@ -326,3 +326,9 @@
   padding: 8px 0;
 }
 
+/* ── Mobile: hide library sidebar completely ── */
+@media (max-width: 620px) {
+  .sidebar {
+    display: none;
+  }
+}

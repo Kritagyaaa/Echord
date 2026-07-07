@@ -40,11 +40,6 @@
 
 @media (max-width: 860px) {
   .sidebar {
-    width: 100%;
-    border-radius: 0;
-  }
-
-  .scrollArea {
-    padding-inline: clamp(12px, 4vw, 24px);
+    display: none;
   }
 }

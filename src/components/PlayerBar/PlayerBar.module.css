@@ -181,6 +181,7 @@
   width: 82px;
 }
 
+/* ── Tablet: hide extras panel ── */
 @media (max-width: 920px) {
   .playerBar {
     height: auto;
@@ -193,18 +194,58 @@
   }
 }
 
+/* ── Mobile: 2-row layout (track top, controls below) ── */
 @media (max-width: 640px) {
   .playerBar {
     grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 16px;
+  }
+
+  .track {
+    justify-content: flex-start;
     gap: 10px;
+  }
+
+  .albumCover {
+    width: 44px;
+    height: 44px;
+  }
+
+  .playerCenter {
+    width: 100%;
+  }
+
+  .progressSection {
+    width: 100%;
+  }
+}
+
+/* ── Small mobile: fully compact ── */
+@media (max-width: 480px) {
+  .playerBar {
+    padding: 8px 12px;
   }
 
   .track {
     justify-content: center;
   }
 
-  .playerCenter {
-    width: 100%;
+  .songInfo h2 {
+    font-size: 13px;
+  }
+
+  .songInfo p {
+    font-size: 11px;
+  }
+
+  .controls {
+    gap: 10px;
+  }
+
+  .playButton {
+    width: 40px;
+    height: 40px;
   }
 }
 .pauseIcon {

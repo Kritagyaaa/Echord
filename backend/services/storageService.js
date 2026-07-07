@@ -1,19 +1,25 @@
 const { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
+const endpoint = process.env.STORAGE_ENDPOINT || process.env.B2_ENDPOINT;
+const region = process.env.STORAGE_REGION || process.env.B2_REGION || 'us-east-1';
+const accessKeyId = process.env.STORAGE_ACCESS_KEY || process.env.B2_ACCESS_KEY;
+const secretAccessKey = process.env.STORAGE_SECRET_KEY || process.env.B2_SECRET_KEY;
+const bucket = process.env.STORAGE_BUCKET || process.env.B2_BUCKET;
+
 const s3 = new S3Client({
-    endpoint: process.env.B2_ENDPOINT,
-    region: process.env.B2_REGION,
+    endpoint,
+    region,
     credentials: {
-        accessKeyId: process.env.B2_ACCESS_KEY,
-        secretAccessKey: process.env.B2_SECRET_KEY,
+        accessKeyId,
+        secretAccessKey,
     },
     forcePathStyle: true,
 });
 
 async function getSignedStreamUrl(key) {
     const command = new GetObjectCommand({
-        Bucket: process.env.B2_BUCKET,
+        Bucket: bucket,
         Key: key,
     });
 
@@ -26,7 +32,7 @@ async function getSignedStreamUrl(key) {
 
 async function uploadFile(key, body, contentType) {
     const command = new PutObjectCommand({
-        Bucket: process.env.B2_BUCKET,
+        Bucket: bucket,
         Key: key,
         Body: body,
         ContentType: contentType,
@@ -38,7 +44,7 @@ async function uploadFile(key, body, contentType) {
 
 async function getObject(key) {
     const command = new GetObjectCommand({
-        Bucket: process.env.B2_BUCKET,
+        Bucket: bucket,
         Key: key,
     });
 
@@ -48,7 +54,7 @@ async function getObject(key) {
 
 async function deleteFile(key) {
     const command = new DeleteObjectCommand({
-        Bucket: process.env.B2_BUCKET,
+        Bucket: bucket,
         Key: key,
     });
 
@@ -57,14 +63,21 @@ async function deleteFile(key) {
 }
 
 function getPublicUrl(key) {
-    const endpoint = process.env.B2_ENDPOINT.replace(/\/$/, '');
+    if (!endpoint) return '';
+    const ep = endpoint.replace(/\/$/, '');
     const encodedKey = key.split('/').map(encodeURIComponent).join('/');
-    const bucket = process.env.B2_BUCKET.toLowerCase();
+    const bkt = bucket ? bucket.toLowerCase() : '';
+
+    if (ep.includes('supabase.co')) {
+        // Transform S3 endpoint to Supabase public URL structure:
+        // https://<ref>.storage.supabase.co/storage/v1/s3 -> https://<ref>.supabase.co/storage/v1/object/public/<bucket>/<key>
+        const baseUrl = ep.replace('.storage.supabase.co/storage/v1/s3', '.supabase.co/storage/v1/object/public');
+        return `${baseUrl}/${bkt}/${encodedKey}`;
+    }
 
     // Use the bucket as a subdomain for public S3-compatible Backblaze URLs.
     // This avoids path-style issues with public access on some B2 setups.
-    const urlPrefix = endpoint.replace(/^(https?:\/\/)(.*)$/, `$1${bucket}.$2`);
-
+    const urlPrefix = ep.replace(/^(https?:\/\/)(.*)$/, `$1${bkt}.$2`);
     return `${urlPrefix}/${encodedKey}`;
 }
 
@@ -83,8 +96,8 @@ function formatCoverUrl(coverUrl, req) {
         return getProxyUrl(coverUrl, req);
     }
 
-    // If it's a B2 public URL
-    if (coverUrl.includes('backblazeb2.com')) {
+    // If it's a B2 or Supabase public URL
+    if (coverUrl.includes('backblazeb2.com') || coverUrl.includes('supabase.co')) {
         const match = coverUrl.match(/(covers\/.*)$/);
         if (match) {
             return getProxyUrl(match[1], req);

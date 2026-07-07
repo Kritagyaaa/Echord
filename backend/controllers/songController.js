@@ -1,5 +1,5 @@
 const pool = require("../db");
-const b2Service = require("../services/b2Service");
+const storageService = require("../services/storageService");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const JWT_SECRET = process.env.JWT_SECRET || 'meowsick-secret-key-123';
@@ -116,7 +116,7 @@ async function getAllSongs(req, res) {
 
         const formattedSongs = songs.map(s => ({
             ...s,
-            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+            cover_url: storageService.formatCoverUrl(s.cover_url, req)
         }));
 
         res.status(200).json({
@@ -172,7 +172,7 @@ async function getCreatorSongs(req, res) {
 
         const formattedSongs = songs.map(s => ({
             ...s,
-            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+            cover_url: storageService.formatCoverUrl(s.cover_url, req)
         }));
 
         res.status(200).json({ success: true, count: formattedSongs.length, songs: formattedSongs });
@@ -213,14 +213,14 @@ async function uploadCreatorSong(req, res) {
         const audioKey = `songs/${Date.now()}_${safeTitle}${audioExtension}`;
         const audioBuffer = Buffer.from(audioBase64, 'base64');
 
-        await b2Service.uploadFile(audioKey, audioBuffer, audioFileType || 'audio/mpeg');
+        await storageService.uploadFile(audioKey, audioBuffer, audioFileType || 'audio/mpeg');
 
         let coverUrl = null;
         if (coverBase64 && coverFileName) {
             const coverExtension = getFileExtension(coverFileName, coverFileType) || '.jpg';
             const coverKey = `covers/${Date.now()}_${safeTitle}${coverExtension}`;
             const coverBuffer = Buffer.from(coverBase64, 'base64');
-            await b2Service.uploadFile(coverKey, coverBuffer, coverFileType || 'image/jpeg');
+            await storageService.uploadFile(coverKey, coverBuffer, coverFileType || 'image/jpeg');
             coverUrl = coverKey;
         }
 
@@ -256,7 +256,7 @@ async function uploadCreatorSong(req, res) {
 
         const formattedSong = {
             ...rows[0],
-            cover_url: b2Service.formatCoverUrl(rows[0].cover_url, req)
+            cover_url: storageService.formatCoverUrl(rows[0].cover_url, req)
         };
 
         res.status(201).json({ success: true, song: formattedSong });
@@ -285,17 +285,17 @@ async function deleteCreatorSong(req, res) {
 
         const song = rows[0];
 
-        // 1. Delete audio file from B2
+        // 1. Delete audio file from storage
         if (song.b2_key) {
             try {
-                await b2Service.deleteFile(song.b2_key);
-                console.log(`Deleted audio file ${song.b2_key} from B2`);
-            } catch (b2Error) {
-                console.error(`Failed to delete audio file ${song.b2_key} from B2:`, b2Error.message);
+                await storageService.deleteFile(song.b2_key);
+                console.log(`Deleted audio file ${song.b2_key} from storage`);
+            } catch (storageError) {
+                console.error(`Failed to delete audio file ${song.b2_key} from storage:`, storageError.message);
             }
         }
 
-        // 2. Delete cover image from B2 if it exists
+        // 2. Delete cover image from storage if it exists
         if (song.cover_url) {
             let coverKey = null;
             if (song.cover_url.startsWith('covers/')) {
@@ -307,10 +307,10 @@ async function deleteCreatorSong(req, res) {
             if (coverKey) {
                 try {
                     const decodedKey = decodeURIComponent(coverKey);
-                    await b2Service.deleteFile(decodedKey);
-                    console.log(`Deleted cover image ${decodedKey} from B2`);
-                } catch (b2Error) {
-                    console.error(`Failed to delete cover image from B2:`, b2Error.message);
+                    await storageService.deleteFile(decodedKey);
+                    console.log(`Deleted cover image ${decodedKey} from storage`);
+                } catch (storageError) {
+                    console.error(`Failed to delete cover image from storage:`, storageError.message);
                 }
             }
         }
@@ -426,7 +426,7 @@ async function searchSongs(req, res) {
 
         const formattedSongs = songs.map(s => ({
             ...s,
-            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+            cover_url: storageService.formatCoverUrl(s.cover_url, req)
         }));
 
         res.json({
@@ -620,7 +620,7 @@ async function getListeningHistory(req, res) {
 
         const formattedHistory = history.map(s => ({
             ...s,
-            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+            cover_url: storageService.formatCoverUrl(s.cover_url, req)
         }));
 
         res.status(200).json({
@@ -670,7 +670,7 @@ async function getLikedSongs(req, res) {
 
         const formattedSongs = songs.map(s => ({
             ...s,
-            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+            cover_url: storageService.formatCoverUrl(s.cover_url, req)
         }));
 
         res.status(200).json({

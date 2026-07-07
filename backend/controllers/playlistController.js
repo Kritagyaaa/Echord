@@ -1,7 +1,7 @@
 const db = require("../db");
 const fs = require("fs");
 const path = require("path");
-const b2Service = require("../services/b2service");
+const storageService = require("../services/storageService");
 
 function saveBase64Image(base64String, req) {
     if (!base64String) return null;
@@ -237,7 +237,7 @@ exports.getUserPlaylists = async (req, res) => {
 
         const playlists = rows.map(row => {
             const song_covers = row.song_covers ? row.song_covers.split('|||') : [];
-            const formattedCovers = song_covers.filter(Boolean).map(c => b2Service.formatCoverUrl(c, req));
+            const formattedCovers = song_covers.filter(Boolean).map(c => storageService.formatCoverUrl(c, req));
             return {
                 id: row.id,
                 name: row.name,
@@ -357,7 +357,7 @@ exports.getPlaylistById = async (req, res) => {
 
         const formattedSongs = songs.map(s => ({
             ...s,
-            cover_url: b2Service.formatCoverUrl(s.cover_url, req)
+            cover_url: storageService.formatCoverUrl(s.cover_url, req)
         }));
 
         res.json({

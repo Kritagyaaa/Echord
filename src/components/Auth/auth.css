@@ -8,14 +8,18 @@
 }
 
 .auth-container {
-  min-height: 100vh;
-  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
   background: #121212;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  padding: 0;
+  padding: 20px 0;
   margin: 0;
 }
 
@@ -203,3 +207,31 @@
   line-height: 1.6;
   max-width: 100%;
 }
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .auth-card h1 {
+    font-size: 32px;
+    margin-bottom: 24px;
+  }
+
+  .auth-container {
+    padding: 16px;
+  }
+
+  .auth-btn,
+  .social-btn {
+    padding: 11px 24px;
+    font-size: 14px;
+  }
+
+  .logo {
+    margin-bottom: 20px;
+  }
+
+  .logo img,
+  .logo svg {
+    height: 60px;
+  }
+}
+

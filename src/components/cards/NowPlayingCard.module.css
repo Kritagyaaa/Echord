@@ -52,7 +52,7 @@
   box-shadow:
   0 18px 48px rgba(0, 0, 0, 0.5),
   inset 0 0 24px rgba(0, 0, 0, 0.6),
-  0 0 32px 6px rgba(225, 159, 199, 0.45);   /* glow now in #E19FC7 */
+  0 0 32px 6px rgba(159, 43, 104, 0.45); /* glow now in #9F2B68 */
   display: grid;
   place-items: center;
   transform-origin: center center;

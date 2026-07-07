@@ -293,6 +293,7 @@ function App() {
 
   return (
     <>
+      <ShaderBackground />
       <Routes>
       {/* Public/Guest Routes */}
       <Route

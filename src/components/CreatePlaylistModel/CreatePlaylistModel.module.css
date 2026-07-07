@@ -11,12 +11,12 @@
 
 .model {
   width: 580px;
-  background: #282828;
+  background: #0d0d0d;
   border-radius: 12px;
   padding: 24px;
-  color: white;
+  color: #E19FC7;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(225, 159, 199, 0.1);
   display: flex;
   flex-direction: column;
   max-height: 85vh;
@@ -56,7 +56,7 @@
 }
 
 .header button:hover {
-  color: white;
+  color: #E19FC7;
 }
 
 .detailsRow {
@@ -82,8 +82,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 8px rgba(135, 3, 57, 0.6);
+  border: 1px solid #870339;
 }
 
 .coverContainer img {
@@ -105,18 +105,20 @@ textarea {
   width: 100%;
   padding: 12px 14px;
   background: #3e3e3e;
-  border: 1px solid transparent;
+  border: 1px solid #870339;
   border-radius: 6px;
-  color: white;
+  color: #E19FC7;
   box-sizing: border-box;
   font-size: 14px;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 6px rgba(135, 3, 57, 0.5);
 }
 
 input:focus,
 textarea:focus {
   background: #4e4e4e;
-  border-color: #535353;
+  border-color: #870339;
+  box-shadow: 0 0 10px #870339;
   outline: none;
 }
 
@@ -126,7 +128,7 @@ textarea {
 }
 
 .searchSection {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(225, 159, 199, 0.1);
   padding-top: 20px;
   margin-bottom: 20px;
 }
@@ -141,22 +143,28 @@ textarea {
   display: flex;
   align-items: center;
   background: #3e3e3e;
+  border: 1px solid #870339;
   border-radius: 6px;
   padding: 0 12px;
   gap: 10px;
   margin-bottom: 12px;
+  box-shadow: 0 0 6px rgba(135, 3, 57, 0.5);
 }
 
 .searchBox input {
   background: none;
-  padding: 10px 0;
   border: none;
+  box-shadow: none;
+  padding: 10px 0;
   margin: 0;
+  width: 100%;
 }
 
 .searchBox input:focus {
   background: none;
   border: none;
+  box-shadow: none;
+  outline: none;
 }
 
 .searchResults {
@@ -195,8 +203,8 @@ textarea {
 }
 
 .songResult button {
-  background: #1DB954;
-  color: black;
+  background: #870339;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 28px;
@@ -210,7 +218,7 @@ textarea {
 
 .songResult button:hover {
   transform: scale(1.05);
-  background: #1ed760;
+  background: #870339;
 }
 
 .selectedSongsContainer {
@@ -244,7 +252,7 @@ textarea {
 }
 
 .selectedSongTag button:hover {
-  color: white;
+  color: #E19FC7;
 }
 
 .buttons {
@@ -266,12 +274,12 @@ textarea {
 }
 
 .cancel:hover {
-  color: white;
+  color: #E19FC7;
 }
 
 .create {
-  background: #1DB954;
-  color: black;
+  background: #870339;
+  color: white;
   border: none;
   border-radius: 24px;
   padding: 10px 24px;
@@ -283,12 +291,12 @@ textarea {
 
 .create:hover {
   transform: scale(1.04);
-  background: #1ed760;
+  background: #870339;
 }
 
 .fileInputLabel {
   background: #3e3e3e;
-  border: 1px solid transparent;
+  border: 1px solid #870339;
   border-radius: 6px;
   color: #b3b3b3;
   padding: 12px 14px;
@@ -297,14 +305,15 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
   width: 100%;
   text-align: center;
   font-weight: 500;
+  box-shadow: 0 0 6px rgba(135, 3, 57, 0.5);
 }
 
 .fileInputLabel:hover {
-  background: #4e4e4e;
+  background: #870339;
   color: white;
 }
 

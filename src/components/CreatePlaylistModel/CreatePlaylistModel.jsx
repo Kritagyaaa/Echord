@@ -249,8 +249,8 @@ export function CreatePlaylistModel({
                                                 isAdded ? removeSong(song.id) : addSong(song)
                                             }
                                             style={{
-                                                background: isAdded ? "none" : "#1DB954",
-                                                color: isAdded ? "#1DB954" : "black"
+                                                background: isAdded ? "none" : "#870339",
+                                                color: isAdded ? "#E19FC7" : "white"
                                             }}
                                             title={isAdded ? "Added" : "Add"}
                                         >

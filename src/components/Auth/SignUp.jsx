@@ -5,7 +5,7 @@ import { SocialButtons } from './SocialButtons';
 import { useGoogleLogin } from '@react-oauth/google';
 import { GoogleNameModal } from './GoogleNameModal';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = (import.meta.env.VITE_API_URL || 'https://spotifyghostt-backend.loca.lt').replace(/\/$/, '');
 
 function SignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onCreatorSignUpClick }) {
   const [name, setName] = useState('');

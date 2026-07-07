@@ -3,32 +3,37 @@ import { usePlayer } from '../../context/PlayerContext';
 import styles from './NowPlayingCard.module.css';
 
 export function NowPlayingCard({ song }) {
-  const { currentSong, toggleLike } = usePlayer();
+  const { currentSong, toggleLike, isPlaying } = usePlayer();
   const isLiked = currentSong?.is_liked;
 
   return (
     <section className={styles.nowPlaying} aria-label={`${song.title} by ${song.artist}`}>
-      <img className={styles.albumCover} src={song.albumCover} alt={`${song.title} album cover`} />
-      <div className={styles.songInfo}>
-        <div className={styles.textBlock}>
-          <h2 className={styles.title}>{song.title}</h2>
-          <p className={styles.artist}>{song.artist}</p>
-        </div>
-        <button 
-          className={`${styles.likeButton} ${isLiked ? styles.liked : ''}`} 
-          type="button" 
-          aria-label={`Save ${song.title} to your library`}
-          onClick={toggleLike}
-          style={{ display: 'flex', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer' }}
-        >
-          <Heart 
-            size={21} 
-            fill={isLiked ? "#870339" : "none"} 
-            color={isLiked ? "#870339" : "#b3b3b3"}
-            strokeWidth={2.1} 
-          />
-        </button>
-      </div>
+      <div className={styles.artStage}>
+  <div className={styles.vinyl} data-spinning={isPlaying ? 'true' : 'false'}>
+    <img
+      className={styles.vinylLabel}
+      src={song.albumCover}
+      alt={`${song.title} album cover`}
+    />
+    <div className={styles.vinylHole} />
+  </div>
+
+  <div className={styles.tonearm} data-active={isPlaying ? 'true' : 'false'}>
+    <div className={styles.tonearmPivot} />
+    <div className={styles.tonearmRod} />
+    <div className={styles.tonearmHead} />
+  </div>
+</div>
+
+ <div className={styles.songInfo}>
+  <div className={styles.marquee}>
+    <div className={styles.marqueeTrack}>
+      <span className={styles.title}>{song.title}</span>
+      <span className={styles.artist}>{song.artist}</span>
+    </div>
+  </div>
+
+</div>
     </section>
   );
 }

@@ -1,12 +1,20 @@
 .sidebar {
   display: flex;
   min-width: 0;
-  height: 100%;
   padding: 16px;
   overflow-y: auto;
   border-radius: 8px;
   color: #E19FC7;
-  background: #0d0d0d;
+  height: 100%;
+    overflow-y: auto;
+  background:
+radial-gradient(
+circle at top center,
+rgba(135, 3, 57, 0.12) 0%,
+rgba(135, 3, 57, 0.05) 25%,
+transparent 60%
+),
+#0D0D0D;
   flex-direction: column;
   scrollbar-color: #5f5f5f transparent;
   scrollbar-width: thin;

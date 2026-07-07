@@ -4,8 +4,15 @@
   height: 100%;
   overflow: visible;
   border-radius: 8px;
-  background: #0d0d0d;
-  flex-direction: column;
+background:
+linear-gradient(
+180deg,
+rgba(135, 3, 57, 0.10) 0%,
+rgba(135, 3, 57, 0.06) 40%,
+rgba(135, 3, 57, 0.03) 75%,
+transparent 100%
+),
+#121212;  flex-direction: column;
 }
 
 .scrollArea {

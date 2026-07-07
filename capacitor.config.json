@@ -1,0 +1,6 @@
+{
+  "appId": "com.ghostt.app",
+  "appName": "Ghostt",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

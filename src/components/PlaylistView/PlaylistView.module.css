@@ -112,14 +112,15 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, background-color 0.2s, outline 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .playButton:hover {
   transform: scale(1.05);
   background-color: #870339;
-  box-shadow: 0 0 0 1.5px #870339, 0 0 8px #870339;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .playButton:active {
@@ -178,13 +179,14 @@
 
 .songRow {
   border-radius: 6px;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, outline 0.2s;
   cursor: pointer;
 }
 
 .songRow:hover {
   background: rgba(225, 159, 199, 0.08);
-  box-shadow: 0 0 0 1.5px #870339, 0 0 8px #870339;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .songRow:hover .songIndex,
@@ -237,16 +239,18 @@
   border: none;
   cursor: pointer;
   color: #b3b3b3;
-  padding: 4px;
+  padding: 6px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s, transform 0.2s;
+  transition: color 0.2s, transform 0.2s, background 0.2s;
 }
 
 .likeButton:hover {
-  color: #E19FC7;
+  color: #870339;
   transform: scale(1.08);
+  background: rgba(135, 3, 57, 0.18);
 }
 
 .likeButton.liked {
@@ -375,14 +379,15 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s, outline 0.2s;
 }
 
 .addButton:hover {
   border-color: #E19FC7;
   background-color: rgba(225, 159, 199, 0.08);
   transform: scale(1.04);
-  box-shadow: 0 0 0 1.5px #870339, 0 0 8px #870339;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .addButton:active {
@@ -451,14 +456,15 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: border-color 0.2s, background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.2s, outline 0.2s;
 }
 
 .addSongsActionButton:hover {
   border-color: #E19FC7;
   background-color: rgba(225, 159, 199, 0.08);
   transform: scale(1.04);
-  box-shadow: 0 0 0 1.5px #870339, 0 0 8px #870339;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .addSongsActionButton:active {

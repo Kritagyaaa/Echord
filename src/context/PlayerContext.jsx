@@ -355,28 +355,35 @@ setIsPlaying(true);
 
     };
 
-    const toggleLike = async () => {
-        if (!currentSong) return;
+    const toggleLike = async (songId) => {
+        const id = (typeof songId === 'string' || typeof songId === 'number') ? songId : currentSong?.id;
+        if (!id) return;
         try {
-            const res = await toggleLikeSong(currentSong.id);
-            setCurrentSong(prev => {
-                if (!prev) return null;
-                const updated = {
-                    ...prev,
-                    is_liked: res.liked ? 1 : 0,
-                    like_count: res.liked ? (prev.like_count || 0) + 1 : Math.max(0, (prev.like_count || 0) - 1)
-                };
-                currentSongRef.current = updated;
-                localStorage.setItem('last_song', JSON.stringify(updated));
-                return updated;
-            });
-            // Update in queue
+            const res = await toggleLikeSong(id);
+            const isLikedVal = res.liked ? 1 : 0;
+            
+            // 1. Update currentSong state if it's the song being liked/unliked
+            if (currentSongRef.current && currentSongRef.current.id === id) {
+                setCurrentSong(prev => {
+                    if (!prev) return null;
+                    const updated = {
+                        ...prev,
+                        is_liked: isLikedVal,
+                        like_count: res.liked ? (prev.like_count || 0) + 1 : Math.max(0, (prev.like_count || 0) - 1)
+                    };
+                    currentSongRef.current = updated;
+                    localStorage.setItem('last_song', JSON.stringify(updated));
+                    return updated;
+                });
+            }
+            
+            // 2. Update queue
             setQueue(prevQueue => {
                 const updatedQueue = prevQueue.map(s => {
-                    if (s.id === currentSongRef.current?.id) {
+                    if (s.id === id) {
                         return {
                             ...s,
-                            is_liked: res.liked ? 1 : 0,
+                            is_liked: isLikedVal,
                             like_count: res.liked ? (s.like_count || 0) + 1 : Math.max(0, (s.like_count || 0) - 1)
                         };
                     }
@@ -386,7 +393,13 @@ setIsPlaying(true);
                 localStorage.setItem('last_queue', JSON.stringify(updatedQueue));
                 return updatedQueue;
             });
-            refreshSelectedPlaylist();
+            
+            // 3. Dispatch a custom event to notify all other listeners
+            window.dispatchEvent(new CustomEvent('song-liked-sync', { 
+                detail: { songId: id, isLiked: isLikedVal } 
+            }));
+            
+            return res.liked;
         } catch (err) {
             console.error("Failed to toggle like:", err);
             alert(err.message || "Please log in to like songs!");

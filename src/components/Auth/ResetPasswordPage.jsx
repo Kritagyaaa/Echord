@@ -90,7 +90,7 @@ function ResetPasswordPage() {
       <div className="auth-wrapper">
         <div className="auth-card">
           <div className="logo">
-            <img src="/logo.svg" alt="Ghostt Logo" />
+            <img src="/logo.svg" alt="Echord Logo" />
           </div>
 
           <h1>Reset Password</h1>

@@ -77,8 +77,7 @@ export function QueueView() {
     const handleLike = async (e, song, index) => {
         e.stopPropagation();
         try {
-            await toggleLikeSong(song.id);
-            // toggleLike in context will handle the main currentSong; for queue items, we do a local update
+            await toggleLike(song.id);
         } catch (err) {
             console.error(err);
         }
@@ -208,8 +207,8 @@ export function QueueView() {
                                     >
                                         <Heart
                                             size={15}
-                                            fill={song.is_liked ? "#1db954" : "none"}
-                                            color={song.is_liked ? "#1db954" : "currentColor"}
+                                            fill={song.is_liked ? "#870339" : "none"}
+                                            color={song.is_liked ? "#870339" : "currentColor"}
                                         />
                                     </button>
                                     <button

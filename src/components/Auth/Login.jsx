@@ -300,7 +300,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
         <div className="auth-card">
           {/* Spotify Logo */}
           <div className="logo">
-            <img src="/logo.svg" alt="Ghostt Logo" />
+            <img src="/logo.svg" alt="Echord Logo" />
           </div>
 
           <h1>Welcome back</h1>

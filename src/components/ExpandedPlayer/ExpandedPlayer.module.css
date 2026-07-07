@@ -1,14 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #2b3b52 0%, #121212 100%);
+  background: linear-gradient(180deg, #870339 0%, #0d0d0d 100%);
   border-radius: 8px;
   height: 100%;
   width: 100%;
   padding: 24px 32px;
   box-sizing: border-box;
   overflow-y: auto;
-  color: #fff;
+  color: #E19FC7;
   position: relative;
   animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -49,7 +49,7 @@
 .playingFromTitle {
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: #E19FC7;
 }
 
 .actionButtons {
@@ -61,7 +61,7 @@
 .actionBtn {
   background: none;
   border: none;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   padding: 8px;
   display: flex;
@@ -72,14 +72,14 @@
 }
 
 .actionBtn:hover {
-  color: #fff;
+  color: #E19FC7;
   background-color: rgba(255, 255, 255, 0.05);
 }
 
 .minimizeBtn {
   background: rgba(0, 0, 0, 0.4);
   border: none;
-  color: #fff;
+  color: #E19FC7;
   cursor: pointer;
   padding: 8px;
   display: flex;

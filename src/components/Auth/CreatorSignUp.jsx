@@ -134,7 +134,7 @@ function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUse
         <div className="auth-card">
           {/* Spotify Logo */}
           <div className="logo">
-            <img src="/logo.svg" alt="Ghostt Logo" />
+            <img src="/logo.svg" alt="Echord Logo" />
           </div>
 
           {isVerifying ? (

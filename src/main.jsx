@@ -14,7 +14,7 @@ const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "219737061264-18
 const isCapacitor = !!(window.Capacitor || (window.location.hostname === 'localhost' && !window.location.port));
 const Router = isCapacitor ? HashRouter : BrowserRouter;
 
-console.log("Ghostt App Router Init:", {
+console.log("Echord App Router Init:", {
   isCapacitor,
   hostname: window.location.hostname,
   port: window.location.port,

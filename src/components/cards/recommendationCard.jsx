@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePlayer } from "../../context/PlayerContext";
 import { getContentRecommendations } from "../../services/api";
 import placeholder from "../../assets/music-placeholder.jpg";
-import styles from "./RecommendationCard.module.css";
+import styles from "./recommendationCard.module.css";
 
 export function RecommendationCard() {
     const { currentSong, playSong, recentSongs } = usePlayer();
@@ -93,7 +94,7 @@ export function RecommendationCard() {
                             className={`${styles.carouselArrow} ${styles.leftArrow}`}
                             onClick={scrollLeft}
                         >
-                            ‹
+                            <ChevronLeft size={20} strokeWidth={2.2} />
                         </button>
                     )}
 
@@ -130,7 +131,7 @@ export function RecommendationCard() {
                             className={`${styles.carouselArrow} ${styles.rightArrow}`}
                             onClick={scrollRight}
                         >
-                            ›
+                            <ChevronRight size={20} strokeWidth={2.2} />
                         </button>
                     )}
 

@@ -8,7 +8,7 @@ import placeholder from "../../assets/music-placeholder.jpg";
 export function HistoryView({ onBackToMain }) {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { currentSong, isPlaying, playSong } = usePlayer();
+  const { currentSong, isPlaying, playSong, toggleLike } = usePlayer();
 
   const fetchHistory = async () => {
     try {
@@ -24,6 +24,26 @@ export function HistoryView({ onBackToMain }) {
 
   useEffect(() => {
     fetchHistory();
+  }, []);
+
+  useEffect(() => {
+    const handleSync = (e) => {
+      const { songId, isLiked } = e.detail;
+      setHistory((prev) =>
+        prev.map((item) => {
+          if (item.id === songId) {
+            return {
+              ...item,
+              is_liked: isLiked,
+              like_count: isLiked ? (item.like_count || 0) + 1 : Math.max(0, (item.like_count || 0) - 1)
+            };
+          }
+          return item;
+        })
+      );
+    };
+    window.addEventListener('song-liked-sync', handleSync);
+    return () => window.removeEventListener('song-liked-sync', handleSync);
   }, []);
 
   const formatTimePlayed = (isoString) => {
@@ -62,22 +82,9 @@ export function HistoryView({ onBackToMain }) {
   const handleLike = async (e, songId) => {
     e.stopPropagation();
     try {
-      const res = await toggleLikeSong(songId);
-      setHistory((prev) =>
-        prev.map((item) => {
-          if (item.id === songId) {
-            return {
-              ...item,
-              is_liked: res.liked ? 1 : 0,
-              like_count: res.liked ? (item.like_count || 0) + 1 : Math.max(0, (item.like_count || 0) - 1)
-            };
-          }
-          return item;
-        })
-      );
+      await toggleLike(songId);
     } catch (err) {
       console.error(err);
-      alert(err.message || "Could not like song");
     }
   };
 
@@ -179,7 +186,7 @@ export function HistoryView({ onBackToMain }) {
                       onClick={(e) => handleLike(e, song.id)}
                       aria-label="Like song"
                     >
-                      <Heart size={16} fill={song.is_liked ? "#1db954" : "none"} />
+                      <Heart size={16} fill={song.is_liked ? "#870339" : "none"} color={song.is_liked ? "#870339" : "#b3b3b3"} />
                     </button>
                     <span className={styles.durationText}>{formatDuration(song.duration)}</span>
                   </span>

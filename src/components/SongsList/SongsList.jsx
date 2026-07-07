@@ -10,7 +10,7 @@ export function SongsList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const { playSong, currentSong, isPlaying, addToUserQueue } = usePlayer();
+  const { playSong, currentSong, isPlaying, addToUserQueue, toggleLike } = usePlayer();
 
   useEffect(() => {
     async function fetchSongs() {
@@ -28,23 +28,30 @@ export function SongsList() {
     fetchSongs();
   }, []);
 
-  const handleLikeToggle = async (e, songId) => {
-    e.stopPropagation(); // Avoid triggering playSong on card click
-    try {
-      const res = await toggleLikeSong(songId);
+  useEffect(() => {
+    const handleSync = (e) => {
+      const { songId, isLiked } = e.detail;
       setSongs(prevSongs => prevSongs.map(s => {
         if (s.id === songId) {
           return {
             ...s,
-            is_liked: res.liked ? 1 : 0,
-            like_count: res.liked ? (s.like_count || 0) + 1 : Math.max(0, (s.like_count || 0) - 1)
+            is_liked: isLiked,
+            like_count: isLiked ? (s.like_count || 0) + 1 : Math.max(0, (s.like_count || 0) - 1)
           };
         }
         return s;
       }));
+    };
+    window.addEventListener('song-liked-sync', handleSync);
+    return () => window.removeEventListener('song-liked-sync', handleSync);
+  }, []);
+
+  const handleLikeToggle = async (e, songId) => {
+    e.stopPropagation(); // Avoid triggering playSong on card click
+    try {
+      await toggleLike(songId);
     } catch (err) {
       console.error(err);
-      alert(err.message || "Failed to toggle like.");
     }
   };
 
@@ -125,7 +132,7 @@ export function SongsList() {
                   className={`${styles.likeButton} ${song.is_liked ? styles.liked : ''}`}
                   onClick={(e) => handleLikeToggle(e, song.id)}
                 >
-                  <Heart size={18} fill={song.is_liked ? "#1db954" : "none"} color={song.is_liked ? "#1db954" : "#b3b3b3"} />
+                  <Heart size={18} fill={song.is_liked ? "#870339" : "none"} color={song.is_liked ? "#870339" : "#b3b3b3"} />
                 </button>
 
                 <button

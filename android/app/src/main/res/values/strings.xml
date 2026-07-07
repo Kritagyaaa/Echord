@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Ghostt</string>
-    <string name="title_activity_main">Ghostt</string>
+    <string name="app_name">Echord</string>
+    <string name="title_activity_main">Echord</string>
     <string name="package_name">com.ghostt.app</string>
     <string name="custom_url_scheme">com.ghostt.app</string>
 </resources>

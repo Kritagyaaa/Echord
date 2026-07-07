@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Settings, MoreHorizontal, Play, Check, User } from 'lucide-react';
 import styles from './ProfilePage.module.css';
 import { getArtists, getListeningHistory } from '../../services/api';
-import { usePlayer } from '../../context/PlayerContext';
+import { usePlayer } from '../../context/playercontext';
 import { usePlaylists } from '../../context/playlistcontext';
 import { PlaylistCover } from '../PlaylistCover/PlaylistCover';
 
@@ -73,16 +73,16 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ 
-          name: modalName, 
-          email: user?.email, 
-          phone_number: user?.phone_number, 
-          profile_picture: modalPicture 
+        body: JSON.stringify({
+          name: modalName,
+          email: user?.email,
+          phone_number: user?.phone_number,
+          profile_picture: modalPicture
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Profile details update failed.');
-      
+
       onProfileUpdate?.(data.user);
       setShowEditModal(false);
     } catch (err) {
@@ -153,7 +153,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
       {/* Profile Info Banner */}
       <div className={styles.banner}>
         <div className={styles.avatarContainer}>
-          <div 
+          <div
             className={`${styles.avatar} ${styles.clickableAvatar}`}
             onClick={() => {
               setModalName(user?.name || '');
@@ -204,7 +204,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
           >
             <MoreHorizontal size={22} />
           </button>
-          
+
           {showOptionsDropdown && (
             <div className={styles.optionsDropdown}>
               <button onClick={handleCopyLink}>
@@ -217,7 +217,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
 
       {/* Profile Page Grid Body */}
       <div className={styles.profileBody}>
-        
+
         {/* Section: Top Artists */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
@@ -375,21 +375,21 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h3>Profile details</h3>
-              <button 
-                className={styles.modalCloseBtn} 
+              <button
+                className={styles.modalCloseBtn}
                 onClick={() => setShowEditModal(false)}
                 aria-label="Close details"
               >
                 ✕
               </button>
             </div>
-            
+
             {modalError && <div className={styles.modalError}>{modalError}</div>}
-            
+
             <div className={styles.modalBody}>
               {/* Left Side: Avatar Click-to-upload */}
-              <div 
-                className={styles.modalAvatarContainer} 
+              <div
+                className={styles.modalAvatarContainer}
                 onClick={() => modalFileRef.current?.click()}
                 title="Choose photo"
               >
@@ -403,12 +403,12 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
                     <span>Choose photo</span>
                   </div>
                 </div>
-                <input 
-                  type="file" 
-                  ref={modalFileRef} 
-                  style={{ display: 'none' }} 
-                  accept="image/*" 
-                  onChange={handleModalFileChange} 
+                <input
+                  type="file"
+                  ref={modalFileRef}
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  onChange={handleModalFileChange}
                 />
               </div>
 
@@ -416,17 +416,17 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
               <div className={styles.modalForm}>
                 <div className={styles.inputGroup}>
                   <label htmlFor="modal-name-input" className={styles.visuallyHidden}>Name</label>
-                  <input 
+                  <input
                     id="modal-name-input"
-                    type="text" 
-                    value={modalName} 
-                    onChange={(e) => setModalName(e.target.value)} 
+                    type="text"
+                    value={modalName}
+                    onChange={(e) => setModalName(e.target.value)}
                     placeholder="Add a display name"
                     required
                   />
                 </div>
-                <button 
-                  className={styles.modalSaveBtn} 
+                <button
+                  className={styles.modalSaveBtn}
                   onClick={handleModalSave}
                   disabled={isSaving}
                 >

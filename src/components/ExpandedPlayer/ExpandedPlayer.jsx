@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext.jsx";
 import { Minimize2, Heart, Plus, ListMusic } from "lucide-react";
 import styles from "./ExpandedPlayer.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
@@ -147,8 +147,8 @@ export function ExpandedPlayer() {
             <ListMusic size={19} />
           </button>
 
-          <button 
-            className={styles.minimizeBtn} 
+          <button
+            className={styles.minimizeBtn}
             onClick={toggleExpand}
             aria-label="Collapse full screen view"
           >
@@ -160,13 +160,13 @@ export function ExpandedPlayer() {
       {/* Main Focus Area (Centered Album Art & Title) */}
       <div className={styles.focusContent}>
         <div className={styles.artWrapper}>
-          <img 
-            className={styles.largeCoverArt} 
-            src={currentSong.cover_url || placeholder} 
-            alt={currentSong.title} 
+          <img
+            className={styles.largeCoverArt}
+            src={currentSong.cover_url || placeholder}
+            alt={currentSong.title}
           />
           {/* Subtle colored glow behind the image for rich modern aesthetics */}
-          <div 
+          <div
             className={styles.glowBg}
             style={{ backgroundImage: `url(${currentSong.cover_url || placeholder})` }}
           />
@@ -177,14 +177,14 @@ export function ExpandedPlayer() {
             <h1 className={styles.songTitle}>{currentSong.title}</h1>
             <p className={styles.songArtist}>{currentSong.artist}</p>
           </div>
-          <button 
+          <button
             className={`${styles.likeBtn} ${currentSong.is_liked ? styles.liked : ""}`}
             onClick={toggleLike}
             aria-label="Like song"
           >
-            <Heart 
-              size={28} 
-              fill={currentSong.is_liked ? "#870339" : "none"} 
+            <Heart
+              size={28}
+              fill={currentSong.is_liked ? "#870339" : "none"}
               color={currentSong.is_liked ? "#870339" : "#b3b3b3"}
             />
           </button>

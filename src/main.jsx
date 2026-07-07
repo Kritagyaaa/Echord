@@ -7,7 +7,7 @@ import App from "./App";
 
 import "./styles/global.css";
 
-import { PlayerProvider } from "./context/PlayerContext";
+import { PlayerProvider } from "./context/playercontext";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "219737061264-18h6l27em1ef1orsbd8hpdh2snano3ne.apps.googleusercontent.com";
 

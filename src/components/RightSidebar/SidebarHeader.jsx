@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Maximize2, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './SidebarHeader.module.css';
-import { usePlayer } from '../../context/PlayerContext';
+import { usePlayer } from '../../context/playercontext';
 import { usePlaylists } from '../../context/playlistcontext';
 import { addSongToPlaylist, removeSongFromPlaylist } from '../../services/api';
 
 export function SidebarHeader({ playlistName }) {
   const { currentSong, toggleExpand, toggleLike, addToQueue } = usePlayer();
   const { playlists, selectedPlaylist, loadPlaylists, refreshSelectedPlaylist } = usePlaylists();
-  
+
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -52,27 +52,27 @@ export function SidebarHeader({ playlistName }) {
     }
   };
 
-  const isSongInCurrentPl = selectedPlaylist && 
-                            selectedPlaylist.id !== "liked-songs" && 
-                            selectedPlaylist.songs?.some(s => s.id === currentSong?.id);
+  const isSongInCurrentPl = selectedPlaylist &&
+    selectedPlaylist.id !== "liked-songs" &&
+    selectedPlaylist.songs?.some(s => s.id === currentSong?.id);
 
   return (
     <header className={styles.header}>
       <h1 className={styles.playlistName}>{playlistName}</h1>
       <div className={styles.actions} aria-label="Now playing actions" ref={dropdownRef}>
         <div className={styles.actionsWrapper}>
-          <button 
-            className={styles.iconButton} 
-            type="button" 
+          <button
+            className={styles.iconButton}
+            type="button"
             aria-label="More options"
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <MoreHorizontal size={21} strokeWidth={2.1} />
           </button>
-          
+
           {showDropdown && currentSong && (
             <div className={styles.dropdown}>
-              <button 
+              <button
                 className={styles.dropdownItem}
                 onClick={() => {
                   toggleLike();
@@ -81,8 +81,8 @@ export function SidebarHeader({ playlistName }) {
               >
                 {currentSong.is_liked ? "Remove from Liked Songs" : "Add to Liked Songs"}
               </button>
-              
-              <button 
+
+              <button
                 className={styles.dropdownItem}
                 onClick={() => {
                   addToQueue(currentSong);
@@ -91,13 +91,13 @@ export function SidebarHeader({ playlistName }) {
               >
                 Add to Queue
               </button>
-              
+
               <div className={styles.dropdownDivider} />
-              
+
               <div className={styles.dropdownItem} style={{ cursor: "default" }}>
                 <span>Add to Playlist</span>
                 <ChevronLeft size={16} />
-                
+
                 {playlists.length > 0 && (
                   <div className={styles.submenu}>
                     {playlists.map(pl => (
@@ -115,11 +115,11 @@ export function SidebarHeader({ playlistName }) {
                   </div>
                 )}
               </div>
-              
+
               {isSongInCurrentPl && (
                 <>
                   <div className={styles.dropdownDivider} />
-                  <button 
+                  <button
                     className={styles.dropdownItem}
                     onClick={handleRemoveFromPl}
                     style={{ color: "#e91429" }}
@@ -132,9 +132,9 @@ export function SidebarHeader({ playlistName }) {
           )}
         </div>
 
-        <button 
-          className={styles.iconButton} 
-          type="button" 
+        <button
+          className={styles.iconButton}
+          type="button"
           aria-label="Expand now playing view"
           onClick={toggleExpand}
         >

@@ -10,7 +10,7 @@ import {
     Volume2,
 } from "lucide-react";
 import styles from "./QueueView.module.css";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import { getSongs, toggleLikeSong } from "../../services/api";
 import placeholder from "../../assets/music-placeholder.jpg";
 

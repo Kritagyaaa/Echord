@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import { getContentRecommendations } from "../../services/api";
 import placeholder from "../../assets/music-placeholder.jpg";
 import styles from "./recommendationCard.module.css";
@@ -18,15 +18,15 @@ export function RecommendationCard() {
     useEffect(() => {
         if (!currentSong) {
             setRecommendations([]);
-            return; 
+            return;
         }
 
         async function loadRecommendations() {
             try {
                 const data = await getContentRecommendations(
-                currentSong.id,
-                recentSongs
-);
+                    currentSong.id,
+                    recentSongs
+                );
                 setRecommendations(data);
 
                 setTimeout(updateArrows, 100);
@@ -47,7 +47,7 @@ export function RecommendationCard() {
 
         setShowRight(
             el.scrollLeft <
-                el.scrollWidth - el.clientWidth - 5
+            el.scrollWidth - el.clientWidth - 5
         );
     };
 
@@ -105,11 +105,11 @@ export function RecommendationCard() {
                     >
                         {recommendations.map((song) => (
 
-                           <div
+                            <div
                                 key={song.id}
-                               className={styles.card}
-                               onClick={() => playSong(song, recommendations)}
-                               >
+                                className={styles.card}
+                                onClick={() => playSong(song, recommendations)}
+                            >
 
                                 <img
                                     src={song.cover_url || placeholder}

@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { ArrowLeft, Play, Heart, Clock } from "lucide-react";
 import styles from "./BrowseView.module.css";
 import { getGenres, getArtists, getSongs, toggleLikeSong } from "../../services/api";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import { usePlaylists } from "../../context/playlistcontext";
 import placeholder from "../../assets/music-placeholder.jpg";
 
@@ -52,7 +52,7 @@ export function BrowseView() {
             ]);
             setGenres(genresData || []);
             setArtists(artistsData || []);
-            
+
             // Extract songs array from songsResponse
             const songsArray = songsResponse || [];
             setAllSongs(songsArray);

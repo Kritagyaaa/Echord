@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import styles from "./SearchDropdown.module.css";
 
 export function SearchDropdown({ results = [], visible, onClose }) {
@@ -17,7 +17,7 @@ export function SearchDropdown({ results = [], visible, onClose }) {
                         key={song.id}
                         className={styles.result}
                         onClick={() => {
-                           playSong(song);
+                            playSong(song);
                             onClose();
                         }}
                     >

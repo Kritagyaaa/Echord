@@ -17,7 +17,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import styles from "./PlayerBar.module.css";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import { usePlaylists } from "../../context/playlistcontext";
 import { CreatePlaylistModel } from "../CreatePlaylistModel/CreatePlaylistModel";
 import { addSongToPlaylist } from "../../services/api";

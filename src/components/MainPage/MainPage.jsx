@@ -4,7 +4,7 @@ import styles from './MainPage.module.css';
 import placeholder from "../../assets/music-placeholder.jpg";
 import { PlaylistCover } from "../PlaylistCover/PlaylistCover";
 import { getSongs, getListeningHistory, toggleLikeSong } from "../../services/api";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import { usePlaylists } from "../../context/playlistcontext";
 import { useNavigate } from "react-router-dom";
 import ShaderBackground from "../shaderBackground/ShaderBackground";
@@ -189,94 +189,94 @@ export function MainPage({
     const topResult = localSearchResults[0];
     const otherSongs = localSearchResults.slice(0, 5);
 
-   return (
-    <div className={styles.mainContent}>
+    return (
+      <div className={styles.mainContent}>
 
         <div className={styles.pageContent}>
-        <h2>Search Results for "{searchQuery}"</h2>
+          <h2>Search Results for "{searchQuery}"</h2>
 
-        {localSearchResults.length === 0 ? (
-          <div className={styles.noResults}>
-            <h3>No results found</h3>
-            <p>Please make sure your words are spelled correctly or try fewer or different keywords.</p>
-          </div>
-        ) : (
-          <div className={styles.searchLayout}>
-            {topResult && (
-              <div className={styles.topResultContainer}>
-                <h3>Top Result</h3>
-                <div
-                  className={styles.topResultCard}
-                  onClick={() => playSong(topResult, localSearchResults)}
-                >
-                  <img
-                    src={topResult.cover_url || placeholder}
-                    alt={topResult.title}
-                    className={styles.topResultImage}
-                  />
-                  <h2 className={styles.topResultName}>{topResult.title}</h2>
-                  <div className={styles.topResultMeta}>
-                    <span className={styles.topResultBadge}>Song</span>
-                    <span className={styles.topResultArtist}>{topResult.artist}</span>
-                  </div>
-                  <div className={styles.playOverlay}>
-                    <Play fill="black" color="black" size={24} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className={styles.songsResultContainer}>
-              <h3>Songs</h3>
-              <div className={styles.searchSongList}>
-                {otherSongs.map((song) => (
+          {localSearchResults.length === 0 ? (
+            <div className={styles.noResults}>
+              <h3>No results found</h3>
+              <p>Please make sure your words are spelled correctly or try fewer or different keywords.</p>
+            </div>
+          ) : (
+            <div className={styles.searchLayout}>
+              {topResult && (
+                <div className={styles.topResultContainer}>
+                  <h3>Top Result</h3>
                   <div
-                    key={song.id}
-                    className={styles.searchSongRow}
-                    onClick={() => playSong(song, localSearchResults)}
+                    className={styles.topResultCard}
+                    onClick={() => playSong(topResult, localSearchResults)}
                   >
                     <img
-                      src={song.cover_url || placeholder}
-                      alt=""
-                      className={styles.searchSongCover}
+                      src={topResult.cover_url || placeholder}
+                      alt={topResult.title}
+                      className={styles.topResultImage}
                     />
-                    <div className={styles.searchSongInfo}>
-                      <p className={styles.searchSongTitle}>{song.title}</p>
-                      <p className={styles.searchSongArtist}>{song.artist}</p>
+                    <h2 className={styles.topResultName}>{topResult.title}</h2>
+                    <div className={styles.topResultMeta}>
+                      <span className={styles.topResultBadge}>Song</span>
+                      <span className={styles.topResultArtist}>{topResult.artist}</span>
                     </div>
-                    <div className={styles.searchSongControls}>
-                      <button
-                        className={`${styles.searchLikeButton} ${song.is_liked ? styles.liked : ''}`}
-                        onClick={(e) => handleLikeToggle(e, song.id)}
-                      >
-                        <Heart
-                          size={18}
-                          fill={song.is_liked ? "#1db954" : "none"}
-                          color={song.is_liked ? "#1db954" : "#b3b3b3"}
-                        />
-                      </button>
-                      <button
-                        className={styles.searchLikeButton}
-                        title="Add to queue"
-                        onClick={(e) => { e.stopPropagation(); addToUserQueue(song); }}
-                      >
-                        <ListPlus size={18} color="#b3b3b3" />
-                      </button>
-                      <span className={styles.searchSongDuration}>
-                        {formatDuration(song.duration)}
-                      </span>
+                    <div className={styles.playOverlay}>
+                      <Play fill="black" color="black" size={24} />
                     </div>
                   </div>
-                ))}
+                </div>
+              )}
+
+              <div className={styles.songsResultContainer}>
+                <h3>Songs</h3>
+                <div className={styles.searchSongList}>
+                  {otherSongs.map((song) => (
+                    <div
+                      key={song.id}
+                      className={styles.searchSongRow}
+                      onClick={() => playSong(song, localSearchResults)}
+                    >
+                      <img
+                        src={song.cover_url || placeholder}
+                        alt=""
+                        className={styles.searchSongCover}
+                      />
+                      <div className={styles.searchSongInfo}>
+                        <p className={styles.searchSongTitle}>{song.title}</p>
+                        <p className={styles.searchSongArtist}>{song.artist}</p>
+                      </div>
+                      <div className={styles.searchSongControls}>
+                        <button
+                          className={`${styles.searchLikeButton} ${song.is_liked ? styles.liked : ''}`}
+                          onClick={(e) => handleLikeToggle(e, song.id)}
+                        >
+                          <Heart
+                            size={18}
+                            fill={song.is_liked ? "#1db954" : "none"}
+                            color={song.is_liked ? "#1db954" : "#b3b3b3"}
+                          />
+                        </button>
+                        <button
+                          className={styles.searchLikeButton}
+                          title="Add to queue"
+                          onClick={(e) => { e.stopPropagation(); addToUserQueue(song); }}
+                        >
+                          <ListPlus size={18} color="#b3b3b3" />
+                        </button>
+                        <span className={styles.searchSongDuration}>
+                          {formatDuration(song.duration)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-           </div>
+          )}
+        </div>
 
-    </div>
-);
-}
+      </div>
+    );
+  }
 
   // Normal Home Page View
   return (
@@ -338,20 +338,20 @@ export function MainPage({
           />
         ))}
       </div>
-<div className={styles.sectionHeader}>
-  <h2>Latest song</h2>
-</div>
-<div className={styles.cardsContainer}>
-  <div className={styles.cardsRow} ref={latestRef}>
-    {latestSongs.map(song => (
-      <MusicCard
-        key={song.id}
-        song={song}
-        playlist={latestSongs}
-      />
-    ))}
-  </div>
-</div>
+      <div className={styles.sectionHeader}>
+        <h2>Latest song</h2>
+      </div>
+      <div className={styles.cardsContainer}>
+        <div className={styles.cardsRow} ref={latestRef}>
+          {latestSongs.map(song => (
+            <MusicCard
+              key={song.id}
+              song={song}
+              playlist={latestSongs}
+            />
+          ))}
+        </div>
+      </div>
 
       <div className={styles.sectionHeader}>
         <h2>Recents</h2>

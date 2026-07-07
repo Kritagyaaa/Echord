@@ -1,4 +1,4 @@
-import { usePlayer } from '../../context/PlayerContext';
+import { usePlayer } from '../../context/playercontext.jsx';
 import { AboutArtistCard } from '../cards/AboutArtistCard.jsx';
 import { CreditsCard } from '../cards/CreditsCard.jsx';
 import { NowPlayingCard } from '../cards/NowPlayingCard.jsx';
@@ -59,7 +59,7 @@ export function RightSidebar() {
         <AboutArtistCard artist={songData.artistInfo} />
         <RecommendationCard />
         <CreditsCard credits={songData.credits} />
-    
+
       </div>
     </aside>
   );

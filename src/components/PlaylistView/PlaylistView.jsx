@@ -3,7 +3,7 @@ import styles from "./PlaylistView.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
 import { PlaylistCover } from "../PlaylistCover/PlaylistCover";
 import { Play, Shuffle, Heart, Search, Check, Plus, Pencil, Trash2, ListPlus } from "lucide-react";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import { usePlaylists } from "../../context/playlistcontext";
 import { searchSongs, addSongToPlaylist, toggleLikeSong, removeSongFromPlaylist, deletePlaylist } from "../../services/api";
 import { EditPlaylistModel } from "../EditPlaylistModel/EditPlaylistModel";
@@ -16,7 +16,7 @@ export function PlaylistView({ playlist }) {
     const [addSearchQuery, setAddSearchQuery] = useState("");
     const [addSearchResults, setAddSearchResults] = useState([]);
     const [showEditModel, setShowEditModel] = useState(false);
-    
+
     const searchSectionRef = useRef(null);
 
     if (!playlist) {
@@ -42,7 +42,7 @@ export function PlaylistView({ playlist }) {
         if (!seconds) return "0 min";
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
-        
+
         if (hours > 0) {
             return `${hours} hr ${minutes} min`;
         }
@@ -147,7 +147,7 @@ export function PlaylistView({ playlist }) {
                         <Heart size={80} fill="white" />
                     </div>
                 ) : (
-                    <div 
+                    <div
                         className={styles.editableCoverContainer}
                         onClick={() => setShowEditModel(true)}
                         title="Change Cover Image"
@@ -170,7 +170,7 @@ export function PlaylistView({ playlist }) {
                         Playlist
                     </p>
 
-                    <h1 
+                    <h1
                         className={!isSystemPlaylist ? styles.editableTitle : ""}
                         onClick={() => !isSystemPlaylist && setShowEditModel(true)}
                         title={!isSystemPlaylist ? "Rename Playlist" : ""}
@@ -233,7 +233,7 @@ export function PlaylistView({ playlist }) {
                         >
                             <Trash2 size={24} />
                         </button>
-                        
+
                         <button
                             className={styles.addSongsActionButton}
                             onClick={focusSearchInput}
@@ -332,7 +332,7 @@ export function PlaylistView({ playlist }) {
                 <div className={styles.addSongsSection} ref={searchSectionRef}>
                     <h2>Let's add something to your playlist</h2>
                     <p>Search for songs by title, artist, or album</p>
-                    
+
                     <div className={styles.addSearchBox}>
                         <Search size={18} color="#b3b3b3" />
                         <input
@@ -347,9 +347,9 @@ export function PlaylistView({ playlist }) {
                         {addSearchResults.map((song) => (
                             <div key={song.id} className={styles.addSongRow}>
                                 <div className={styles.addSongDetails}>
-                                    <img 
-                                        src={song.cover_url || placeholder} 
-                                        alt="" 
+                                    <img
+                                        src={song.cover_url || placeholder}
+                                        alt=""
                                         className={styles.addSongCover}
                                         onError={(e) => {
                                             e.target.src = placeholder;
@@ -392,7 +392,7 @@ export function PlaylistView({ playlist }) {
                 </div>
             )}
 
-            <EditPlaylistModel 
+            <EditPlaylistModel
                 isOpen={showEditModel}
                 onClose={() => setShowEditModel(false)}
                 playlist={playlist}

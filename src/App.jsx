@@ -20,13 +20,13 @@ import AccountPage from './components/Auth/AccountPage.jsx';
 import ProfilePage from './components/Profile/ProfilePage.jsx';
 import { HistoryView } from './components/HistoryView/HistoryView.jsx';
 import { QueueView } from "./components/QueueView/QueueView.jsx";
-import { usePlayer } from './context/PlayerContext.jsx';
+import { usePlayer } from './context/playercontext.jsx';
 import { ExpandedPlayer } from './components/ExpandedPlayer/ExpandedPlayer.jsx';
 import { usePlaylists } from './context/playlistcontext.jsx';
 import { BrowseView } from './components/BrowseView/BrowseView.jsx';
-import ShaderBackground from "./components/shaderBackground/ShaderBackground";
-import { AlbumsView } from "./components/AlbumsView/AlbumsView";
-import { PlaylistsView } from "./components/PlaylistsView/PlaylistsView";
+import { AlbumsView } from './components/AlbumsView/AlbumsView.jsx';
+import { PlaylistsView } from './components/PlaylistsView/PlaylistsView.jsx';
+import ShaderBackground from './components/shaderBackground/ShaderBackground.jsx';
 
 function ProtectedLayout({
   isAuthenticated,
@@ -78,18 +78,18 @@ function ProtectedLayout({
             selectedPlaylist={selectedPlaylist}
             collapsed={false}
           />
-         <main
-  className={styles.mainPlaceholder}
-  aria-label="Main content"
->
-    <div className={styles.shaderLayer}>
-        <ShaderBackground />
-    </div>
+          <main
+            className={styles.mainPlaceholder}
+            aria-label="Main content"
+          >
+            <div className={styles.shaderLayer}>
+              <ShaderBackground />
+            </div>
 
-    <div className={styles.contentLayer}>
-        <Outlet />
-    </div>
-</main>
+            <div className={styles.contentLayer}>
+              <Outlet />
+            </div>
+          </main>
 
           <RightSidebar />
         </div>
@@ -242,59 +242,10 @@ function App() {
     navigate('/login');
   };
 
-  // Protected Layout component that renders the full Spotify layout
-  const AppLayout = () => {
-    const location = useLocation();
-    const isProfilePage = location.pathname === '/profile';
 
-    if (!isAuthenticated) {
-      return <Navigate to="/login" replace />;
-    }
-
-    return (
-      <div className={styles.appFrame}>
-        <Header
-          onHomeClick={() => {
-            setSelectedPlaylist(null);
-            setSearchQuery("");
-            navigate("/");
-          }}
-          user={user}
-          onLogout={handleLogout}
-          onAccountClick={() => window.open("/account", "_blank")}
-          onProfileClick={() => navigate("/profile")}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-
-        <div className={styles.appShell}>
-          <LibrarySidebar
-            onPlaylistSelect={(playlist) => {
-              setSelectedPlaylist(playlist);
-              navigate('/');
-            }}
-            selectedPlaylist={selectedPlaylist}
-            collapsed={false}
-          />
-          <main
-            className={styles.mainPlaceholder}
-            aria-label="Main content"
-          >
-            <Outlet />
-          </main>
-
-          <RightSidebar />
-        </div>
-
-        <PlayerBar />
-      </div>
-    );
-  };
 
   return (
-    <>
-      <ShaderBackground />
-      <Routes>
+    <Routes>
       {/* Public/Guest Routes */}
       <Route
         path="/login"
@@ -373,19 +324,19 @@ function App() {
       {/* Protected Routes inside the App Layout */}
       <Route
         element={
-       <ProtectedLayout
-    isAuthenticated={isAuthenticated}
-    selectedPlaylist={selectedPlaylist}
-    setSelectedPlaylist={setSelectedPlaylist}
-    handlePlaylistSelect={handlePlaylistSelect}
-    user={user}
-    handleLogout={handleLogout}
-    navigate={navigate}
-    searchQuery={searchQuery}
-    setSearchQuery={setSearchQuery}
-    searchResults={searchResults}
-    setSearchResults={setSearchResults}
-/>
+          <ProtectedLayout
+            isAuthenticated={isAuthenticated}
+            selectedPlaylist={selectedPlaylist}
+            setSelectedPlaylist={setSelectedPlaylist}
+            handlePlaylistSelect={handlePlaylistSelect}
+            user={user}
+            handleLogout={handleLogout}
+            navigate={navigate}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchResults={searchResults}
+            setSearchResults={setSearchResults}
+          />
         }
       >
         <Route
@@ -474,7 +425,6 @@ function App() {
       {/* Fallback route */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  </>
   );
 }
 export default App;

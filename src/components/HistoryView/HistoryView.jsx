@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Play, Volume2, Clock, Heart, ArrowLeft, Trash2 } from "lucide-react";
 import { getListeningHistory, toggleLikeSong } from "../../services/api";
-import { usePlayer } from "../../context/PlayerContext";
+import { usePlayer } from "../../context/playercontext";
 import styles from "./HistoryView.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
 
@@ -108,11 +108,8 @@ export function HistoryView({ onBackToMain }) {
   return (
     <div className={styles.container}>
       <div className={styles.headerGradient}></div>
-      
+
       <div className={styles.header}>
-        <button className={styles.backButton} onClick={onBackToMain} aria-label="Go back">
-          <ArrowLeft size={24} />
-        </button>
         <div className={styles.headerContent}>
           <p className={styles.upperTitle}>RECENTS</p>
           <h1 className={styles.title}>Listening History</h1>
@@ -158,7 +155,7 @@ export function HistoryView({ onBackToMain }) {
                       index + 1
                     )}
                   </span>
-                  
+
                   <span className={styles.colTitle}>
                     <div className={styles.songInfoBlock}>
                       <div className={styles.coverWrapper}>

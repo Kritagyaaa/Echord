@@ -6,35 +6,35 @@ export default function ShaderBackground() {
 
     useEffect(() => {
 
-    const canvas = canvasRef.current;
+        const canvas = canvasRef.current;
 
-    if (!canvas) return;
+        if (!canvas) return;
 
-    const gl =
-        canvas.getContext("webgl") ||
-        canvas.getContext("experimental-webgl");
+        const gl =
+            canvas.getContext("webgl") ||
+            canvas.getContext("experimental-webgl");
 
-    if (!gl) {
-        console.error("WebGL not supported");
-        return;
-    }
+        if (!gl) {
+            console.error("WebGL not supported");
+            return;
+        }
 
-    function resizeCanvas() {
+        function resizeCanvas() {
 
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
 
-        gl.viewport(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-    }
+            gl.viewport(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+        }
 
-    resizeCanvas();
+        resizeCanvas();
 
-    const vertexShaderSource = `
+        const vertexShaderSource = `
 attribute vec2 a_position;
 varying vec2 v_texCoord;
 
@@ -44,7 +44,7 @@ void main() {
 }
 `;
 
-const fragmentShaderSource = `
+        const fragmentShaderSource = `
 precision highp float;
 
 uniform float u_time;
@@ -88,155 +88,155 @@ void main() {
 
 }
 `;
-function createShader(type, source) {
+        function createShader(type, source) {
 
-    const shader = gl.createShader(type);
+            const shader = gl.createShader(type);
 
-    gl.shaderSource(shader, source);
+            gl.shaderSource(shader, source);
 
-    gl.compileShader(shader);
+            gl.compileShader(shader);
 
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 
-        console.error(gl.getShaderInfoLog(shader));
+                console.error(gl.getShaderInfoLog(shader));
 
-        gl.deleteShader(shader);
+                gl.deleteShader(shader);
 
-        return null;
+                return null;
 
-    }
+            }
 
-    return shader;
+            return shader;
 
-}
+        }
 
-const vertexShader = createShader(
-    gl.VERTEX_SHADER,
-    vertexShaderSource
-);
+        const vertexShader = createShader(
+            gl.VERTEX_SHADER,
+            vertexShaderSource
+        );
 
-const fragmentShader = createShader(
-    gl.FRAGMENT_SHADER,
-    fragmentShaderSource
-);
+        const fragmentShader = createShader(
+            gl.FRAGMENT_SHADER,
+            fragmentShaderSource
+        );
 
-const program = gl.createProgram();
+        const program = gl.createProgram();
 
-gl.attachShader(program, vertexShader);
+        gl.attachShader(program, vertexShader);
 
-gl.attachShader(program, fragmentShader);
+        gl.attachShader(program, fragmentShader);
 
-gl.linkProgram(program);
+        gl.linkProgram(program);
 
-if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
 
-    console.error(gl.getProgramInfoLog(program));
+            console.error(gl.getProgramInfoLog(program));
 
-    return;
+            return;
 
-}
+        }
 
-gl.useProgram(program);
-const vertices = new Float32Array([
-    -1, -1,
-     1, -1,
-    -1,  1,
-     1,  1,
-]);
+        gl.useProgram(program);
+        const vertices = new Float32Array([
+            -1, -1,
+            1, -1,
+            -1, 1,
+            1, 1,
+        ]);
 
-const buffer = gl.createBuffer();
+        const buffer = gl.createBuffer();
 
-gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
-gl.bufferData(
-    gl.ARRAY_BUFFER,
-    vertices,
-    gl.STATIC_DRAW
-);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            vertices,
+            gl.STATIC_DRAW
+        );
 
-const positionLocation = gl.getAttribLocation(
-    program,
-    "a_position"
-);
+        const positionLocation = gl.getAttribLocation(
+            program,
+            "a_position"
+        );
 
-gl.enableVertexAttribArray(positionLocation);
+        gl.enableVertexAttribArray(positionLocation);
 
-gl.vertexAttribPointer(
-    positionLocation,
-    2,
-    gl.FLOAT,
-    false,
-    0,
-    0
-);
+        gl.vertexAttribPointer(
+            positionLocation,
+            2,
+            gl.FLOAT,
+            false,
+            0,
+            0
+        );
 
-const timeLocation = gl.getUniformLocation(
-    program,
-    "u_time"
-);
+        const timeLocation = gl.getUniformLocation(
+            program,
+            "u_time"
+        );
 
-const resolutionLocation = gl.getUniformLocation(
-    program,
-    "u_resolution"
-);
+        const resolutionLocation = gl.getUniformLocation(
+            program,
+            "u_resolution"
+        );
 
-let animationFrame;
+        let animationFrame;
 
-function render(time){
+        function render(time) {
 
-    resizeCanvas();
+            resizeCanvas();
 
-    gl.uniform1f(
-        timeLocation,
-        time * 0.001
+            gl.uniform1f(
+                timeLocation,
+                time * 0.001
+            );
+
+            gl.uniform2f(
+                resolutionLocation,
+                canvas.width,
+                canvas.height
+            );
+
+            gl.drawArrays(
+                gl.TRIANGLE_STRIP,
+                0,
+                4
+            );
+
+            animationFrame =
+                requestAnimationFrame(render);
+
+        }
+
+        animationFrame =
+            requestAnimationFrame(render);
+
+        window.addEventListener("resize", resizeCanvas);
+
+        return () => {
+
+            cancelAnimationFrame(animationFrame);
+
+            window.removeEventListener(
+                "resize",
+                resizeCanvas
+            );
+
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                pointerEvents: "none",
+            }}
+        />
     );
-
-    gl.uniform2f(
-        resolutionLocation,
-        canvas.width,
-        canvas.height
-    );
-
-    gl.drawArrays(
-        gl.TRIANGLE_STRIP,
-        0,
-        4
-    );
-
-    animationFrame =
-        requestAnimationFrame(render);
-
-}
-
-animationFrame =
-    requestAnimationFrame(render);
-
-    window.addEventListener("resize", resizeCanvas);
-
-return () => {
-
-    cancelAnimationFrame(animationFrame);
-
-    window.removeEventListener(
-        "resize",
-        resizeCanvas
-    );
-
-};
-}, []);
-
- return (
-    <canvas
-        ref={canvasRef}
-        style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 0,
-            pointerEvents: "none",
-        }}
-    />
-);
 }

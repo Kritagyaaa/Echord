@@ -292,14 +292,14 @@ export function MainPage({
               width: 60,
               height: 60,
               borderRadius: 4,
-              background: "linear-gradient(135deg,#450af5,#8e8ee5,#c4efd9)",
+              background: "linear-gradient(135deg,#E19FC7,#E19FC7,#c4efd9)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              color: "white",
+              color: "#E19FC7",
             }}
           >
-            <Heart size={24} fill="white" />
+            <Heart size={24} fill="#870339" />
           </div>
           <span>Liked Songs</span>
         </div>

@@ -7,6 +7,7 @@
   align-items: center;
   gap: 18px;
 }
+
 .homeButton {
   cursor: pointer;
 }
@@ -269,6 +270,7 @@
     display: none;
   }
 }
+
 .searchContainer {
   position: relative;
   flex: 1;
@@ -337,7 +339,7 @@
 .siteTitle {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 400;
   color: #E19FC7;
   letter-spacing: -0.5px;
   background: linear-gradient(135deg, #E19FC7 60%, #a61c3c 100%);
@@ -350,6 +352,7 @@
   .siteTitle {
     display: none;
   }
+
   .siteHeader {
     margin-right: 4px;
     padding: 4px;

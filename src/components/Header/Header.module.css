@@ -137,15 +137,15 @@
 }
 
 .profile.profileDefault {
-  background-color: #7A142A;
+  background-color: #870339;
   color: #ffffff;
   border-color: #1f1f1f;
 }
 
 .profile.profileDefault:hover {
-  background-color: #9c1a36;
+  background-color: #a10545;
   color: #ffffff;
-  box-shadow: 0 0 10px 2px rgba(122, 20, 42, 0.6);
+  box-shadow: 0 0 10px 2px rgba(135, 3, 57, 0.6);
 }
 
 .profileLetter {

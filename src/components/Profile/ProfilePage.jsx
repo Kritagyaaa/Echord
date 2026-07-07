@@ -31,7 +31,6 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
 
   const [dbArtists, setDbArtists] = useState([]);
   const [dbHistory, setDbHistory] = useState([]);
-  const [isSticky, setIsSticky] = useState(false);
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -117,25 +116,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
     loadData();
   }, []);
 
-  // Monitor scrolling to toggle sticky header
-  useEffect(() => {
-    const handleScroll = (e) => {
-      const target = e.target;
-      // .mainPlaceholder is the scroll container
-      if (target.classList && target.classList.contains('App_mainPlaceholder__3rWqJ') || target.tagName === 'MAIN') {
-        if (target.scrollTop > 120) {
-          setIsSticky(true);
-        } else {
-          setIsSticky(false);
-        }
-      }
-    };
 
-    window.addEventListener('scroll', handleScroll, true);
-    return () => {
-      window.removeEventListener('scroll', handleScroll, true);
-    };
-  }, []);
 
   const formatDuration = (seconds) => {
     if (!seconds) return "0:00";
@@ -167,10 +148,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
         </div>
       )}
 
-      {/* Sticky Header */}
-      <div className={`${styles.stickyHeader} ${isSticky ? styles.stickyVisible : ''}`}>
-        <span className={styles.stickyUsername}>{user?.name || "Profile"}</span>
-      </div>
+
 
       {/* Profile Info Banner */}
       <div className={styles.banner}>

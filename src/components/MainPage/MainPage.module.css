@@ -130,7 +130,6 @@
 overflow:hidden;
 position:relative;
 
-
   transition:
     transform 0.3s ease,
     background 0.3s ease,
@@ -140,6 +139,7 @@ position:relative;
   border: 1px solid rgba(225,159,199,.10);
   box-shadow:
 0 0 8px rgba(135,3,57,.15); 
+
 }
 
 .musicCard:hover {

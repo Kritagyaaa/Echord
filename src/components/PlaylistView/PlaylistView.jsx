@@ -10,7 +10,7 @@ import { EditPlaylistModel } from "../EditPlaylistModel/EditPlaylistModel";
 
 export function PlaylistView({ playlist }) {
 
-    const { playSong, isShuffle, toggleShuffle, addToUserQueue } = usePlayer();
+    const { playSong, isShuffle, toggleShuffle, addToUserQueue, toggleLike } = usePlayer();
     const { refreshSelectedPlaylist, loadPlaylists, selectPlaylist } = usePlaylists();
 
     const [addSearchQuery, setAddSearchQuery] = useState("");
@@ -71,7 +71,7 @@ export function PlaylistView({ playlist }) {
     const handleLikeToggle = async (e, songId) => {
         e.stopPropagation();
         try {
-            await toggleLikeSong(songId);
+            await toggleLike(songId);
             await refreshSelectedPlaylist();
         } catch (err) {
             console.error(err);
@@ -292,8 +292,8 @@ export function PlaylistView({ playlist }) {
                             >
                                 <Heart
                                     size={16}
-                                    fill={song.is_liked ? "#1db954" : "none"}
-                                    color={song.is_liked ? "#1db954" : "#b3b3b3"}
+                                    fill={song.is_liked ? "#870339" : "none"}
+                                    color={song.is_liked ? "#870339" : "#b3b3b3"}
                                 />
                             </button>
                         </span>

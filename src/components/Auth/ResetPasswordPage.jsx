@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FaSpotify } from 'react-icons/fa';
 import './auth.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = (import.meta.env.VITE_API_URL || 'https://spotifyghostt-backend.loca.lt').replace(/\/$/, '');
 
 function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -90,7 +90,7 @@ function ResetPasswordPage() {
       <div className="auth-wrapper">
         <div className="auth-card">
           <div className="logo">
-            <img src="/logo.svg" alt="Ghostt Logo" />
+            <img src="/logo.svg" alt="Echord Logo" />
           </div>
 
           <h1>Reset Password</h1>

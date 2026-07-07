@@ -4,7 +4,7 @@ import { Music, Heart, Plus, Edit, Trash2, LogOut, ArrowRight, X, Upload, Check 
 import placeholder from '../../assets/music-placeholder.jpg';
 import './CreatorDashboard.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = (import.meta.env.VITE_API_URL || 'https://spotifyghostt-backend.loca.lt').replace(/\/$/, '');
 
 function CreatorDashboard({ user, onLogout }) {
   const navigate = useNavigate();
@@ -158,6 +158,12 @@ function CreatorDashboard({ user, onLogout }) {
       };
 
       setSongs((currentSongs) => [uploadedSong, ...currentSongs]);
+      try {
+        localStorage.setItem('songs:updated', String(Date.now()));
+      } catch (storageErr) {
+        console.warn('Unable to persist song update signal:', storageErr);
+      }
+      window.dispatchEvent(new Event('songs-updated'));
       setSuccessMsg('Song uploaded successfully!');
       setLoading(false);
 
@@ -225,6 +231,12 @@ function CreatorDashboard({ user, onLogout }) {
       }
 
       setSongs((currentSongs) => currentSongs.filter((s) => s.id !== songId));
+      try {
+        localStorage.setItem('songs:updated', String(Date.now()));
+      } catch (storageErr) {
+        console.warn('Unable to persist song update signal:', storageErr);
+      }
+      window.dispatchEvent(new Event('songs-updated'));
       setSuccessMsg('Song deleted successfully!');
       setTimeout(() => setSuccessMsg(''), 2000);
     } catch (err) {

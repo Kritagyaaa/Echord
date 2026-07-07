@@ -2,7 +2,7 @@
   display: grid;
   height: 72px;
   padding: 8px 24px;
-  background: #000;
+  background: #0d0d0d;
   grid-template-columns: minmax(88px, 1fr) minmax(280px, 680px) minmax(120px, 1fr);
   align-items: center;
   gap: 18px;
@@ -51,26 +51,32 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  color: #E19FC7;
 }
 
 .homeButton {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  color: #fff;
+  color: #E19FC7;
 }
 
 .iconButton:hover,
 .homeButton:hover {
-  color: #fff;
+  color: #E19FC7;
   background: #2a2a2a;
   transform: scale(1.04);
+  box-shadow: 0 0 10px 2px rgba(135, 3, 57, 0.6);
 }
 
 .iconButton:focus-visible,
-.homeButton:focus-visible,
+.homeButton:focus-visible {
+  outline: 2px solid #E19FC7;
+  outline-offset: 2px;
+}
+
 .searchBox:focus-within {
-  outline: 2px solid #fff;
+  outline: 2px solid #870339;
   outline-offset: 2px;
 }
 
@@ -81,7 +87,7 @@
   height: 52px;
   padding: 0 18px;
   border-radius: 999px;
-  color: #b3b3b3;
+  color: #E19FC7;
   background: #1f1f1f;
   gap: 14px;
   transition:
@@ -91,6 +97,8 @@
 
 .searchBox:hover {
   background: #2a2a2a;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .searchBox input {
@@ -98,7 +106,7 @@
   min-width: 0;
   border: 0;
   outline: 0;
-  color: #fff;
+  color: #E19FC7;
   background: transparent;
   font-size: 16px;
 }
@@ -118,13 +126,14 @@
   align-items: center;
   justify-content: center;
   background: #1f1f1f;
-  color: #b3b3b3;
+  color: #E19FC7;
 }
 
 .profile:hover {
   transform: scale(1.05);
   background: #2a2a2a;
-  color: #fff;
+  color: #E19FC7;
+  box-shadow: 0 0 10px 2px rgba(135, 3, 57, 0.6);
 }
 
 .profileWrapper {
@@ -148,7 +157,7 @@
   align-items: center;
   padding: 12px 16px;
   cursor: pointer;
-  color: #fff;
+  color: #E19FC7;
   transition: background-color 160ms ease;
 }
 
@@ -177,13 +186,13 @@
   text-align: left;
   margin: 0 0 20px;
   font-size: 14px;
-  color: #fff;
+  color: #E19FC7;
 }
 
 .checkIcon {
   display: flex;
   justify-content: center;
-  color: #fff;
+  color: #E19FC7;
   margin: 15px 0;
 }
 
@@ -191,7 +200,7 @@
   font-size: 14px;
   font-weight: 600;
   margin: 15px 0 8px;
-  color: #fff;
+  color: #E19FC7;
 }
 
 .updateText {
@@ -250,7 +259,7 @@
 .briefcaseButton {
   background: none;
   border: none;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -261,9 +270,10 @@
 }
 
 .briefcaseButton:hover {
-  color: white;
+  color: #E19FC7;
   background-color: rgba(255, 255, 255, 0.1);
   transform: scale(1.05);
+  box-shadow: 0 0 10px 2px rgba(135, 3, 57, 0.6);
 }
 
 .briefcaseButton:active {
@@ -307,9 +317,9 @@
 .siteTitle {
   font-size: 22px;
   font-weight: 800;
-  color: #fff;
+  color: #E19FC7;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #fff 60%, #a61c3c 100%);
+  background: linear-gradient(135deg, #E19FC7 60%, #a61c3c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

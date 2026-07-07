@@ -11,7 +11,7 @@ import {
   Check,
   User,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import { searchSongs } from "../../services/api";
@@ -30,6 +30,24 @@ export function Header({
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
+
+  const searchContainerRef = useRef(null);
+  const profileWrapperRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
+        setShowSearch(false);
+      }
+      if (profileWrapperRef.current && !profileWrapperRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -61,25 +79,9 @@ export function Header({
     <header className={styles.navbar} aria-label="Main navigation">
       <div className={styles.left}>
         <div className={styles.siteHeader} onClick={onHomeClick} title="Go to Home" role="link" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') onHomeClick(); }}>
-          <img src="/logo.svg" alt="Ghostt Logo" className={styles.titleLogo} />
-          <span className={styles.siteTitle}>Ghostt</span>
+          <img src="/logo.svg" alt="Echord Logo" className={styles.titleLogo} />
+          <span className={styles.siteTitle}>Echord</span>
         </div>
-        <button 
-          className={`${styles.iconButton} ${styles.navButton}`} 
-          type="button" 
-          aria-label="Go back"
-          onClick={() => navigate(-1)}
-        >
-          <ChevronLeft size={22} strokeWidth={2.4} />
-        </button>
-        <button 
-          className={`${styles.iconButton} ${styles.navButton}`} 
-          type="button" 
-          aria-label="Go forward"
-          onClick={() => navigate(1)}
-        >
-          <ChevronRight size={22} strokeWidth={2.4} />
-        </button>
       </div>
 
       <div className={styles.center}>
@@ -92,7 +94,7 @@ export function Header({
           <Home size={26} fill="currentColor" strokeWidth={2.1} />
         </button>
 
-        <div className={styles.searchContainer}>
+        <div className={styles.searchContainer} ref={searchContainerRef}>
           <div className={styles.searchBox}>
           <Search size={22} strokeWidth={2.2} />
           <input
@@ -110,7 +112,12 @@ export function Header({
 
 }}
     onFocus={() => {
-        if (searchResults.length > 0) {
+        if (searchQuery.trim()) {
+            setShowSearch(true);
+        }
+    }}
+    onClick={() => {
+        if (searchQuery.trim()) {
             setShowSearch(true);
         }
     }}
@@ -145,7 +152,7 @@ export function Header({
         <button className={styles.iconButton} type="button" aria-label="Friends activity">
           <UsersRound size={22} strokeWidth={2.2} />
         </button>
-        <div className={styles.profileWrapper}>
+        <div className={styles.profileWrapper} ref={profileWrapperRef}>
           <div
             className={styles.profile}
             onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -193,7 +200,7 @@ export function Header({
                     setShowProfileMenu(false);
                     navigate("/creator/dashboard");
                   }}
-                  style={{ cursor: 'pointer', color: '#1db954', fontWeight: 'bold' }}
+                  style={{ cursor: 'pointer', color: '#870339', fontWeight: 'bold' }}
                 >
                   <span>Creator Dashboard</span>
                 </div>

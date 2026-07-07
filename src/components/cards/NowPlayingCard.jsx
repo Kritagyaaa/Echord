@@ -23,8 +23,8 @@ export function NowPlayingCard({ song }) {
         >
           <Heart 
             size={21} 
-            fill={isLiked ? "#1db954" : "none"} 
-            color={isLiked ? "#1db954" : "#b3b3b3"}
+            fill={isLiked ? "#870339" : "none"} 
+            color={isLiked ? "#870339" : "#b3b3b3"}
             strokeWidth={2.1} 
           />
         </button>

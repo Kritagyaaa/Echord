@@ -1,12 +1,12 @@
 .heading {
-    margin-bottom:      8px;
+    margin-bottom: 8px;
 }
 
 .heading h3 {
     margin: 0;
-    font-size: 28px;
-    font-weight: 700;
-    color: white;
+    font-size: 24px;
+    font-weight: 500;
+    color: #E19FC7;
 }
 
 .heading p {
@@ -24,21 +24,21 @@
     margin-bottom: 16px;
 }
 
-.carousel{
+.carousel {
 
-    display:flex;
+    display: flex;
 
-    gap:14px;
+    gap: 14px;
 
-    overflow-x:auto;
+    overflow-x: auto;
 
-    overflow-y:hidden;
+    overflow-y: hidden;
 
-    scroll-behavior:smooth;
+    scroll-behavior: smooth;
 
-    scrollbar-width:none;
+    scrollbar-width: none;
 
-    padding:0;
+    padding: 0;
 }
 
 .carousel::-webkit-scrollbar {
@@ -49,95 +49,133 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-
-    border-radius: 8px;
-
-    margin-bottom: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
 }
-.card {
-    flex: 0 0 145px;
 
-    background: #181818;
+.card {
+    flex: 0 0 165px;
+    min-width: 0;
+    width: 165px;
+    max-width: 165px;
+
+    background: linear-gradient(
+        180deg,
+        #262626 0%,
+        #1A1A1A 70%,
+        rgba(225, 159, 199, 0.06) 100%
+    );
 
     border-radius: 10px;
-
     padding: 10px;
-
     cursor: pointer;
-
-    transition: .25s;
-
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
     box-sizing: border-box;
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+
+    border: 1px solid rgba(225, 159, 199, 0.10);
+    box-shadow: 0 0 8px rgba(135, 3, 57, 0.15);
 }
 
 .card:hover {
-    background: #282828;
+    background: #870339;
+    transform: translateY(-4px) scale(1.03);
+    border-color: rgba(225, 159, 199, 0.35);
+    box-shadow:
+        0 0 12px rgba(225, 159, 199, 0.18),
+        0 0 28px rgba(225, 159, 199, 0.12),
+        0 18px 35px rgba(0, 0, 0, 0.45);
+}
+
+.card:hover .cover {
+    transform: scale(1.04);
 }
 
 .card h4 {
-    margin: 0;
-    color: white;
-    font-size: 15px;
+    margin: 0 0 4px;
+    color: #E19FC7;
+    font-size: 13px;
     font-weight: 700;
+    line-height: 1.3;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color 0.3s ease;
+    display: block;
+}
+
+.card:hover h4 {
+    color: #FFD6EA;
 }
 
 .card p {
-    margin-top: 4px;
-    color: #b3b3b3;
-    font-size: 13px;
+    margin: 0;
+    color: #C98AB3;
+    font-size: 11px;
+    line-height: 1.3;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.carouselWrapper{
-    position:relative;
+.carouselWrapper {
+    position: relative;
+    isolation: isolate;
 }
-.carouselArrow{
 
-    position:absolute;
+.carouselArrow {
 
-    top:38%;
+    position: absolute;
 
-    transform:translateY(-50%);
+    top: 38%;
 
-    width:46px;
+    transform: translateY(-50%);
 
-    height:46px;
+    width: 46px;
 
-    border:none;
+    height: 46px;
 
-    border-radius:50%;
+    border: none;
 
-    background:rgba(40,40,40,.95);
+    border-radius: 50%;
 
-    color:white;
+    background: rgba(40, 40, 40, .95);
 
-    font-size:28px;
+    color: #E19FC7;
 
-    cursor:pointer;
+    font-size: 28px;
 
-    z-index:20;
+    cursor: pointer;
 
-    transition:.25s;
+    z-index: 50;
+
+    transition: .25s;
 }
-.carouselArrow:hover{
 
-    background:#3a3a3a;
+.carouselArrow:hover {
 
-    transform:translateY(-50%) scale(1.08);
+    background: #3a3a3a;
 
-}
-.leftArrow{
-
-    left:6px;
+    transform: translateY(-50%) scale(1.08);
 
 }
-.rightArrow{
 
-    right:6px;
+.leftArrow {
+
+    left: 6px;
+
+}
+
+.rightArrow {
+
+    right: 6px;
 
 }

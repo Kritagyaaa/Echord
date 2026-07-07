@@ -2,6 +2,7 @@ import { usePlayer } from "../../context/PlayerContext";
 import { Minimize2, Settings, ListMusic, Layers, Radio, Heart } from "lucide-react";
 import styles from "./ExpandedPlayer.module.css";
 import placeholder from "../../assets/music-placeholder.jpg";
+import { RecommendationCard } from "../cards/recommendationCard.jsx";
 
 export function ExpandedPlayer() {
   const { currentSong, toggleExpand, toggleLike } = usePlayer();
@@ -98,30 +99,16 @@ export function ExpandedPlayer() {
           >
             <Heart 
               size={28} 
-              fill={currentSong.is_liked ? "#1db954" : "none"} 
-              color={currentSong.is_liked ? "#1db954" : "#b3b3b3"}
+              fill={currentSong.is_liked ? "#870339" : "none"} 
+              color={currentSong.is_liked ? "#870339" : "#b3b3b3"}
             />
           </button>
         </div>
       </div>
 
-      {/* Related Content Row */}
+      {/* Recommended Content Row */}
       <div className={styles.relatedSection}>
-        <h2 className={styles.relatedHeader}>Related music videos</h2>
-        <div className={styles.videoRow}>
-          {RELATED_VIDEOS.map(video => (
-            <div key={video.id} className={styles.videoCard}>
-              <div className={styles.thumbnailWrapper}>
-                <img src={video.thumbnail} alt={video.title} />
-                <span className={styles.videoDuration}>{video.duration}</span>
-              </div>
-              <div className={styles.videoInfo}>
-                <h3 className={styles.videoTitle}>{video.title}</h3>
-                <span className={styles.videoViews}>{video.views}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <RecommendationCard />
       </div>
     </div>
   );

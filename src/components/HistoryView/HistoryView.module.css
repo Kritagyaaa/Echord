@@ -324,16 +324,18 @@
 
 .likeBtn.liked {
   opacity: 1;
-  color: #1db954;
+  color: #870339;
 }
 
 .likeBtn:hover {
   transform: scale(1.1);
-  color: #fff;
+  color: #870339;
+  background: rgba(135, 3, 57, 0.18);
+  border-radius: 50%;
 }
 
 .likeBtn.liked:hover {
-  color: #1ed760;
+  color: #a80a4c;
 }
 
 .durationText {

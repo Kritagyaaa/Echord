@@ -264,8 +264,8 @@ export function BrowseView() {
                                         >
                                             <Heart
                                                 size={16}
-                                                fill={song.is_liked ? "#1db954" : "none"}
-                                                color={song.is_liked ? "#1db954" : "#b3b3b3"}
+                                                fill={song.is_liked ? "#870339" : "none"}
+                                                color={song.is_liked ? "#870339" : "#b3b3b3"}
                                             />
                                         </button>
                                     </span>

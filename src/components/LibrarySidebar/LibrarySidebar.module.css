@@ -44,7 +44,7 @@
   overflow: hidden;
   color: #fff;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -60,7 +60,7 @@
   color: #fff;
   background: #282828;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 500;
   opacity: 0;
   pointer-events: none;
   transform: translateY(-4px);
@@ -83,7 +83,7 @@
   color: #fff;
   background: #242424;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 500;
   transition:
     color 160ms ease,
     background-color 160ms ease,
@@ -248,7 +248,7 @@
 .itemTitle {
   color: #fff;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.25;
 }
 
@@ -326,3 +326,9 @@
   padding: 8px 0;
 }
 
+/* ── Mobile: hide library sidebar completely ── */
+@media (max-width: 620px) {
+  .sidebar {
+    display: none;
+  }
+}

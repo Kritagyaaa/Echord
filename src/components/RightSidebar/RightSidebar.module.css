@@ -4,7 +4,7 @@
   height: 100%;
   overflow: visible;
   border-radius: 8px;
-  background: #121212;
+  background: #0d0d0d;
   flex-direction: column;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .scrollArea::-webkit-scrollbar-thumb {
-  border: 3px solid #121212;
+  border: 3px solid #0d0d0d;
   border-radius: 999px;
   background: #5f5f5f;
 }
@@ -40,11 +40,6 @@
 
 @media (max-width: 860px) {
   .sidebar {
-    width: 100%;
-    border-radius: 0;
-  }
-
-  .scrollArea {
-    padding-inline: clamp(12px, 4vw, 24px);
+    display: none;
   }
 }

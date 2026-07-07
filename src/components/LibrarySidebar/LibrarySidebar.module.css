@@ -26,12 +26,12 @@
   background: #5f5f5f;
 }
 
-.sidebarHeader,
-.sidebarControls {
+.sidebarHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
 }
 
 .libraryTitle {
@@ -44,87 +44,30 @@
   overflow: hidden;
   color: #E19FC7;
   font-size: 20px;
-  font-weight: normal;
+  font-weight: 600;
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.tooltip {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  z-index: 2;
-  padding: 8px 12px;
-  border-radius: 4px;
-  color: #E19FC7;
-  background: #282828;
-  font-size: 13px;
-  font-weight: normal;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity 160ms ease;
-  visibility: hidden;
-  white-space: nowrap;
-}
-
-.libraryTitle:hover .tooltip {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
-}
-
-.controlButton,
-.recentsButton {
-  border: 0;
-  color: #E19FC7;
-  background: transparent;
-  cursor: pointer;
-  font-weight: normal;
-  transition:
-    color 160ms ease,
-    background-color 160ms ease,
-    transform 160ms ease;
-}
-
-.createButton,
-.filterButtons button {
+.createButton {
   border: 1px solid #870339;
   color: #E19FC7;
-  background: #1a1a1a;
+  background: #0d0d0d;
   cursor: pointer;
-  font-weight: normal;
-  transition:
-    color 160ms ease,
-    background-color 160ms ease,
-    transform 160ms ease;
-}
-
-.createButton {
-  display: inline-flex;
-  align-items: center;
+  width: 36px;
   height: 36px;
-  padding: 0 14px 0 12px;
-  border-radius: 999px;
-  gap: 6px;
-  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
 }
 
-.createButton:hover,
-.filterButtons button:hover {
+.createButton:hover {
+  color: white;
   background: #870339;
-  transform: scale(1.04);
-}
-
-.controlButton:hover {
-  background: transparent;
-  transform: scale(1.05);
-}
-
-.recentsButton:hover {
-  background: transparent;
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .createButton:focus-visible,
@@ -138,68 +81,125 @@
 
 .filterButtons {
   display: flex;
-  margin-top: 18px;
-  flex-wrap: wrap;
+  margin-top: 16px;
   gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+.filterButtons::-webkit-scrollbar {
+  display: none;
 }
 
 .filterButtons button {
-  height: 34px;
-  padding: 0 13px;
+  height: 32px;
+  padding: 0 16px;
   border-radius: 999px;
   font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #870339;
+  color: #E19FC7;
+  background: #0d0d0d;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.filterButtons button:hover {
+  background: #870339;
+  color: #fff;
+  transform: scale(1.04);
 }
 
 .sidebarControls {
-  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
   color: #E19FC7;
+  height: 36px;
+  width: 100%;
+}
+
+.controlsLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
 .controlButton {
-  display: inline-grid;
-  width: 34px;
-  height: 34px;
+  display: flex;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border-radius: 50%;
   color: #E19FC7;
   background: transparent;
-  place-items: center;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.controlButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.05);
 }
 
 .searchContainer {
-  display: inline-block;
-  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .searchInput {
   background: #1f1f1f;
   border: 1px solid #2b2b2b;
   color: #E19FC7;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 999px;
-  width: 180px;
+  width: 100%;
+  max-width: 180px;
+  font-size: 13px;
   outline: none;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .searchInput:focus {
-  border-color: #8884ff;
-  box-shadow: 0 0 0 4px rgba(136,132,255,0.08);
+  border-color: #870339;
+  box-shadow: 0 0 0 3px rgba(135, 3, 57, 0.15);
 }
 
 .recentsButton {
   display: inline-flex;
   align-items: center;
-  padding: 0;
+  padding: 6px 12px;
+  border: none;
   color: #E19FC7;
   background: transparent;
   font-size: 13px;
-  gap: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  gap: 4px;
+  border-radius: 999px;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.recentsButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.03);
 }
 
 .filterActive {
-  background: rgba(255,255,255,0.06);
-  color: #E19FC7;
+  background: #870339 !important;
+  color: #fff !important;
+  font-weight: 600;
 }
 
 .unimplementedMessage {
@@ -287,23 +287,15 @@
     padding: 12px 8px;
   }
 
-  .libraryTitle h2,
-  .createButton span,
+  .libraryTitle,
   .filterButtons,
   .sidebarControls,
   .itemInfo {
-    display: none;
+    display: none !important;
   }
 
   .sidebarHeader {
     justify-content: center;
-  }
-
-  .createButton {
-    width: 48px;
-    height: 48px;
-    justify-content: center;
-    padding: 0;
   }
 
   .libraryItem {
@@ -329,8 +321,7 @@
   padding: 12px 8px;
 }
 
-.sidebar.collapsed .libraryTitle h2,
-.sidebar.collapsed .createButton span,
+.sidebar.collapsed .libraryTitle,
 .sidebar.collapsed .filterButtons,
 .sidebar.collapsed .sidebarControls,
 .sidebar.collapsed .itemInfo {
@@ -339,13 +330,6 @@
 
 .sidebar.collapsed .sidebarHeader {
   justify-content: center;
-}
-
-.sidebar.collapsed .createButton {
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  padding: 0;
 }
 
 .sidebar.collapsed .libraryItem {

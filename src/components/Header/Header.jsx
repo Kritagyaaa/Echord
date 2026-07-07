@@ -80,7 +80,7 @@ export function Header({
       <div className={styles.left}>
         <div className={styles.siteHeader} onClick={onHomeClick} title="Go to Home" role="link" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') onHomeClick(); }}>
           <img src="/logo.svg" alt="Echord Logo" className={styles.titleLogo} />
-          <span className={styles.siteTitle}>Echord</span>
+          <span className={styles.siteTitle}>ECHORD</span>
         </div>
       </div>
 
@@ -154,7 +154,7 @@ export function Header({
         </button>
         <div className={styles.profileWrapper} ref={profileWrapperRef}>
           <div
-            className={styles.profile}
+            className={`${styles.profile} ${!(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com')) ? styles.profileDefault : ''}`}
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             role="button"
             tabIndex={0}
@@ -164,7 +164,9 @@ export function Header({
             {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
               <img src={user.profile_picture} alt="Profile" className={styles.profileImg} />
             ) : (
-              <User size={22} strokeWidth={2.2} />
+              <span className={styles.profileLetter}>
+                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+              </span>
             )}
           </div>
           {showProfileMenu && (

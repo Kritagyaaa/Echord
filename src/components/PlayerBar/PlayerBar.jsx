@@ -26,26 +26,26 @@ import { addSongToPlaylist } from "../../services/api";
 import placeholder from "../../assets/music-placeholder.jpg";
 
 export function PlayerBar() {
-    const {
-        currentSong,
-        isPlaying,
-        togglePlay,
-        nextSong,
-        previousSong,
-        currentTime,
-        duration,
-        seek,
-        volume,
-        setVolume,
-        toggleLike,
-        isExpanded,
-        toggleExpand,
-        isShuffle,
-        toggleShuffle,
-        isRepeat,
-        toggleRepeat,
-        addToUserQueue,
-    } = usePlayer();
+  const {
+    currentSong,
+    isPlaying,
+    togglePlay,
+    nextSong,
+    previousSong,
+    currentTime,
+    duration,
+    seek,
+    volume,
+    setVolume,
+    toggleLike,
+    isExpanded,
+    toggleExpand,
+    isShuffle,
+    toggleShuffle,
+    isRepeat,
+    toggleRepeat,
+    addToUserQueue,
+  } = usePlayer();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -162,6 +162,9 @@ export function PlayerBar() {
             max={1}
             step={0.01}
             value={isMuted ? 0 : volume}
+            style={{
+              background: `linear-gradient(to right, #870339 0%, #870339 ${(isMuted ? 0 : volume) * 100}%, #eaeaea ${(isMuted ? 0 : volume) * 100}%, #eaeaea 100%)`
+            }}
             onChange={(e) => {
               const val = Number(e.target.value);
               if (isMuted && val > 0) setIsMuted(false);
@@ -221,7 +224,7 @@ export function PlayerBar() {
       {/* CENTER */}
       <div className={styles.playerCenter}>
         <div className={styles.controls}>
-          <button 
+          <button
             className={`${styles.controlButton} ${isShuffle ? styles.activeControl : ""}`}
             onClick={toggleShuffle}
             aria-label="Toggle Shuffle"
@@ -244,19 +247,19 @@ export function PlayerBar() {
             onClick={togglePlay}
           >
             {isPlaying ? (
-    <div className={styles.pauseIcon}>
-        <span></span>
-        <span></span>
-    </div>
-) : (
-    <Play
-        size={18}
-        fill="#0d0d0d"
-        color="#0d0d0d"
-        strokeWidth={2.5}
-        className={styles.playIcon}
-    />
-)}
+              <div className={styles.pauseIcon}>
+                <span></span>
+                <span></span>
+              </div>
+            ) : (
+              <Play
+                size={18}
+                fill="#0d0d0d"
+                color="#0d0d0d"
+                strokeWidth={2.5}
+                className={styles.playIcon}
+              />
+            )}
           </button>
 
           <button
@@ -269,7 +272,7 @@ export function PlayerBar() {
             />
           </button>
 
-          <button 
+          <button
             className={`${styles.controlButton} ${isRepeat ? styles.activeControl : ""}`}
             onClick={toggleRepeat}
             aria-label="Toggle Repeat"
@@ -298,17 +301,17 @@ export function PlayerBar() {
       {/* RIGHT */}
       <div className={styles.extras}>
         <div className={styles.dropdownWrapper} ref={addToPlaylistDropdownRef}>
-          <button 
+          <button
             className={styles.controlButton}
             onClick={() => setShowAddToPlaylistDropdown(!showAddToPlaylistDropdown)}
             title="Add to playlist"
           >
             <Plus size={18} />
           </button>
-          
+
           {showAddToPlaylistDropdown && (
             <div className={styles.playlistDropdown}>
-              <button 
+              <button
                 className={styles.dropdownItem}
                 onClick={() => {
                   setShowCreateModel(true);
@@ -317,7 +320,7 @@ export function PlayerBar() {
               >
                 <Plus size={14} /> Create Playlist
               </button>
-              
+
               {playlists.length > 0 && (
                 <>
                   <div className={styles.dropdownDivider} />
@@ -366,6 +369,9 @@ export function PlayerBar() {
           max={1}
           step={0.01}
           value={isMuted ? 0 : volume}
+          style={{
+            background: `linear-gradient(to right, #870339 0%, #870339 ${(isMuted ? 0 : volume) * 100}%, #eaeaea ${(isMuted ? 0 : volume) * 100}%, #eaeaea 100%)`
+          }}
           onChange={(e) => {
             const val = Number(e.target.value);
             if (isMuted && val > 0) setIsMuted(false);
@@ -379,9 +385,9 @@ export function PlayerBar() {
         </button>
       </div>
 
-      <CreatePlaylistModel 
-        isOpen={showCreateModel} 
-        onClose={() => setShowCreateModel(false)} 
+      <CreatePlaylistModel
+        isOpen={showCreateModel}
+        onClose={() => setShowCreateModel(false)}
       />
     </footer>
   );

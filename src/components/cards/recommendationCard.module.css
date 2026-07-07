@@ -128,40 +128,29 @@
 }
 
 .carouselArrow {
-
     position: absolute;
-
     top: 38%;
-
     transform: translateY(-50%);
-
-    width: 46px;
-
-    height: 46px;
-
+    width: 40px;
+    height: 40px;
     border: none;
-
     border-radius: 50%;
-
-    background: rgba(40, 40, 40, .95);
-
+    background: #870339;
     color: #E19FC7;
-
-    font-size: 28px;
-
     cursor: pointer;
-
     z-index: 50;
-
-    transition: .25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 }
 
 .carouselArrow:hover {
-
-    background: #3a3a3a;
-
+    background: #870339;
     transform: translateY(-50%) scale(1.08);
-
+    box-shadow:
+        0 0 10px rgba(225, 159, 199, 0.45),
+        0 0 20px rgba(225, 159, 199, 0.25);
 }
 
 .leftArrow {

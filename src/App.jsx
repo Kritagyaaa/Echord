@@ -24,8 +24,6 @@ import { usePlayer } from './context/PlayerContext.jsx';
 import { ExpandedPlayer } from './components/ExpandedPlayer/ExpandedPlayer.jsx';
 import { usePlaylists } from './context/playlistcontext.jsx';
 import { BrowseView } from './components/BrowseView/BrowseView.jsx';
-import { AlbumsView } from './components/AlbumsView/AlbumsView.jsx';
-import { PlaylistsView } from './components/PlaylistsView/PlaylistsView.jsx';
 
 function ProtectedLayout({
   isAuthenticated,
@@ -77,12 +75,18 @@ function ProtectedLayout({
             selectedPlaylist={selectedPlaylist}
             collapsed={false}
           />
-          <main
-            className={styles.mainPlaceholder}
-            aria-label="Main content"
-          >
-            <Outlet />
-          </main>
+         <main
+  className={styles.mainPlaceholder}
+  aria-label="Main content"
+>
+    <div className={styles.shaderLayer}>
+        <ShaderBackground />
+    </div>
+
+    <div className={styles.contentLayer}>
+        <Outlet />
+    </div>
+</main>
 
           <RightSidebar />
         </div>
@@ -285,7 +289,9 @@ function App() {
   };
 
   return (
-    <Routes>
+    <>
+      <ShaderBackground />
+      <Routes>
       {/* Public/Guest Routes */}
       <Route
         path="/login"
@@ -465,7 +471,7 @@ function App() {
       {/* Fallback route */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+  </>
   );
 }
-
 export default App;

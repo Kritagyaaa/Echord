@@ -44,13 +44,10 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-<<<<<<< HEAD
   border-radius: 8px !important;
 }
 
 .mainPlaceholder {
-=======
->>>>>>> 0f5c3cec1153301e89cb3851eb7e8c6217ce00ea
   border-radius: 8px;
   background:
     linear-gradient(180deg, rgba(135, 3, 57, 0.08), transparent 28%),
@@ -120,9 +117,4 @@
 
 .mainPlaceholder::-webkit-scrollbar-thumb:hover {
   background: #a8044a;
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 0f5c3cec1153301e89cb3851eb7e8c6217ce00ea

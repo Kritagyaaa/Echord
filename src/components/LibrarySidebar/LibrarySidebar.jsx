@@ -160,23 +160,24 @@ export function LibrarySidebar({
                             onClick={() => onPlaylistSelect({ id: "liked-songs", name: "Liked Songs" })}
                         >
 
-                            <div
+                             <div
                                 style={{
                                     width: 48,
                                     height: 48,
                                     borderRadius: 6,
                                     background:
-                                        "linear-gradient(135deg,#450af5,#8e8ee5,#c4efd9)",
+                                        "linear-gradient(135deg,#E19FC7,#c4efd9)",
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    color: "white",
+                                    color: "#870339",
                                 }}
                             >
 
                                 <Heart
                                     size={20}
-                                    fill="white"
+                                    fill="#870339"
+                                    color="#870339"
                                 />
 
                             </div>

@@ -322,7 +322,9 @@ exports.getPlaylistById = async (req, res) => {
 
                 artists.name AS artist,
 
-                playlist_songs.position
+                playlist_songs.position,
+
+                IF(? IS NOT NULL, EXISTS(SELECT 1 FROM likes WHERE song_id = songs.id AND user_id = ?), 0) AS is_liked
 
             FROM playlist_songs
 
@@ -338,6 +340,8 @@ exports.getPlaylistById = async (req, res) => {
             `,
 
             [
+                userId,
+                userId,
                 playlistId
             ]
 

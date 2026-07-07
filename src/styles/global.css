@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700;800&display=swap');
+
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 html,
@@ -9,6 +13,8 @@ body,
   height: 100%;
   margin: 0;
   overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -19,10 +25,27 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+  /* Android safe area support */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
-button {
+button,
+a,
+[role="button"] {
   font: inherit;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+img,
+svg {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* Playlist Collage Grid */
@@ -72,4 +95,3 @@ button {
   scrollbar-width: thin;
   scrollbar-color: #870339 transparent;
 }
-

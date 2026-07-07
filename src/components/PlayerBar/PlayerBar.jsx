@@ -26,26 +26,26 @@ import { addSongToPlaylist } from "../../services/api";
 import placeholder from "../../assets/music-placeholder.jpg";
 
 export function PlayerBar() {
-    const {
-        currentSong,
-        isPlaying,
-        togglePlay,
-        nextSong,
-        previousSong,
-        currentTime,
-        duration,
-        seek,
-        volume,
-        setVolume,
-        toggleLike,
-        isExpanded,
-        toggleExpand,
-        isShuffle,
-        toggleShuffle,
-        isRepeat,
-        toggleRepeat,
-        addToUserQueue,
-    } = usePlayer();
+  const {
+    currentSong,
+    isPlaying,
+    togglePlay,
+    nextSong,
+    previousSong,
+    currentTime,
+    duration,
+    seek,
+    volume,
+    setVolume,
+    toggleLike,
+    isExpanded,
+    toggleExpand,
+    isShuffle,
+    toggleShuffle,
+    isRepeat,
+    toggleRepeat,
+    addToUserQueue,
+  } = usePlayer();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -125,7 +125,7 @@ export function PlayerBar() {
               <SkipBack size={22} fill="currentColor" />
             </button>
             <button className={`${styles.playButton} ${styles.disabled}`} disabled>
-              <Play size={18} fill="black" color="black" strokeWidth={2.5} className={styles.playIcon} />
+              <Play size={18} fill="#0d0d0d" color="#0d0d0d" strokeWidth={2.5} className={styles.playIcon} />
             </button>
             <button className={`${styles.controlButton} ${styles.disabled}`} disabled>
               <SkipForward size={22} fill="currentColor" />
@@ -162,6 +162,9 @@ export function PlayerBar() {
             max={1}
             step={0.01}
             value={isMuted ? 0 : volume}
+            style={{
+              background: `linear-gradient(to right, #870339 0%, #870339 ${(isMuted ? 0 : volume) * 100}%, #eaeaea ${(isMuted ? 0 : volume) * 100}%, #eaeaea 100%)`
+            }}
             onChange={(e) => {
               const val = Number(e.target.value);
               if (isMuted && val > 0) setIsMuted(false);
@@ -208,12 +211,11 @@ export function PlayerBar() {
           className={`${styles.savedButton} ${currentSong.is_liked ? styles.liked : ''}`}
           type="button"
           onClick={toggleLike}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
           <Heart
             size={19}
-            fill={currentSong.is_liked ? "#1db954" : "none"}
-            color={currentSong.is_liked ? "#1db954" : "#b3b3b3"}
+            fill={currentSong.is_liked ? "#870339" : "none"}
+            color={currentSong.is_liked ? "#870339" : "#b3b3b3"}
             strokeWidth={2.2}
           />
         </button>
@@ -222,7 +224,7 @@ export function PlayerBar() {
       {/* CENTER */}
       <div className={styles.playerCenter}>
         <div className={styles.controls}>
-          <button 
+          <button
             className={`${styles.controlButton} ${isShuffle ? styles.activeControl : ""}`}
             onClick={toggleShuffle}
             aria-label="Toggle Shuffle"
@@ -245,19 +247,19 @@ export function PlayerBar() {
             onClick={togglePlay}
           >
             {isPlaying ? (
-    <div className={styles.pauseIcon}>
-        <span></span>
-        <span></span>
-    </div>
-) : (
-    <Play
-        size={18}
-        fill="black"
-        color="black"
-        strokeWidth={2.5}
-        className={styles.playIcon}
-    />
-)}
+              <div className={styles.pauseIcon}>
+                <span></span>
+                <span></span>
+              </div>
+            ) : (
+              <Play
+                size={18}
+                fill="#0d0d0d"
+                color="#0d0d0d"
+                strokeWidth={2.5}
+                className={styles.playIcon}
+              />
+            )}
           </button>
 
           <button
@@ -270,7 +272,7 @@ export function PlayerBar() {
             />
           </button>
 
-          <button 
+          <button
             className={`${styles.controlButton} ${isRepeat ? styles.activeControl : ""}`}
             onClick={toggleRepeat}
             aria-label="Toggle Repeat"
@@ -299,17 +301,17 @@ export function PlayerBar() {
       {/* RIGHT */}
       <div className={styles.extras}>
         <div className={styles.dropdownWrapper} ref={addToPlaylistDropdownRef}>
-          <button 
+          <button
             className={styles.controlButton}
             onClick={() => setShowAddToPlaylistDropdown(!showAddToPlaylistDropdown)}
             title="Add to playlist"
           >
             <Plus size={18} />
           </button>
-          
+
           {showAddToPlaylistDropdown && (
             <div className={styles.playlistDropdown}>
-              <button 
+              <button
                 className={styles.dropdownItem}
                 onClick={() => {
                   setShowCreateModel(true);
@@ -318,7 +320,7 @@ export function PlayerBar() {
               >
                 <Plus size={14} /> Create Playlist
               </button>
-              
+
               {playlists.length > 0 && (
                 <>
                   <div className={styles.dropdownDivider} />
@@ -342,7 +344,7 @@ export function PlayerBar() {
           className={styles.controlButton}
           onClick={() => navigate(isQueueActive ? "/" : "/queue")}
           title="Queue"
-          style={isQueueActive ? { color: "#1db954" } : {}}
+          style={isQueueActive ? { color: "#870339" } : {}}
         >
           <ListMusic size={18} />
         </button>
@@ -367,6 +369,9 @@ export function PlayerBar() {
           max={1}
           step={0.01}
           value={isMuted ? 0 : volume}
+          style={{
+            background: `linear-gradient(to right, #870339 0%, #870339 ${(isMuted ? 0 : volume) * 100}%, #eaeaea ${(isMuted ? 0 : volume) * 100}%, #eaeaea 100%)`
+          }}
           onChange={(e) => {
             const val = Number(e.target.value);
             if (isMuted && val > 0) setIsMuted(false);
@@ -380,9 +385,9 @@ export function PlayerBar() {
         </button>
       </div>
 
-      <CreatePlaylistModel 
-        isOpen={showCreateModel} 
-        onClose={() => setShowCreateModel(false)} 
+      <CreatePlaylistModel
+        isOpen={showCreateModel}
+        onClose={() => setShowCreateModel(false)}
       />
     </footer>
   );

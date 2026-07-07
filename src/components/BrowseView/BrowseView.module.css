@@ -10,9 +10,9 @@
 
 .section h2 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 20px;
-  color: white;
+  color: #E19FC7;
 }
 
 .genreGrid {
@@ -41,7 +41,7 @@
 
 .genreCard h3 {
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 500;
   color: white;
   margin: 0;
   word-wrap: break-word;
@@ -82,8 +82,8 @@
 
 .creatorCard h3 {
   font-size: 14px;
-  font-weight: 700;
-  color: white;
+  font-weight: 500;
+  color: #E19FC7;
   margin: 0;
   max-width: 100%;
   white-space: nowrap;
@@ -104,19 +104,19 @@
 .backButton {
   background: none;
   border: none;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 20px;
   transition: color 0.2s;
 }
 
 .backButton:hover {
-  color: white;
+  color: #E19FC7;
 }
 
 .cover {
@@ -135,7 +135,7 @@
   align-items: center;
   justify-content: center;
   font-size: 40px;
-  font-weight: 800;
+  font-weight: 500;
   color: white;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
@@ -147,17 +147,17 @@
 
 .type {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  color: white;
+  color: #E19FC7;
   margin-bottom: 8px;
 }
 
 .info h1 {
   font-size: 48px;
-  font-weight: 800;
+  font-weight: 500;
   margin: 0 0 16px 0;
-  color: white;
+  color: #E19FC7;
 }
 
 .bio {
@@ -178,7 +178,7 @@
   height: 56px;
   border: none;
   border-radius: 50%;
-  background: #1db954;
+  background: #870339;
   color: black;
   display: flex;
   align-items: center;
@@ -190,7 +190,7 @@
 
 .playButton:hover {
   transform: scale(1.05);
-  background-color: #1ed760;
+  background-color: #a80a4c;
 }
 
 .playButton:active {
@@ -231,7 +231,7 @@
 }
 
 .songRow:hover .songIndex {
-  color: white;
+  color: #E19FC7;
 }
 
 .songTitleCol {
@@ -249,7 +249,7 @@
 
 .songTitle {
   font-weight: 500;
-  color: white;
+  color: #E19FC7;
 }
 
 .songArtist {
@@ -269,12 +269,12 @@
 }
 
 .likeButton:hover {
-  color: white;
+  color: #870339;
   transform: scale(1.08);
 }
 
 .likeButton.liked {
-  color: #1db954;
+  color: #870339;
 }
 
 .songDuration {

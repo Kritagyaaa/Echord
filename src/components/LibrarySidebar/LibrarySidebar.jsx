@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ListFilter, Plus, Search, Heart } from "lucide-react";
+import { ListFilter, Plus, Search, Heart, Library, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 
@@ -40,23 +40,18 @@ export function LibrarySidebar({
             <div className={styles.sidebarHeader}>
 
                 <div className={styles.libraryTitle}>
-
                     <h2>Your Library</h2>
-
-                    <span className={styles.tooltip}>
-                        Collapse Your Library
-                    </span>
-
                 </div>
 
                 <button
-    className={styles.createButton}
-    type="button"
-    onClick={() => setShowCreateModel(true)}
->
-    <Plus size={17} strokeWidth={2.5} />
-    <span>Create</span>
-</button>
+                    className={styles.createButton}
+                    type="button"
+                    onClick={() => setShowCreateModel(true)}
+                    title="Create Playlist"
+                    aria-label="Create Playlist"
+                >
+                    <Plus size={24} strokeWidth={2.2} />
+                </button>
 
             </div>
 
@@ -90,56 +85,55 @@ export function LibrarySidebar({
 
             <div className={styles.sidebarControls}>
 
-                <button
-                    className={styles.controlButton}
-                    type="button"
-                    onClick={() => {
-                        setShowSearch(prev => !prev);
-                        setTimeout(() => {
-                            if (searchRef.current) searchRef.current.focus();
-                        }, 0);
-                    }}
-                >
-
-                    <Search
-                        size={18}
-                        strokeWidth={2.2}
-                    />
-
-                </button>
-
-                {showSearch && (
-                    <div className={styles.searchContainer}>
-                        <input
-                            ref={searchRef}
-                            className={styles.searchInput}
-                            placeholder="Search playlists..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Escape") {
-                                    setShowSearch(false);
-                                    setSearchQuery("");
-                                }
-                            }}
+                <div className={styles.controlsLeft}>
+                    <button
+                        className={styles.controlButton}
+                        type="button"
+                        onClick={() => {
+                            setShowSearch(prev => !prev);
+                            setTimeout(() => {
+                                if (searchRef.current) searchRef.current.focus();
+                            }, 0);
+                        }}
+                    >
+                        <Search
+                            size={18}
+                            strokeWidth={2.2}
                         />
-                    </div>
+                    </button>
+
+                    {showSearch && (
+                        <div className={styles.searchContainer}>
+                            <input
+                                ref={searchRef}
+                                className={styles.searchInput}
+                                placeholder="Search playlists..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Escape") {
+                                        setShowSearch(false);
+                                        setSearchQuery("");
+                                    }
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                {!showSearch && (
+                    <button
+                        className={styles.recentsButton}
+                        type="button"
+                        onClick={() => navigate("/history")}
+                    >
+                        <span>Recents</span>
+                        <ChevronDown
+                            size={18}
+                            strokeWidth={2.1}
+                        />
+                    </button>
                 )}
-
-                <button
-                    className={styles.recentsButton}
-                    type="button"
-                    onClick={() => navigate("/history")}
-                >
-
-                    Recents
-
-                    <ListFilter
-                        size={18}
-                        strokeWidth={2.1}
-                    />
-
-                </button>
 
             </div>
 
@@ -160,23 +154,24 @@ export function LibrarySidebar({
                             onClick={() => onPlaylistSelect({ id: "liked-songs", name: "Liked Songs" })}
                         >
 
-                            <div
+                             <div
                                 style={{
                                     width: 48,
                                     height: 48,
                                     borderRadius: 6,
                                     background:
-                                        "linear-gradient(135deg,#450af5,#8e8ee5,#c4efd9)",
+                                        "linear-gradient(135deg, #E19FC7, #E19FC7, #c4efd9)",
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    color: "white",
+                                    color: "#E19FC7",
                                 }}
                             >
 
                                 <Heart
                                     size={20}
-                                    fill="white"
+                                    fill="#870339"
+                                    color="#E19FC7"
                                 />
 
                             </div>

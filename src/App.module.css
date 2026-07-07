@@ -1,11 +1,18 @@
+/* =====================================================
+   APP FRAME — full-viewport container
+   ===================================================== */
 .appFrame {
   display: grid;
   height: 100vh;
+  height: 100dvh; /* Android Chrome: dynamic viewport height */
   overflow: hidden;
   background: #0d0d0d;
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
+/* =====================================================
+   APP SHELL — 3-column layout (library | main | right)
+   ===================================================== */
 .appShell {
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr) 340px;
@@ -17,6 +24,7 @@
   background: #000000;
 }
 
+/* Expanded player takes full width */
 .appShellExpanded {
   display: grid;
   grid-template-columns: 1fr;
@@ -27,55 +35,75 @@
   background: #0d0d0d;
 }
 
-/*.mainPlaceholder {
-  min-width: 0;
-  min-height: 0;   
-  overflow: hidden;  
-  border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 34%),
-    #121212;
-}shubh */
+/* =====================================================
+   MAIN CONTENT AREA
+   ===================================================== */
 .mainPlaceholder {
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+<<<<<<< HEAD
   border-radius: 8px !important;
 }
 
 .mainPlaceholder {
+=======
+  border-radius: 8px;
+>>>>>>> 709ef74a117fd0ea12c025544486b151c6a2925c
   background:
-    linear-gradient(180deg, rgba(29, 185, 84, 0.08), transparent 28%),
-    #121212;
+    linear-gradient(180deg, rgba(135, 3, 57, 0.08), transparent 28%),
+    #0d0d0d;
 }
 
-@media (max-width: 1100px) {
-  .appShell {
-    grid-template-columns: 88px minmax(0, 1fr) 360px;
-  }
-}
-
-@media (max-width: 860px) {
-  .appShell {
-    grid-template-columns: 1fr;
-    padding: 0 0 8px;
-  }
-
-  .mainPlaceholder {
-    display: none;
-  }
-}
-
+/* =====================================================
+   SIDEBAR COLLAPSED MODIFIER
+   ===================================================== */
 .sidebarCollapsed {
   grid-template-columns: 88px minmax(0, 1fr) 380px !important;
 }
 
+/* =====================================================
+   RESPONSIVE BREAKPOINTS
+   ===================================================== */
+
+/* ── Large tablet (≤1100px): collapse library to icons, shrink right sidebar ── */
+@media (max-width: 1100px) {
+  .appShell {
+    grid-template-columns: 88px minmax(0, 1fr) 320px;
+  }
+
+  .sidebarCollapsed {
+    grid-template-columns: 88px minmax(0, 1fr) 320px !important;
+  }
+}
+
+/* ── Small tablet (≤860px): hide right sidebar, keep collapsed library ── */
 @media (max-width: 860px) {
+  .appShell {
+    grid-template-columns: 88px minmax(0, 1fr);
+    padding: 6px 6px;
+    gap: 6px;
+  }
+
+  .sidebarCollapsed {
+    grid-template-columns: 88px minmax(0, 1fr) !important;
+  }
+}
+
+/* ── Mobile (≤620px): single column, no sidebars ── */
+@media (max-width: 620px) {
+  .appShell {
+    grid-template-columns: 1fr;
+    padding: 0;
+    gap: 0;
+  }
+
   .sidebarCollapsed {
     grid-template-columns: 1fr !important;
   }
 }
+<<<<<<< HEAD
 
 .mainPlaceholder::-webkit-scrollbar {
   width: 8px;
@@ -94,3 +122,5 @@
   background: #a8044a;
 }
 
+=======
+>>>>>>> 709ef74a117fd0ea12c025544486b151c6a2925c

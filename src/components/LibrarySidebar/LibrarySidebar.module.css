@@ -1,12 +1,24 @@
 .sidebar {
   display: flex;
   min-width: 0;
-  height: 100%;
   padding: 16px;
   overflow-y: auto;
+<<<<<<< HEAD
   border-radius: 8px !important;
   color: #fff;
   background: #121212;
+=======
+  border-radius: 8px;
+  color: #E19FC7;
+  height: 100%;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at top center,
+      rgba(135, 3, 57, 0.12) 0%,
+      rgba(135, 3, 57, 0.05) 25%,
+      transparent 60%),
+    #0D0D0D;
+>>>>>>> 709ef74a117fd0ea12c025544486b151c6a2925c
   flex-direction: column;
   scrollbar-color: #5f5f5f transparent;
   scrollbar-width: thin;
@@ -21,17 +33,17 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  border: 3px solid #121212;
+  border: 3px solid #0d0d0d;
   border-radius: 999px;
   background: #870339;
 }
 
-.sidebarHeader,
-.sidebarControls {
+.sidebarHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
 }
 
 .libraryTitle {
@@ -42,70 +54,32 @@
 .libraryTitle h2 {
   margin: 0;
   overflow: hidden;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 800;
+  color: #E19FC7;
+  font-size: 24px;
+  font-weight: 600;
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.tooltip {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  z-index: 2;
-  padding: 8px 12px;
-  border-radius: 4px;
-  color: #fff;
-  background: #282828;
-  font-size: 13px;
-  font-weight: 700;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity 160ms ease;
-  visibility: hidden;
-  white-space: nowrap;
-}
-
-.libraryTitle:hover .tooltip {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
-}
-
-.createButton,
-.filterButtons button,
-.controlButton,
-.recentsButton {
-  border: 0;
-  color: #fff;
-  background: #242424;
-  cursor: pointer;
-  font-weight: 800;
-  transition:
-    color 160ms ease,
-    background-color 160ms ease,
-    transform 160ms ease;
-}
-
 .createButton {
-  display: inline-flex;
+  border: none;
+  color: #E19FC7;
+  background: transparent;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
   align-items: center;
-  height: 36px;
-  padding: 0 14px 0 12px;
-  border-radius: 999px;
-  gap: 6px;
-  flex: 0 0 auto;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
 }
 
-.createButton:hover,
-.filterButtons button:hover,
-.controlButton:hover,
-.recentsButton:hover {
-  background: #2f2f2f;
-  transform: scale(1.04);
+.createButton:hover {
+  color: white;
+  background: #870339;
+  transform: scale(1.06);
 }
 
 .createButton:focus-visible,
@@ -113,74 +87,131 @@
 .controlButton:focus-visible,
 .recentsButton:focus-visible,
 .libraryItem:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid #E19FC7;
   outline-offset: 2px;
 }
 
 .filterButtons {
   display: flex;
-  margin-top: 18px;
-  flex-wrap: wrap;
+  margin-top: 16px;
   gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+.filterButtons::-webkit-scrollbar {
+  display: none;
 }
 
 .filterButtons button {
-  height: 34px;
-  padding: 0 13px;
+  height: 32px;
+  padding: 0 16px;
   border-radius: 999px;
   font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #870339;
+  color: #E19FC7;
+  background: #0d0d0d;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.filterButtons button:hover {
+  background: #870339;
+  color: #fff;
+  transform: scale(1.04);
 }
 
 .sidebarControls {
-  margin-top: 18px;
-  color: #b3b3b3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  color: #E19FC7;
+  height: 36px;
+  width: 100%;
+}
+
+.controlsLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
 .controlButton {
-  display: inline-grid;
-  width: 34px;
-  height: 34px;
+  display: flex;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border-radius: 50%;
-  color: #b3b3b3;
+  color: #E19FC7;
   background: transparent;
-  place-items: center;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.controlButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.05);
 }
 
 .searchContainer {
-  display: inline-block;
-  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .searchInput {
   background: #1f1f1f;
   border: 1px solid #2b2b2b;
-  color: #fff;
-  padding: 6px 10px;
+  color: #E19FC7;
+  padding: 6px 12px;
   border-radius: 999px;
-  width: 180px;
+  width: 100%;
+  max-width: 180px;
+  font-size: 13px;
   outline: none;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .searchInput:focus {
-  border-color: #8884ff;
-  box-shadow: 0 0 0 4px rgba(136,132,255,0.08);
+  border-color: #870339;
+  box-shadow: 0 0 0 3px rgba(135, 3, 57, 0.15);
 }
 
 .recentsButton {
   display: inline-flex;
   align-items: center;
-  padding: 0;
-  color: #b3b3b3;
+  padding: 6px 12px;
+  border: none;
+  color: #E19FC7;
   background: transparent;
   font-size: 13px;
-  gap: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  gap: 4px;
+  border-radius: 999px;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.recentsButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.03);
 }
 
 .filterActive {
-  background: rgba(255,255,255,0.06);
-  color: #fff;
+  background: #870339 !important;
+  color: #fff !important;
+  font-weight: 600;
 }
 
 .unimplementedMessage {
@@ -213,7 +244,11 @@
 }
 
 .libraryItem:hover {
-  background: #272626;
+  background: #870339;
+}
+
+.libraryItem:hover .itemSubtitle {
+  color: white;
 }
 
 .libraryItem img {
@@ -246,16 +281,16 @@
 }
 
 .itemTitle {
-  color: #fff;
+  color: #E19FC7;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: normal;
   line-height: 1.25;
 }
 
 .itemSubtitle {
   color: #b3b3b3;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: normal;
   line-height: 1.35;
 }
 
@@ -264,23 +299,15 @@
     padding: 12px 8px;
   }
 
-  .libraryTitle h2,
-  .createButton span,
+  .libraryTitle,
   .filterButtons,
   .sidebarControls,
   .itemInfo {
-    display: none;
+    display: none !important;
   }
 
   .sidebarHeader {
     justify-content: center;
-  }
-
-  .createButton {
-    width: 48px;
-    height: 48px;
-    justify-content: center;
-    padding: 0;
   }
 
   .libraryItem {
@@ -290,11 +317,15 @@
 }
 
 .activePlaylist {
-  background: rgba(255, 255, 255, 0.12);
+  background: #870339;
+}
+
+.activePlaylist .itemSubtitle {
+  color: white;
 }
 
 .activePlaylist:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: #870339;
 }
 
 /* Force collapse styling */
@@ -302,8 +333,7 @@
   padding: 12px 8px;
 }
 
-.sidebar.collapsed .libraryTitle h2,
-.sidebar.collapsed .createButton span,
+.sidebar.collapsed .libraryTitle,
 .sidebar.collapsed .filterButtons,
 .sidebar.collapsed .sidebarControls,
 .sidebar.collapsed .itemInfo {
@@ -314,15 +344,14 @@
   justify-content: center;
 }
 
-.sidebar.collapsed .createButton {
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  padding: 0;
-}
-
 .sidebar.collapsed .libraryItem {
   justify-content: center;
   padding: 8px 0;
 }
 
+/* ── Mobile: hide library sidebar completely ── */
+@media (max-width: 620px) {
+  .sidebar {
+    display: none;
+  }
+}

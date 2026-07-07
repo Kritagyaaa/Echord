@@ -14,6 +14,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
+  padding: 20px 0;
   color: #E19FC7;
   padding: 0;
   margin: 0;
@@ -235,4 +237,31 @@ body.auth-page::-webkit-scrollbar-track {
   color: #737373;
   line-height: 1.6;
   max-width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .auth-card h1 {
+    font-size: 32px;
+    margin-bottom: 24px;
+  }
+
+  .auth-container {
+    padding: 16px;
+  }
+
+  .auth-btn,
+  .social-btn {
+    padding: 11px 24px;
+    font-size: 14px;
+  }
+
+  .logo {
+    margin-bottom: 20px;
+  }
+
+  .logo img,
+  .logo svg {
+    height: 60px;
+  }
 }

@@ -38,9 +38,9 @@
   left: 16px;
   z-index: 1;
   margin: 0;
-  color: #fff;
+  color: #E19FC7;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.3;
 }
 
@@ -69,9 +69,9 @@
 .artistName {
   margin: 0;
   overflow: hidden;
-  color: #fff;
+  color: #E19FC7;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -79,14 +79,14 @@
 
 .verifiedIcon {
   flex: 0 0 auto;
-  color: #fff;
+  color: #E19FC7;
 }
 
 .listeners {
   margin: 7px 0 0;
-  color: #fff;
+  color: #E19FC7;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.35;
 }
 

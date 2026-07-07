@@ -4,7 +4,7 @@
   padding: 6px 15px;
   border: 1px solid #878787;
   border-radius: 999px;
-  color: #fff;
+  color: #E19FC7;
   background: transparent;
   cursor: pointer;
   font-size: 13px;
@@ -17,18 +17,19 @@
 }
 
 .button:hover {
-  border-color: #fff;
+  border-color: #E19FC7;
   background: rgba(255, 255, 255, 0.08);
   transform: scale(1.04);
+  box-shadow: 0 0 10px 2px rgba(135, 3, 57, 0.6);
 }
 
 .button:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid #E19FC7;
   outline-offset: 2px;
 }
 
 .button[aria-pressed="true"] {
-  border-color: #1db954;
-  color: #000;
-  background: #1db954;
+  border-color: #870339;
+  color: #0d0d0d;
+  background: #870339;
 }

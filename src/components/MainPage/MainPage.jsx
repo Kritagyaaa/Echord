@@ -277,9 +277,9 @@ export function MainPage({
   return (
     <div className={styles.mainContent}>
       <div className={styles.categoryButtons}>
-        <button>All</button>
-        <button>Music</button>
-        <button>Podcasts</button>
+        <button onClick={() => navigate("/playlists")}>All</button>
+        <button onClick={() => navigate("/browse")}>Music</button>
+        <button onClick={() => navigate("/albums")}>Album</button>
       </div>
 
       <div className={styles.quickPicks}>
@@ -292,14 +292,14 @@ export function MainPage({
               width: 60,
               height: 60,
               borderRadius: 4,
-              background: "linear-gradient(135deg,#450af5,#8e8ee5,#c4efd9)",
+              background: "linear-gradient(135deg,#E19FC7,#E19FC7,#c4efd9)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              color: "white",
+              color: "#E19FC7",
             }}
           >
-            <Heart size={24} fill="white" />
+            <Heart size={24} fill="#870339" />
           </div>
           <span>Liked Songs</span>
         </div>
@@ -322,7 +322,7 @@ export function MainPage({
 
       <div className={styles.sectionHeader}>
         <h2>Trending</h2>
-        <span style={{ cursor: "pointer" }} onClick={() => selectPlaylist({ id: "trending", name: "Trending" })}>Show all</span>
+
       </div>
       <div className={styles.cardsRow}>
         {trendingSongs.slice(0, 3).map(song => (
@@ -333,30 +333,20 @@ export function MainPage({
           />
         ))}
       </div>
-
-      <div className={styles.sectionHeader}>
-        <h2>Latest song</h2>
-        <span style={{ cursor: "pointer" }} onClick={() => selectPlaylist({ id: "latest-song", name: "Latest song" })}>Show all</span>
-      </div>
-      <div className={styles.cardsContainer}>
-        {showLatestLeftArrow && (
-          <button className={styles.spotifyArrowLeft} onClick={() => { scrollLeft(latestRef); setShowLatestLeftArrow(false); }}>
-            <ChevronLeft size={20} />
-          </button>
-        )}
-        <button className={styles.spotifyArrow} onClick={() => { scrollRight(latestRef); setShowLatestLeftArrow(true); }}>
-          <ChevronRight size={20} />
-        </button>
-        <div className={styles.cardsRow} ref={latestRef}>
-          {latestSongs.map(song => (
-            <MusicCard
-              key={song.id}
-              song={song}
-              playlist={latestSongs}
-            />
-          ))}
-        </div>
-      </div>
+<div className={styles.sectionHeader}>
+  <h2>Latest song</h2>
+</div>
+<div className={styles.cardsContainer}>
+  <div className={styles.cardsRow} ref={latestRef}>
+    {latestSongs.map(song => (
+      <MusicCard
+        key={song.id}
+        song={song}
+        playlist={latestSongs}
+      />
+    ))}
+  </div>
+</div>
 
       <div className={styles.sectionHeader}>
         <h2>Recents</h2>

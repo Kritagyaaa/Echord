@@ -24,6 +24,8 @@ import { usePlayer } from './context/PlayerContext.jsx';
 import { ExpandedPlayer } from './components/ExpandedPlayer/ExpandedPlayer.jsx';
 import { usePlaylists } from './context/playlistcontext.jsx';
 import { BrowseView } from './components/BrowseView/BrowseView.jsx';
+import { AlbumsView } from './components/AlbumsView/AlbumsView.jsx';
+import { PlaylistsView } from './components/PlaylistsView/PlaylistsView.jsx';
 
 function ProtectedLayout({
   isAuthenticated,
@@ -93,6 +95,7 @@ function ProtectedLayout({
 
 function App() {
   const { selectedPlaylist, setSelectedPlaylist, selectPlaylist, loadPlaylists, setPlaylists } = usePlaylists();
+  const API_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const [user, setUser] = useState(() => {
     try {
@@ -178,7 +181,7 @@ function App() {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const API_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
     const interval = setInterval(async () => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -214,7 +217,7 @@ function App() {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await fetch('http://localhost:5000/api/auth/logout', {
+        await fetch(`${API_URL}/auth/logout`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -393,6 +396,18 @@ function App() {
           path="/browse"
           element={
             <BrowseView />
+          }
+        />
+        <Route
+          path="/albums"
+          element={
+            <AlbumsView />
+          }
+        />
+        <Route
+          path="/playlists"
+          element={
+            <PlaylistsView />
           }
         />
         <Route

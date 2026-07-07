@@ -1,9 +1,16 @@
 .container {
   position: relative;
-  background: linear-gradient(180deg, #1f1f1f 0%, #121212 100%);
+  background:
+radial-gradient(
+circle at top left,
+rgba(135, 3, 57, 0.18) 0%,
+rgba(135, 3, 57, 0.08) 25%,
+transparent 55%
+),
+#0D0D0D;
   min-height: 100%;
   overflow-y: auto;
-  color: #fff;
+  color: #E19FC7;
   padding-bottom: 80px;
 }
 
@@ -13,7 +20,7 @@
   left: 0;
   width: 100%;
   height: 300px;
-  background: linear-gradient(180deg, rgba(29, 185, 84, 0.2) 0%, rgba(18, 18, 18, 0) 100%);
+  background: linear-gradient(180deg, rgba(135, 3, 57, 0.2) 0%, rgba(135, 3, 57, 0) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -31,7 +38,7 @@
   background: rgba(0, 0, 0, 0.7);
   border: none;
   border-radius: 50%;
-  color: #fff;
+  color: #E19FC7;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -58,19 +65,24 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin: 0 0 8px 0;
-  color: #b3b3b3;
+  color: #E19FC7;
 }
 
 .title {
-  font-size: 48px;
-  font-weight: 900;
+  font-size: 36px;
+  font-weight: 500;
   margin: 0 0 12px 0;
   letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+}
+
+.title:hover {
+  color: #870339;
 }
 
 .subtitle {
   font-size: 14px;
-  color: #b3b3b3;
+  color: #fff;
   margin: 0;
 }
 
@@ -88,7 +100,7 @@
   justify-content: center;
   padding: 80px 0;
   text-align: center;
-  color: #b3b3b3;
+  color: #E19FC7;
 }
 
 .emptyIcon {
@@ -104,7 +116,7 @@
 }
 
 .emptyState h2 {
-  color: #fff;
+  color: #E19FC7;
   font-size: 24px;
   margin-bottom: 8px;
 }
@@ -117,8 +129,8 @@
 }
 
 .startListeningBtn {
-  background-color: #1db954;
-  color: #000;
+  background-color: #870339;
+  color: #fff;
   border: none;
   border-radius: 500px;
   padding: 12px 32px;
@@ -130,7 +142,7 @@
 
 .startListeningBtn:hover {
   transform: scale(1.04);
-  background-color: #1ed760;
+  background-color: #a80a18;
 }
 
 /* Song Table */
@@ -144,7 +156,7 @@
   grid-template-columns: 50px minmax(0, 4fr) minmax(0, 3fr) 2fr 120px;
   padding: 8px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #b3b3b3;
+  color: #fff;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -170,17 +182,20 @@
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, outline 0.2s;
   align-items: center;
+  outline: 1px solid transparent;
 }
 
 .colTitle {
   min-width: 0;
   overflow: hidden;
+  padding-right: 24px;
 }
 
 .songRow:hover {
   background-color: rgba(255, 255, 255, 0.08);
+  outline: 1px solid #870339;
 }
 
 .activeRow {
@@ -188,7 +203,7 @@
 }
 
 .playingIcon {
-  color: #1db954;
+  color: #870339;
   animation: bounce 0.6s infinite alternate;
 }
 
@@ -246,7 +261,7 @@
 .songTitle {
   font-size: 15px;
   font-weight: 500;
-  color: #fff;
+  color: #E19FC7;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -255,12 +270,12 @@
 }
 
 .greenText {
-  color: #1db954 !important;
+  color: #870339 !important;
 }
 
 .songArtist {
   font-size: 13px;
-  color: #b3b3b3;
+  color: #E19FC7;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -269,11 +284,11 @@
 }
 
 .songRow:hover .songArtist {
-  color: #fff;
+  color: #E19FC7;
 }
 
 .colAlbum {
-  color: #b3b3b3;
+  color: #fff;
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
@@ -281,6 +296,7 @@
   min-width: 0;
   display: block;
   width: 100%;
+  padding-right: 24px;
 }
 
 .songRow:hover .colAlbum {
@@ -288,7 +304,7 @@
 }
 
 .colTime {
-  color: #b3b3b3;
+  color: #fff;
   font-size: 14px;
 }
 
@@ -301,20 +317,20 @@
   align-items: center;
   gap: 16px;
   justify-content: flex-end;
-  color: #b3b3b3;
+  color: #fff;
   font-size: 14px;
 }
 
 .likeBtn {
   background: none;
   border: none;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
+  opacity: 0.75;
   transition: opacity 0.2s, color 0.2s, transform 0.2s;
 }
 
@@ -324,16 +340,18 @@
 
 .likeBtn.liked {
   opacity: 1;
-  color: #1db954;
+  color: #870339;
 }
 
 .likeBtn:hover {
   transform: scale(1.1);
-  color: #fff;
+  color: #870339;
+  background: rgba(135, 3, 57, 0.18);
+  border-radius: 50%;
 }
 
 .likeBtn.liked:hover {
-  color: #1ed760;
+  color: #a80a4c;
 }
 
 .durationText {
@@ -348,12 +366,12 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: #b3b3b3;
+  color: #E19FC7;
 }
 
 .loader {
   border: 4px solid rgba(255, 255, 255, 0.1);
-  border-left-color: #1db954;
+  border-left-color: #870339;
   border-radius: 50%;
   width: 40px;
   height: 40px;

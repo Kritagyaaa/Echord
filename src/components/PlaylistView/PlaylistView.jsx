@@ -10,7 +10,7 @@ import { EditPlaylistModel } from "../EditPlaylistModel/EditPlaylistModel";
 
 export function PlaylistView({ playlist }) {
 
-    const { playSong, isShuffle, toggleShuffle, addToUserQueue } = usePlayer();
+    const { playSong, isShuffle, toggleShuffle, addToUserQueue, toggleLike } = usePlayer();
     const { refreshSelectedPlaylist, loadPlaylists, selectPlaylist } = usePlaylists();
 
     const [addSearchQuery, setAddSearchQuery] = useState("");
@@ -71,7 +71,7 @@ export function PlaylistView({ playlist }) {
     const handleLikeToggle = async (e, songId) => {
         e.stopPropagation();
         try {
-            await toggleLikeSong(songId);
+            await toggleLike(songId);
             await refreshSelectedPlaylist();
         } catch (err) {
             console.error(err);
@@ -128,7 +128,7 @@ export function PlaylistView({ playlist }) {
 
                 {playlist.id === "liked-songs" ? (
                     <div className={styles.likedSongsCover}>
-                        <Heart size={80} fill="white" />
+                        <Heart size={80} fill="#870339" color="#E19FC7" />
                     </div>
                 ) : playlist.id === "trending" ? (
                     <div className={styles.likedSongsCover} style={{ background: "linear-gradient(135deg,#ff5722,#ff9800)" }}>
@@ -230,7 +230,6 @@ export function PlaylistView({ playlist }) {
                             className={styles.editButton}
                             onClick={handleDeletePlaylist}
                             title="Delete Playlist"
-                            style={{ color: "#b3b3b3" }}
                         >
                             <Trash2 size={24} />
                         </button>
@@ -292,8 +291,8 @@ export function PlaylistView({ playlist }) {
                             >
                                 <Heart
                                     size={16}
-                                    fill={song.is_liked ? "#1db954" : "none"}
-                                    color={song.is_liked ? "#1db954" : "#b3b3b3"}
+                                    fill={song.is_liked ? "#870339" : "none"}
+                                    color={song.is_liked ? "#870339" : "#b3b3b3"}
                                 />
                             </button>
                         </span>
@@ -380,7 +379,7 @@ export function PlaylistView({ playlist }) {
                                             title={isAdded ? "Added to playlist" : "Add to playlist"}
                                         >
                                             {isAdded ? (
-                                                <Check size={18} color="#1db954" strokeWidth={3} />
+                                                <Check size={18} color="#870339" strokeWidth={3} />
                                             ) : (
                                                 <Plus size={18} />
                                             )}

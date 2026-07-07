@@ -1,0 +1,89 @@
+.playlistsContainer {
+  padding: 30px;
+  background: radial-gradient(circle at top left, rgba(135, 3, 57, 0.08) 0%, transparent 60%);
+  min-height: 100%;
+}
+
+.title {
+  color: #E19FC7;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  font-family: 'Josefin Sans', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.playlistsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.playlistCard {
+  background: #181818;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.playlistCard:hover {
+  background-color: #282828;
+  transform: translateY(-4px);
+}
+
+.likedSongsCover {
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #E19FC7, #E19FC7, #c4efd9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.coverWrapper {
+  aspect-ratio: 1;
+  width: 100%;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.playlistCover {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  min-height: 52px;
+}
+
+.cardTitle {
+  color: #E19FC7;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardSubtitle {
+  color: #b3b3b3;
+  font-size: 13px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

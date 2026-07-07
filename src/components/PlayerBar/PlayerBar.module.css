@@ -1,12 +1,16 @@
 .playerBar {
   display: grid;
   height: 96px;
-  padding: 12px 20px;
-  color: #fff;
-  background: #000;
+  padding: 12px 24px;
+  color: #E19FC7;
+  background: linear-gradient(180deg, #121212 0%, #0d0d0d 100%);
+  border-top: 1px solid rgba(225, 159, 199, 0.1);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
   grid-template-columns: minmax(180px, 30%) minmax(260px, 40%) minmax(190px, 30%);
   align-items: center;
   gap: 18px;
+  position: relative;
+  z-index: 100;
 }
 
 .track,
@@ -25,9 +29,16 @@
 .albumCover {
   width: 56px;
   height: 56px;
-  border-radius: 4px;
+  border-radius: 6px;
   object-fit: cover;
   flex: 0 0 auto;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.albumCover:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(135, 3, 57, 0.45);
 }
 
 .songInfo {
@@ -43,7 +54,7 @@
 }
 
 .songInfo h2 {
-  color: #fff;
+  color: #E19FC7;
   font-size: 14px;
   font-weight: 800;
   line-height: 1.35;
@@ -86,8 +97,9 @@
   height: 32px;
   padding: 0;
   border: none;
+  border-radius: 50%;
   background: transparent;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   place-items: center;
   transition: all .2s ease;
@@ -95,8 +107,9 @@
 
 .controlButton:hover,
 .savedButton:hover {
-  color: #fff;
+  color: #E19FC7;
   transform: scale(1.08);
+  background: rgba(135, 3, 57, 0.18);
 }
 
 /* -------------------- */
@@ -106,23 +119,19 @@
 .playButton {
   width: 48px;
   height: 48px;
-
   border: none;
   border-radius: 50%;
-
-  background: #ffffff;
-
+  background: #E19FC7;
   display: flex;
   justify-content: center;
   align-items: center;
-
   cursor: pointer;
-
   transition: transform .15s ease;
 }
 
 .playButton:hover {
   transform: scale(1.08);
+  box-shadow: 0 0 10px 2px rgba(135, 3, 57, 0.6);
 }
 
 /* -------------------- */
@@ -130,17 +139,17 @@
 .controlButton:focus-visible,
 .savedButton:focus-visible,
 .playButton:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid #E19FC7;
   outline-offset: 2px;
 }
 
 .savedButton {
-  color: #1db954;
+  color: #870339;
   flex: 0 0 auto;
 }
 
 .liked {
-  color: #1db954;
+  color: #870339;
 }
 
 .progressSection {
@@ -160,18 +169,74 @@
 .volumeSlider {
   height: 4px;
   min-width: 0;
-  accent-color: #fff;
+  accent-color: #870339;
   cursor: pointer;
 }
 
 .progressSection input {
   width: 100%;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.progressSection input:focus,
+.progressSection input:focus-visible,
+.progressSection input:active {
+  outline: none;
+  border: none;
+  box-shadow: none;
 }
 
 .volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
   width: 82px;
+  height: 8px;
+  background: #0d0d0d;
+  border-radius: 8px;
+  padding: 0 !important;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
 }
 
+.volumeSlider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: #870339;
+  cursor: pointer;
+  border: none;
+}
+
+.volumeSlider::-moz-range-track {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+}
+
+.volumeSlider::-moz-range-thumb {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: #870339;
+  cursor: pointer;
+  border: none;
+}
+
+/* ── Tablet: hide extras panel ── */
 @media (max-width: 920px) {
   .playerBar {
     height: auto;
@@ -184,32 +249,73 @@
   }
 }
 
+/* ── Mobile: 2-row layout (track top, controls below) ── */
 @media (max-width: 640px) {
   .playerBar {
     grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 16px;
+  }
+
+  .track {
+    justify-content: flex-start;
     gap: 10px;
+  }
+
+  .albumCover {
+    width: 44px;
+    height: 44px;
+  }
+
+  .playerCenter {
+    width: 100%;
+  }
+
+  .progressSection {
+    width: 100%;
+  }
+}
+
+/* ── Small mobile: fully compact ── */
+@media (max-width: 480px) {
+  .playerBar {
+    padding: 8px 12px;
   }
 
   .track {
     justify-content: center;
   }
 
-  .playerCenter {
-    width: 100%;
+  .songInfo h2 {
+    font-size: 13px;
+  }
+
+  .songInfo p {
+    font-size: 11px;
+  }
+
+  .controls {
+    gap: 10px;
+  }
+
+  .playButton {
+    width: 40px;
+    height: 40px;
   }
 }
+
 .pauseIcon {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
 }
 
 .pauseIcon span {
-    width: 5px;
-    height: 18px;
-    background: #000;
-    border-radius: 2px;
+  width: 5px;
+  height: 18px;
+  background: #0d0d0d;
+  border-radius: 2px;
 }
 
 /* Disabled / idle state */
@@ -220,11 +326,11 @@
 }
 
 .activeControl {
-  color: #1db954 !important;
+  color: #870339 !important;
 }
 
 .activeControl:hover {
-  color: #1ed760 !important;
+  color: #870339 !important;
 }
 
 .dropdownWrapper {
@@ -264,7 +370,7 @@
 
 .dropdownItem:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: white;
+  color: #E19FC7;
 }
 
 .dropdownDivider {

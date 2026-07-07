@@ -1,0 +1,95 @@
+.albumsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 250px);
+  padding: 40px;
+  background: radial-gradient(circle at center, rgba(135, 3, 57, 0.08) 0%, transparent 70%);
+}
+
+.emptyStateCard {
+  background: rgba(26, 26, 26, 0.65);
+  border: 1px solid rgba(135, 3, 57, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 60px 40px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(135, 3, 57, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.emptyStateCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(225, 159, 199, 0.5);
+}
+
+.iconCircle {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(135, 3, 57, 0.25) 0%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  border: 1px dashed rgba(225, 159, 199, 0.4);
+}
+
+.discIcon {
+  color: #E19FC7;
+  animation: rotate 8s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.title {
+  color: #E19FC7;
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  font-family: 'Josefin Sans', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  color: #a7a7a7;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0 0 32px 0;
+}
+
+.exploreButton {
+  background: #870339;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(135, 3, 57, 0.3);
+}
+
+.exploreButton:hover {
+  background: #a80a18;
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(135, 3, 57, 0.5);
+}
+
+.exploreButton:active {
+  transform: scale(0.98);
+}

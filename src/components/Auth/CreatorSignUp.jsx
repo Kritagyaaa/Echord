@@ -3,7 +3,7 @@ import './auth.css';
 import { FaSpotify } from 'react-icons/fa';
 import { SocialButtons } from './SocialButtons';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = (import.meta.env.VITE_API_URL || 'https://spotifyghostt-backend.loca.lt').replace(/\/$/, '');
 
 function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUserSignUp }) {
   const [name, setName] = useState('');
@@ -134,7 +134,7 @@ function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUse
         <div className="auth-card">
           {/* Spotify Logo */}
           <div className="logo">
-            <img src="/logo.svg" alt="Ghostt Logo" />
+            <img src="/logo.svg" alt="Echord Logo" />
           </div>
 
           {isVerifying ? (
@@ -143,7 +143,11 @@ function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUse
               <p style={{ color: '#b3b3b3', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
                 We sent a 6-digit verification code to <strong>{email}</strong>. Please enter it below to activate your creator account.
               </p>
-
+              {dummyOtp && (
+                <div style={{ background: 'rgba(29, 185, 84, 0.1)', color: '#1db954', border: '1px solid #1db954', padding: '10px', borderRadius: '4px', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>
+                  Local Dev OTP: {dummyOtp}
+                </div>
+              )}
               {error && <div style={{ color: '#ff4444', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold' }}>{error}</div>}
 
               <form onSubmit={handleVerifyOtp}>

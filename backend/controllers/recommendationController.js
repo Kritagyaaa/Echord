@@ -1,7 +1,7 @@
 const {
     getContentRecommendations,
 } = require("../services/contentRecommendation");
-const b2Service = require("../services/b2service");
+const storageService = require("../services/storageService");
 
 async function getContentRecommendationsController(req, res) {
 
@@ -15,7 +15,7 @@ async function getContentRecommendationsController(req, res) {
 
         const formatted = recommendations.map(rec => ({
             ...rec,
-            cover_url: b2Service.formatCoverUrl(rec.cover_url, req)
+            cover_url: storageService.formatCoverUrl(rec.cover_url, req)
         }));
 
         res.status(200).json({

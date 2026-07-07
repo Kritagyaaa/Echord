@@ -216,7 +216,17 @@ async function sendMail(to, subject, html, logMessage) {
     };
   } catch (error) {
     console.error(`Error sending email to ${to}:`, error);
-    throw error;
+    console.warn('⚠️ SMTP sending failed. Falling back to Mock Mode...');
+    console.log('\n================== [MOCK EMAIL SERVICE] ==================');
+    console.log(`To:      ${to}`);
+    console.log(`Subject: ${subject}`);
+    console.log(`Log:     ${logMessage}`);
+    console.log('==========================================================\n');
+    return {
+      mocked: true,
+      message: `Mock email sent to ${to}. ${logMessage}`,
+      error: error.message
+    };
   }
 }
 

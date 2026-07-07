@@ -1,0 +1,6 @@
+{
+  "appId": "com.ghostt.app",
+  "appName": "Echord",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

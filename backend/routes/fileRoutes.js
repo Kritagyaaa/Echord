@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const b2Service = require('../services/b2service');
+const storageService = require('../services/storageService');
 
 // Public file proxy: GET /files/<key...>
 // Use `use` to avoid path-to-regexp parsing issues and capture all methods/paths under /files
@@ -8,7 +8,7 @@ router.use(async (req, res) => {
   try {
     // req.path inside this router is the path under /files, e.g. '/creators/1/song.mp3'
     const key = req.path.replace(/^\//, '');
-    const obj = await b2Service.getObject(key);
+    const obj = await storageService.getObject(key);
     const stream = obj.Body;
 
     if (obj.ContentType) res.setHeader('Content-Type', obj.ContentType);

@@ -2,9 +2,21 @@
   height: 100%;
   width: 100%;
   overflow-y: auto;
+<<<<<<< HEAD
   color: white;
   background: #0d0d0d;
 }
+=======
+  color: #E19FC7;
+background:
+radial-gradient(
+circle at top center,
+rgba(135, 3, 57, 0.12) 0%,
+rgba(135, 3, 57, 0.05) 25%,
+transparent 60%
+),
+#0D0D0D;}
+>>>>>>> 709ef74a117fd0ea12c025544486b151c6a2925c
 
 .empty {
   height: 100%;
@@ -25,7 +37,7 @@
   background: linear-gradient(
     180deg,
     rgba(80, 80, 80, 0.4),
-    rgba(18, 18, 18, 1)
+    rgba(13, 13, 13, 1)
   );
 }
 
@@ -42,11 +54,11 @@
   width: 220px;
   height: 220px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #450af5, #8e8ee5, #c4efd9);
+  background: linear-gradient(135deg, #E19FC7, #E19FC7, #c4efd9);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #E19FC7;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
 }
@@ -86,7 +98,7 @@
   margin-top: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: white;
+  color: #E19FC7;
 }
 
 .metaInfo span {
@@ -106,19 +118,21 @@
   height: 56px;
   border: none;
   border-radius: 50%;
-  background: #1db954;
+  background: #870339;
   color: black;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: transform 0.2s, background-color 0.2s, outline 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .playButton:hover {
   transform: scale(1.05);
-  background-color: #1ed760;
+  background-color: #870339;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .playButton:active {
@@ -128,7 +142,7 @@
 .shuffleButton {
   background: none;
   border: none;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   transition: color 0.2s, transform 0.2s;
   display: flex;
@@ -137,12 +151,12 @@
 }
 
 .shuffleButton:hover {
-  color: white;
+  color: #E19FC7;
   transform: scale(1.06);
 }
 
 .shuffleActive {
-  color: #1db954 !important;
+  color: #870339 !important;
 }
 
 .songList {
@@ -158,8 +172,8 @@
 }
 
 .songHeader {
-  color: #b3b3b3;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  border-bottom: 1px solid rgba(225, 159, 199, 0.1);
   margin-bottom: 8px;
   font-size: 12px;
   text-transform: uppercase;
@@ -167,23 +181,37 @@
   font-weight: 600;
 }
 
+.songHeader span {
+  transition: color 0.2s;
+}
+
+.songHeader span:hover {
+  color: #E19FC7;
+}
+
 .songRow {
   border-radius: 6px;
-  transition: background 0.2s;
+  transition: background 0.2s, outline 0.2s;
   cursor: pointer;
 }
 
 .songRow:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(225, 159, 199, 0.08);
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
-.songRow:hover .songIndex {
-  color: white;
+.songRow:hover .songIndex,
+.songRow:hover .songTitle,
+.songRow:hover .songArtist,
+.songRow:hover .songDuration {
+  color: #E19FC7;
 }
 
 .songIndex {
-  color: #b3b3b3;
+  color: #E19FC7;
   font-variant-numeric: tabular-nums;
+  transition: color 0.2s;
 }
 
 .songTitleCol {
@@ -203,17 +231,19 @@
 
 .songTitle {
   font-weight: 500;
-  color: white;
+  color: #E19FC7;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s;
 }
 
 .songArtist {
-  color: #b3b3b3;
+  color: #E19FC7;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s;
 }
 
 .likeButton {
@@ -221,31 +251,34 @@
   border: none;
   cursor: pointer;
   color: #b3b3b3;
-  padding: 4px;
+  padding: 6px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s, transform 0.2s;
+  transition: color 0.2s, transform 0.2s, background 0.2s;
 }
 
 .likeButton:hover {
-  color: white;
+  color: #870339;
   transform: scale(1.08);
+  background: rgba(135, 3, 57, 0.18);
 }
 
 .likeButton.liked {
-  color: #1db954;
+  color: #870339;
 }
 
 .songDuration {
-  color: #b3b3b3;
+  color: #E19FC7;
   font-variant-numeric: tabular-nums;
+  transition: color 0.2s;
 }
 
 /* Add songs section styles */
 .addSongsSection {
   margin-top: 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(225, 159, 199, 0.1);
   padding: 32px;
 }
 
@@ -270,18 +303,24 @@
   gap: 12px;
   max-width: 400px;
   margin-bottom: 24px;
-  border: 1px solid transparent;
-  transition: border-color 0.2s;
+  transition: background-color 160ms ease, outline 160ms ease;
+}
+
+.addSearchBox:hover {
+  background: #2a2a2a;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .addSearchBox:focus-within {
-  border-color: #535353;
+  outline: 2px solid #870339;
+  outline-offset: 2px;
 }
 
 .addSearchBox input {
   background: none;
   border: none;
-  color: white;
+  color: #E19FC7;
   width: 100%;
   font-size: 14px;
 }
@@ -302,12 +341,12 @@
   justify-content: space-between;
   padding: 8px 16px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(225, 159, 199, 0.02);
   transition: background 0.2s;
 }
 
 .addSongRow:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(225, 159, 199, 0.06);
 }
 
 .addSongDetails {
@@ -338,6 +377,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #E19FC7;
 }
 
 .addSongArtist {
@@ -350,9 +390,9 @@
 }
 
 .addButton {
-  background: none;
-  border: 1px solid #878787;
-  color: white;
+  background: #1a1a1a;
+  border: 1px solid #870339;
+  color: #E19FC7;
   padding: 6px 18px;
   border-radius: 20px;
   font-size: 12px;
@@ -362,8 +402,8 @@
 }
 
 .addButton:hover {
-  border-color: white;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #870339;
+  border-color: #870339;
   transform: scale(1.04);
 }
 
@@ -399,7 +439,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s;
-  color: white;
+  color: #E19FC7;
   font-size: 14px;
   font-weight: 600;
   gap: 8px;
@@ -419,13 +459,13 @@
 }
 
 .editableTitle:hover {
-  color: #1db954;
+  color: #870339;
 }
 
 .addSongsActionButton {
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: white;
+  background: #1a1a1a;
+  border: 1px solid #870339;
+  color: #E19FC7;
   padding: 8px 20px;
   border-radius: 20px;
   font-size: 13px;
@@ -437,8 +477,8 @@
 }
 
 .addSongsActionButton:hover {
-  border-color: white;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #870339;
+  border-color: #870339;
   transform: scale(1.04);
 }
 
@@ -449,7 +489,7 @@
 .editButton {
   background: none;
   border: none;
-  color: #b3b3b3;
+  color: #E19FC7;
   cursor: pointer;
   transition: color 0.2s, transform 0.2s;
   display: flex;
@@ -458,7 +498,7 @@
 }
 
 .editButton:hover {
-  color: white;
+  color: #E19FC7;
   transform: scale(1.08);
 }
 

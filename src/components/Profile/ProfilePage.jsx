@@ -67,7 +67,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
     setIsSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const API_URL = (import.meta.env.VITE_API_URL || 'https://spotifyghostt-backend.loca.lt').replace(/\/$/, '');
       const res = await fetch(`${API_URL}/user/profile`, {
         method: 'PUT',
         headers: {

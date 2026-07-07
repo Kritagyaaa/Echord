@@ -3,9 +3,22 @@
   min-width: 0;
   height: 100%;
   overflow: visible;
+<<<<<<< HEAD
   border-radius: 8px !important;
   background: #121212;
   flex-direction: column;
+=======
+  border-radius: 8px;
+background:
+linear-gradient(
+180deg,
+rgba(135, 3, 57, 0.10) 0%,
+rgba(135, 3, 57, 0.06) 40%,
+rgba(135, 3, 57, 0.03) 75%,
+transparent 100%
+),
+#121212;  flex-direction: column;
+>>>>>>> 709ef74a117fd0ea12c025544486b151c6a2925c
 }
 
 .scrollArea {
@@ -29,7 +42,7 @@
 }
 
 .scrollArea::-webkit-scrollbar-thumb {
-  border: 3px solid #121212;
+  border: 3px solid #0d0d0d;
   border-radius: 999px;
   background: #870339;
 }
@@ -40,11 +53,6 @@
 
 @media (max-width: 860px) {
   .sidebar {
-    width: 100%;
-    border-radius: 0;
-  }
-
-  .scrollArea {
-    padding-inline: clamp(12px, 4vw, 24px);
+    display: none;
   }
 }

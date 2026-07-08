@@ -38,9 +38,19 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
   const [showEditModal, setShowEditModal] = useState(false);
   const [modalName, setModalName] = useState(user?.name || '');
   const [modalPicture, setModalPicture] = useState(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? user.profile_picture : '');
+  const [profileImgError, setProfileImgError] = useState(false);
+  const [modalImgError, setModalImgError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [modalError, setModalError] = useState('');
   const modalFileRef = useRef(null);
+
+  useEffect(() => {
+    setProfileImgError(false);
+  }, [user?.profile_picture]);
+
+  useEffect(() => {
+    setModalImgError(false);
+  }, [modalPicture]);
 
   const handleModalFileChange = (e) => {
     const file = e.target.files[0];
@@ -163,8 +173,13 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
             }}
             title="Edit profile"
           >
-            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
-              <img src={user.profile_picture} alt="Profile Avatar" className={styles.avatarImg} />
+            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') && !profileImgError ? (
+              <img 
+                src={user.profile_picture} 
+                alt="Profile Avatar" 
+                className={styles.avatarImg} 
+                onError={() => setProfileImgError(true)}
+              />
             ) : (
               <User size={120} strokeWidth={1.2} />
             )}
@@ -235,6 +250,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
                     src={artist.cover_url || artist.profile_image || FALLBACK_AVATAR}
                     alt={artist.name}
                     className={styles.artistImage}
+                    onError={(e) => { e.target.src = FALLBACK_AVATAR; }}
                   />
                   <div className={styles.playOverlay}>
                     <Play fill="black" color="black" size={20} />
@@ -346,6 +362,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
                     src={artist.cover_url || artist.profile_image || FALLBACK_AVATAR}
                     alt={artist.name}
                     className={styles.artistImage}
+                    onError={(e) => { e.target.src = FALLBACK_AVATAR; }}
                   />
                 </div>
                 <h3>{artist.name}</h3>
@@ -382,8 +399,13 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
                 title="Choose photo"
               >
                 <div className={styles.modalAvatarCircle}>
-                  {modalPicture ? (
-                    <img src={modalPicture} alt="Profile Preview" className={styles.modalAvatarImg} />
+                  {modalPicture && !modalImgError ? (
+                    <img 
+                      src={modalPicture} 
+                      alt="Profile Preview" 
+                      className={styles.modalAvatarImg} 
+                      onError={() => setModalImgError(true)}
+                    />
                   ) : (
                     <User size={80} strokeWidth={1} />
                   )}

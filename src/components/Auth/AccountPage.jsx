@@ -36,6 +36,16 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
   const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.phone_number || '');
   const [picture, setPicture] = useState(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? user.profile_picture : '');
+  const [profileImgError, setProfileImgError] = useState(false);
+  const [pictureImgError, setPictureImgError] = useState(false);
+
+  useEffect(() => {
+    setProfileImgError(false);
+  }, [user?.profile_picture]);
+
+  useEffect(() => {
+    setPictureImgError(false);
+  }, [picture]);
   
   const [currentPassword, setCurrentPassword] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -389,8 +399,13 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             <span className="divider">|</span>
             <div className="header-profile-dropdown" onClick={onBackToMain} style={{ cursor: 'pointer' }}>
               <div className="header-avatar-circle profile-default-avatar">
-                {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
-                  <img src={user.profile_picture} alt="Avatar" className="header-avatar-img" />
+                {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') && !profileImgError ? (
+                  <img 
+                    src={user.profile_picture} 
+                    alt="Avatar" 
+                    className="header-avatar-img" 
+                    onError={() => setProfileImgError(true)}
+                  />
                 ) : (
                   <span className="profile-letter-avatar">
                     {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -568,7 +583,18 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                 <div className="profile-upload-container">
                   {picture && (
                     <div className="profile-upload-preview">
-                      <img src={picture} alt="Upload Preview" />
+                      {!pictureImgError ? (
+                        <img 
+                          src={picture} 
+                          alt="Upload Preview" 
+                          onError={() => setPictureImgError(true)}
+                        />
+                      ) : (
+                        <div className="profile-upload-preview-fallback" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#282828', border: '1px solid #404040' }}>
+                          <User size={32} color="#aaa" />
+                          <span style={{ fontSize: '10px', color: '#aaa', marginTop: '4px', textAlign: 'center' }}>Error</span>
+                        </div>
+                      )}
                       <button 
                         type="button" 
                         className="remove-preview-btn" 

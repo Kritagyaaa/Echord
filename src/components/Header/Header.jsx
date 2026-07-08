@@ -27,10 +27,15 @@ export function Header({
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [profileImgError, setProfileImgError] = useState(false);
   const navigate = useNavigate();
 
   const searchContainerRef = useRef(null);
   const profileWrapperRef = useRef(null);
+
+  useEffect(() => {
+    setProfileImgError(false);
+  }, [user?.profile_picture]);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -146,15 +151,20 @@ export function Header({
       <div className={styles.right}>
         <div className={styles.profileWrapper} ref={profileWrapperRef}>
           <div
-            className={`${styles.profile} ${!(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com')) ? styles.profileDefault : ''}`}
+            className={`${styles.profile} ${!(user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') && !profileImgError) ? styles.profileDefault : ''}`}
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             role="button"
             tabIndex={0}
             aria-expanded={showProfileMenu}
             aria-label="User profile menu"
           >
-            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') ? (
-              <img src={user.profile_picture} alt="Profile" className={styles.profileImg} />
+            {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') && !profileImgError ? (
+              <img 
+                src={user.profile_picture} 
+                alt="Profile" 
+                className={styles.profileImg} 
+                onError={() => setProfileImgError(true)}
+              />
             ) : (
               <span className={styles.profileLetter}>
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}

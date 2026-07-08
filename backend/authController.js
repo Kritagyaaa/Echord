@@ -6,8 +6,9 @@ const crypto = require('crypto');
 const emailService = require('./services/emailService');
 const fs = require('fs');
 const path = require('path');
+const storageService = require('./services/storageService');
 
-function saveBase64Image(base64String, req) {
+async function saveBase64Image(base64String, req) {
   if (!base64String) return null;
   const matches = base64String.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
   if (!matches) {
@@ -17,15 +18,22 @@ function saveBase64Image(base64String, req) {
   const buffer = Buffer.from(matches[2], 'base64');
   const extension = type.split('/')[1] || 'png';
   const filename = `profile-${Date.now()}-${Math.floor(Math.random() * 10000)}.${extension}`;
-  const uploadsDir = path.join(__dirname, 'uploads');
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  const key = `profiles/${filename}`;
+
+  try {
+    await storageService.uploadFile(key, buffer, type);
+    return storageService.getProxyUrl(key, req);
+  } catch (err) {
+    console.error('Failed to upload profile image to B2, falling back to local file:', err);
+    const uploadsDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+    const protocol = req.protocol || (req.connection && req.connection.encrypted ? 'https' : 'http');
+    const host = req.get ? req.get('host') : (req.headers.host || 'localhost:5000');
+    return `${protocol}://${host}/uploads/${filename}`;
   }
-  fs.writeFileSync(path.join(uploadsDir, filename), buffer);
-  
-  const protocol = req.protocol || (req.connection && req.connection.encrypted ? 'https' : 'http');
-  const host = req.get ? req.get('host') : (req.headers.host || 'localhost:5000');
-  return `${protocol}://${host}/uploads/${filename}`;
 }
 
 // Helper to read JSON request body
@@ -477,7 +485,7 @@ async function handleUpdateProfile(request, response) {
 
     let finalProfilePicture = profile_picture;
     if (profile_picture && profile_picture.startsWith('data:image/')) {
-      finalProfilePicture = saveBase64Image(profile_picture, request);
+      finalProfilePicture = await saveBase64Image(profile_picture, request);
     }
 
     await database.query(

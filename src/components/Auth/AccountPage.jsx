@@ -458,7 +458,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                     <div className="free-plan-card-body">
                       <div className="plan-logo-and-title">
                         <img src={logo} alt="Echord Logo" style={{ width: '24px', height: '24px' }} />
-                        <h2 className="plan-title-free">Spotify Free</h2>
+                        <h2 className="plan-title-free">Echord Free</h2>
                       </div>
                       <button className="explore-plans-btn" onClick={() => triggerMockToast('Explore plans')}>
                         Explore plans

@@ -35,7 +35,7 @@ app.use('/files', fileRoutes);
 app.get("/api/health", (req, res) => {
     res.json({
         success: true,
-        message: "Spotify Backend Running"
+        message: "Echord Backend Running"
     });
 });
 
@@ -173,7 +173,7 @@ app.get("/db-viewer", async (req, res) => {
             </style>
         </head>
         <body>
-            <h1>Spotify Clone - Database Table Viewer</h1>
+            <h1>Echord - Database Table Viewer</h1>
             <p>Showing current records in MySQL database: <strong>spotify_clone</strong></p>
         `;
 

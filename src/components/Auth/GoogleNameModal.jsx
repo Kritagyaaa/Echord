@@ -7,7 +7,7 @@ export function GoogleNameModal({ googleUser, onConfirm, onCancel, error }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const finalName = shareName ? (googleUser?.name || 'Google User') : (customName.trim() || 'Spotify Listener');
+    const finalName = shareName ? (googleUser?.name || 'Google User') : (customName.trim() || 'Echord Listener');
     onConfirm({
       displayName: finalName,
       shareName,
@@ -26,7 +26,7 @@ export function GoogleNameModal({ googleUser, onConfirm, onCancel, error }) {
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
           </div>
-          <h3>Share your name with Spotify Clone?</h3>
+          <h3>Share your name with Echord?</h3>
           <p className="google-modal-sub">
             Logged in as <strong>{googleUser?.email}</strong>
           </p>
@@ -75,7 +75,7 @@ export function GoogleNameModal({ googleUser, onConfirm, onCancel, error }) {
                 type="text"
                 value={customName}
                 onChange={(e) => setCustomName(e.target.value)}
-                placeholder="e.g. Spotify Listener"
+                placeholder="e.g. Echord Listener"
                 maxLength={40}
               />
             </div>

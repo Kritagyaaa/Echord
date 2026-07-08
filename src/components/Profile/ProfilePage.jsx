@@ -424,7 +424,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
             </div>
 
             <p className={styles.modalDisclaimer}>
-              By proceeding, you agree to give Spotify access to the image you choose to upload. Please make sure you have the right to upload the image.
+              By proceeding, you agree to give Echord access to the image you choose to upload. Please make sure you have the right to upload the image.
             </p>
           </div>
         </div>

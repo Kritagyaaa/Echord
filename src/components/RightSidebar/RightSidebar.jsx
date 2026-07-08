@@ -33,7 +33,7 @@ export function RightSidebar() {
       name: currentSong.artist,
       image: currentSong.artist_image || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=90',
       monthlyListeners: currentSong.play_count ? (currentSong.play_count * 123 + 4567).toLocaleString() : '14,243',
-      bio: currentSong.artist_bio || `${currentSong.artist} is a featured artist on Spotify Clone. Explore their musical creations!`,
+      bio: currentSong.artist_bio || `${currentSong.artist} is a featured artist on Echord. Explore their musical creations!`,
     },
     credits: [
       {

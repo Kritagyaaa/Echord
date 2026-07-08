@@ -205,7 +205,7 @@ export function BrowseView() {
                             <p className={styles.bio}>
                                 {selectedDetail.type === "genre"
                                     ? `All songs in the ${selectedDetail.item.name} genre`
-                                    : selectedDetail.item.bio || `${selectedDetail.item.name} is a music creator on Spotify Clone.`}
+                                    : selectedDetail.item.bio || `${selectedDetail.item.name} is a music creator on Echord.`}
                             </p>
                         </div>
                     </div>

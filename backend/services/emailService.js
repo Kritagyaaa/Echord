@@ -128,7 +128,7 @@ function getEmailHtml(title, greeting, messageBody, codeOrButtonHtml) {
         <p>${messageBody}</p>
         ${codeOrButtonHtml}
         <div class="footer">
-          <p>This is an automated message from Spotify Clone. If you did not request this, please ignore this email.</p>
+          <p>This is an automated message from Echord. If you did not request this, please ignore this email.</p>
         </div>
       </div>
     </body>
@@ -137,10 +137,10 @@ function getEmailHtml(title, greeting, messageBody, codeOrButtonHtml) {
 }
 
 async function sendVerificationOtp(email, otp) {
-  const subject = 'Verify your Spotify Clone Account';
+  const subject = 'Verify your Echord Account';
   const title = 'Verify your Email';
   const greeting = email;
-  const messageBody = 'Thank you for signing up for Spotify Clone! Please use the 6-digit verification code below to verify and activate your account. This code is valid for 10 minutes.';
+  const messageBody = 'Thank you for signing up for Echord! Please use the 6-digit verification code below to verify and activate your account. This code is valid for 10 minutes.';
   const codeHtml = `
     <div class="code-container">
       <div class="code">${otp}</div>
@@ -151,7 +151,7 @@ async function sendVerificationOtp(email, otp) {
 }
 
 async function sendResetOtp(email, otp) {
-  const subject = 'Reset your Spotify Clone Password';
+  const subject = 'Reset your Echord Password';
   const title = 'Password Reset Code';
   const greeting = email;
   const messageBody = 'We received a request to reset your password. Please use the 6-digit code below to reset your password. This code is valid for 10 minutes.';
@@ -165,7 +165,7 @@ async function sendResetOtp(email, otp) {
 }
 
 async function sendResetLink(email, link) {
-  const subject = 'Reset your Spotify Clone Password';
+  const subject = 'Reset your Echord Password';
   const title = 'Password Reset Link';
   const greeting = email;
   const messageBody = 'We received a request to reset your password. You can reset it directly by clicking the button below. This link is valid for 1 hour.';
@@ -198,10 +198,10 @@ async function sendMail(to, subject, html, logMessage) {
     };
   }
 
-  const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || 'no-reply@spotify-clone.com';
+  const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || 'no-reply@echord.com';
   
   const mailOptions = {
-    from: `"Spotify Clone" <${fromEmail}>`,
+    from: `"Echord" <${fromEmail}>`,
     to,
     subject,
     html,

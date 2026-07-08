@@ -1,7 +1,6 @@
 {
   "name": "echord",
   "private": true,
-  "homepage": "https://kritagyaaa.github.io/Echord",
   "scripts": {
     "start": "node backend/server.js",
     "frontend": "vite",
@@ -10,9 +9,7 @@
     "build": "vite build",
     "build:mobile": "vite build --base=/",
     "mobile:sync": "npm run build:mobile && npx cap sync",
-    "preview": "vite preview --host 127.0.0.1",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1075.0",
@@ -39,7 +36,6 @@
     "@capacitor/android": "^8.4.1",
     "@capacitor/cli": "^8.4.1",
     "concurrently": "^9.0.1",
-    "gh-pages": "^6.3.0",
     "nodemon": "^3.1.10"
   }
 }

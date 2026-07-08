@@ -82,7 +82,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
     {
       title: 'Help',
       items: [
-        { label: 'Ghostt support', icon: HelpCircle, action: () => triggerMockToast('Ghostt support') }
+        { label: 'ECHORD support', icon: HelpCircle, action: () => triggerMockToast('ECHORD support') }
       ]
     }
   ];
@@ -378,8 +378,8 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
       <header className="spotify-account-header">
         <div className="header-inner">
           <div className="spotify-logo-clickable" onClick={onBackToMain} style={{ cursor: 'pointer' }}>
-            <img src="/logo.svg" alt="Ghostt Logo" style={{ width: '36px', height: '36px' }} />
-            <span className="logo-text">Ghostt</span>
+            <img src="/logo.svg" alt="ECHORD Logo" style={{ width: '36px', height: '36px' }} />
+            <span className="logo-text">E C H O R D</span>
           </div>
 
           <nav className="header-nav-links">
@@ -870,8 +870,8 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
         <div className="footer-top">
           <div className="footer-logo-col">
             <div className="footer-logo" onClick={onBackToMain} style={{ cursor: 'pointer' }}>
-              <img src="/logo.svg" alt="Ghostt Logo" style={{ width: '32px', height: '32px' }} />
-              <span>Ghostt</span>
+              <img src="/logo.svg" alt="ECHORD Logo" style={{ width: '32px', height: '32px' }} />
+              <span>ECHORD</span>
             </div>
           </div>
           
@@ -898,11 +898,11 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
               <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Import your music'); }}>Import your music</a>
             </div>
             <div className="footer-col">
-              <h4>Ghostt Plans</h4>
+              <h4>ECHORD Plans</h4>
               <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Premium Standard'); }}>Premium Standard</a>
               <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Premium Platinum'); }}>Premium Platinum</a>
               <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Premium Student'); }}>Premium Student</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Ghostt Free'); }}>Ghostt Free</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('ECHORD Free'); }}>ECHORD Free</a>
             </div>
           </div>
 
@@ -939,7 +939,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
               <Globe size={16} />
               <span>India (English)</span>
             </div>
-            <p className="copyright">&copy; {new Date().getFullYear()} Ghostt AB</p>
+            <p className="copyright">&copy; {new Date().getFullYear()} ECHORD AB</p>
           </div>
         </div>
       </footer>

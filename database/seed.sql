@@ -30,7 +30,7 @@ VALUES
 (
     1,
     'Admin',
-    'admin@spotifyghost.com'
+    'admin@echord.com'
 );
 
 -- =====================================

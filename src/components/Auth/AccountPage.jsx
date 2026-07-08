@@ -385,8 +385,6 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
           </div>
 
           <nav className="header-nav-links">
-            <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Premium plans'); }}>Premium plans</a>
-            <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Support'); }}>Support</a>
             <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Download'); }}>Download</a>
             <span className="divider">|</span>
             <div className="header-profile-dropdown" onClick={onBackToMain} style={{ cursor: 'pointer' }}>
@@ -399,7 +397,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                   </span>
                 )}
               </div>
-              <span className="profile-name">Profile ∨</span>
+              <span className="profile-name">{user?.name || 'Username'}</span>
             </div>
           </nav>
         </div>

@@ -12,11 +12,7 @@ const cors = require("cors");
 
 const app = express();
 
-// Debug (Temporary - remove after testing)
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("DB_PORT:", process.env.DB_PORT);
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_NAME:", process.env.DB_NAME);
+
 
 // Import Routes
 const songRoutes = require("./routes/songRoutes");
@@ -25,7 +21,13 @@ const playlistRoutes = require("./routes/playlistRoutes");
 const fileRoutes = require("./routes/fileRoutes");
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'https://kritagyaaa.github.io'
+    ],
+    credentials: true
+}));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -232,6 +234,6 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });

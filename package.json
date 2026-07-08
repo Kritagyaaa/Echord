@@ -3,6 +3,7 @@
   "private": true,
   "homepage": "https://kritagyaaa.github.io/Echord",
   "scripts": {
+    "start": "node backend/server.js",
     "frontend": "vite",
     "backend": "nodemon backend/server.js",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",

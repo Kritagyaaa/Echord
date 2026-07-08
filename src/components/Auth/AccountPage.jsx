@@ -28,7 +28,7 @@ import {
 import './AccountPage.css';
 import logo from '../../assets/logo.svg';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'https://echord-backend.loca.lt').replace(/\/$/, '');
+const API_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
 function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'edit', 'password', 'notifications', 'sessions'

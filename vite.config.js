@@ -3,7 +3,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/Echord/' : '/',
+
+  base: '/Echord/',
+
   server: {
     host: '0.0.0.0',
     port: 5173,
@@ -16,4 +18,3 @@ export default defineConfig({
     },
   },
 })
-

@@ -296,7 +296,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
   };
 
   return (
-    <div className="auth-container" style={{ height: '100vh', overflow: 'hidden' }}>
+    <div className="auth-container">
       <div className="auth-wrapper">
         <div className="auth-card">
           {/* Spotify Logo */}
@@ -591,11 +591,6 @@ function Login({ onShowSignUp, onLoginSuccess }) {
 
               <SocialButtons
                 authType="login"
-                onPhoneLoginClick={() => {
-                  setLoginMethod('phone');
-                  setError('');
-                  setMessage('');
-                }}
                 onGoogleClick={handleGoogleLogin}
               />
             </>

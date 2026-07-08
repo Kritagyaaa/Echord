@@ -1,4 +1,4 @@
-import { Phone, Music } from 'lucide-react';
+import { Music } from 'lucide-react';
 
 const SOCIAL_ICONS = {
   google: (
@@ -27,42 +27,19 @@ const SOCIAL_ICONS = {
       />
     </svg>
   ),
-  apple: (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="white"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M17.05 20.28c-.98.95-2.05.78-3.08.35-1.09-.44-2.08-.48-3.24 0-1.44.62-2.2.44-3.12-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8.9-.07 1.82-.63 2.93-.76 1.4-.09 2.68.42 3.36 1.63-3.1 1.88-2.47 6.6.53 7.87-.36.95-.75 1.85-1.9 2.43l-.01-.01zM12.03 7.07c-.41-4.4 6.07-6.55 7.85-4.46.45.55.78 1.35.66 2.52-.98.07-1.98.65-2.6 1.22-.8.71-1.57.66-2.6.62-.59-.03-1.18-.33-1.38-.43-.36-.15-.74-.3-1.33-.47z" />
-    </svg>
-  ),
 };
 
-export function SocialButtons({ authType = 'login', onPhoneLoginClick, onGoogleClick, onCreatorSignUpClick }) {
-  const loginText = authType === 'login' ? 'login with' : 'sign up with';
-
+export function SocialButtons({
+  authType = 'login',
+  onGoogleClick,
+  onCreatorSignUpClick,
+}) {
   return (
     <>
-      {/* Phone Number Button */}
-      <button className="social-btn phone-btn" onClick={onPhoneLoginClick}>
-        <span className="social-icon">
-          <Phone size={18} />
-        </span>
-        {authType === 'login' ? 'Continue with' : 'Sign up with'} phone number
-      </button>
-
       {/* Google Button */}
       <button className="social-btn google-btn" onClick={onGoogleClick}>
         <span className="social-icon">{SOCIAL_ICONS.google}</span>
         {authType === 'login' ? 'Continue with' : 'Sign up with'} Google
-      </button>
-
-      {/* Apple Button */}
-      <button className="social-btn apple-btn">
-        <span className="social-icon">{SOCIAL_ICONS.apple}</span>
-        {authType === 'login' ? 'Continue with' : 'Sign up with'} Apple
       </button>
 
       {authType === 'signup' && (

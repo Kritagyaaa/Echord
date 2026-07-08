@@ -331,18 +331,6 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
           </div>
         </section>
 
-        {/* Section: Followers */}
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2>Followers</h2>
-          </div>
-          <div className={styles.cardsRow}>
-            <div className={styles.followerCard}>
-              <div className={styles.greyCirclePlaceholder}></div>
-              {/* Image and Name are removed/empty per specifications */}
-            </div>
-          </div>
-        </section>
 
         {/* Section: Following */}
         <section className={styles.section}>

@@ -285,9 +285,6 @@ function SignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onCreatorSignUpC
 
               <SocialButtons
                 authType="signup"
-                onPhoneLoginClick={() => {
-                  alert('Please sign up by filling out the form. Phone OTP is currently supported for login verification.');
-                }}
                 onGoogleClick={handleGoogleSignUp}
                 onCreatorSignUpClick={onCreatorSignUpClick}
               />

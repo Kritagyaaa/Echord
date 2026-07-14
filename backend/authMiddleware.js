@@ -55,6 +55,11 @@ async function authenticateRequest(request) {
       throw error;
     }
 
+    // Override DB role with JWT session-specific role (e.g. if a creator logged in as a user)
+    if (decoded && decoded.role) {
+      user.role = decoded.role;
+    }
+
     // Enforce user inactivity timeout
     const timeoutSeconds = user.session_timeout_seconds || 604800;
     const lastUsed = session.last_used_at ? new Date(session.last_used_at) : new Date(session.created_at);

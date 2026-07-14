@@ -19,6 +19,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [loadingAction, setLoadingAction] = useState('');
   const [pendingGoogleUser, setPendingGoogleUser] = useState(null);
+  const [loginRole, setLoginRole] = useState('user'); // 'user' or 'creator'
 
   const triggerGoogleAuth = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -63,6 +64,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
           google_id: pendingGoogleUser.google_id,
           profile_picture: pendingGoogleUser.profile_picture,
           share_name: shareName,
+          role: loginRole,
         }),
       });
       const data = await res.json();
@@ -92,7 +94,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, role: loginRole }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -154,7 +156,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
       const res = await fetch(`${API_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phone, otp_code: otp, purpose: 'login' }),
+        body: JSON.stringify({ phone_number: phone, otp_code: otp, purpose: 'login', role: loginRole }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -262,6 +264,30 @@ function Login({ onShowSignUp, onLoginSuccess }) {
     }
   };
 
+  const handleResendSignupOtp = async (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/auth/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, purpose: 'verify' }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to resend code.');
+      }
+      setDummyOtp(data.otp || '');
+      alert('Verification code resent successfully!');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleResetPasswordSubmit = async (e) => {
     e.preventDefault();
     if (!email || !otp || !password) {
@@ -305,7 +331,52 @@ function Login({ onShowSignUp, onLoginSuccess }) {
           <h1>Music Awaits</h1>
 
           {error && <div style={{ color: '#ff4444', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold' }}>{error}</div>}
-          {message && <div style={{ color: '#1db954', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold' }}>{message}</div>}
+          {message && <div style={{ color: '#E19FC7', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold' }}>{message}</div>}
+
+          {(loginMethod === 'email' || loginMethod === 'phone' || loginMethod === 'otp') && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '25px' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setLoginRole('user');
+                  setError('');
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: loginRole === 'user' ? '#E19FC7' : '#b3b3b3',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  borderBottom: loginRole === 'user' ? '2px solid #E19FC7' : 'none',
+                  paddingBottom: '5px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease-in-out'
+                }}
+              >
+                User Login
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setLoginRole('creator');
+                  setError('');
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: loginRole === 'creator' ? '#E19FC7' : '#b3b3b3',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  borderBottom: loginRole === 'creator' ? '2px solid #E19FC7' : 'none',
+                  paddingBottom: '5px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease-in-out'
+                }}
+              >
+                Creator Login
+              </button>
+            </div>
+          )}
 
           {/* Email Login Flow */}
           {loginMethod === 'email' && (
@@ -389,11 +460,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
           {/* OTP Entry Flow */}
           {loginMethod === 'otp' && (
             <form onSubmit={handleVerifyOtp}>
-              {dummyOtp && (
-                <div style={{ background: 'rgba(29, 185, 84, 0.1)', color: '#1db954', border: '1px solid #1db954', padding: '10px', borderRadius: '4px', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>
-                  Local Dev OTP: {dummyOtp}
-                </div>
-              )}
+
               <div style={{ textAlign: 'left' }}>
                 <label>Enter 6-Digit OTP</label>
                 <input
@@ -455,7 +522,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                   className="auth-btn"
                   onClick={handleSendResetOtp}
                   disabled={loading}
-                  style={{ background: 'transparent', border: '1px solid #1db954', color: '#1db954', marginBottom: 0 }}
+                  style={{ marginBottom: 0 }}
                 >
                   {loadingAction === 'reset_otp' ? 'Requesting OTP...' : 'Send Reset OTP'}
                 </button>
@@ -481,11 +548,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
           {/* Forgot Password - OTP Verification and Password Reset Flow */}
           {loginMethod === 'forgot_reset' && (
             <form onSubmit={handleResetPasswordSubmit}>
-              {dummyOtp && (
-                <div style={{ background: 'rgba(29, 185, 84, 0.1)', color: '#1db954', border: '1px solid #1db954', padding: '10px', borderRadius: '4px', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>
-                  Local Dev OTP: {dummyOtp}
-                </div>
-              )}
+
               <div style={{ textAlign: 'left' }}>
                 <label>Email Address</label>
                 <input
@@ -542,11 +605,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
               <p style={{ color: '#b3b3b3', fontSize: '14px', marginBottom: '20px', textAlign: 'left' }}>
                 Please enter the 6-digit verification code sent to <strong>{email}</strong> to activate your account.
               </p>
-              {dummyOtp && (
-                <div style={{ background: 'rgba(29, 185, 84, 0.1)', color: '#1db954', border: '1px solid #1db954', padding: '10px', borderRadius: '4px', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>
-                  Local Dev OTP: {dummyOtp}
-                </div>
-              )}
+
               
               <div style={{ textAlign: 'left' }}>
                 <label>Enter 6-Digit Code</label>
@@ -564,10 +623,17 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                 {loading ? 'Verifying...' : 'Verify Code'}
               </button>
 
-              <p style={{ marginTop: '10px', fontSize: '13px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
                 <a
                   href="#"
-                  style={{ color: '#b3b3b3', textDecoration: 'none', fontWeight: 'bold' }}
+                  style={{ color: '#E19FC7', fontSize: '14px', textDecoration: 'none', fontWeight: 'bold' }}
+                  onClick={handleResendSignupOtp}
+                >
+                  Resend Verification Code
+                </a>
+                <a
+                  href="#"
+                  style={{ color: '#b3b3b3', fontSize: '13px', textDecoration: 'none' }}
                   onClick={(e) => {
                     e.preventDefault();
                     setLoginMethod('email');
@@ -577,7 +643,7 @@ function Login({ onShowSignUp, onLoginSuccess }) {
                 >
                   Back to Login
                 </a>
-              </p>
+              </div>
             </form>
           )}
 

@@ -69,8 +69,8 @@ function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUse
       if (!res.ok) {
         throw new Error(data.error || 'Registration failed.');
       }
-      setDummyOtp(data.otp || '');
-      setIsVerifying(true);
+      alert('Creator registration successful! Please log in to verify your email and activate your account.');
+      onSignUpSuccess?.();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -142,11 +142,7 @@ function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUse
               <p style={{ color: '#b3b3b3', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
                 We sent a 6-digit verification code to <strong>{email}</strong>. Please enter it below to activate your creator account.
               </p>
-              {dummyOtp && (
-                <div style={{ background: 'rgba(29, 185, 84, 0.1)', color: '#1db954', border: '1px solid #1db954', padding: '10px', borderRadius: '4px', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold', textAlign: 'center' }}>
-                  Local Dev OTP: {dummyOtp}
-                </div>
-              )}
+
               {error && <div style={{ color: '#ff4444', marginBottom: '15px', fontSize: '14px', fontWeight: 'bold' }}>{error}</div>}
 
               <form onSubmit={handleVerifyOtp}>
@@ -170,7 +166,7 @@ function CreatorSignUp({ onShowLogin, onSignUpSuccess, onLoginSuccess, onShowUse
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
                 <a
                   href="#"
-                  style={{ color: '#1db954', fontSize: '14px', textDecoration: 'none', fontWeight: 'bold' }}
+                  style={{ color: '#E19FC7', fontSize: '14px', textDecoration: 'none', fontWeight: 'bold' }}
                   onClick={handleResendOtp}
                 >
                   Resend Verification Code

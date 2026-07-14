@@ -84,14 +84,14 @@
   align-items: center;
   gap: 8px;
   background: transparent;
-  color: #ff4444;
-  border: 1px solid #ff4444;
+  color: #E19FC7;
+  border: 1px solid #878787;
 }
 
 .creator-btn-logout:hover {
-  background: #353839;
-  border-color: #353839;
-  color: #ff4444;
+  border-color: #870339;
+  background: #870339;
+  color: white;
 }
 
 .creator-stats-grid {

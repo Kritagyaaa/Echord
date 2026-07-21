@@ -6,6 +6,7 @@
 
 ECHORD is a full-stack music streaming platform built for listeners and creators alike — stream your favorite tracks, build playlists that match your mood, and discover new sounds with personalized listening through intelligent music recommandations, real-time trending charts. Designed with a focus on seamless user experience, ECHORD brings together secure authentication, real-time music playback, and an intuitive interface that makes discovering and organizing music effortless. Whether you're curating the perfect playlist for a late-night drive or exploring what's trending today, ECHORD adapts to how you listen — and for creators, it offers a dedicated space to share their work with a growing community of listeners.
 
+
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
@@ -17,6 +18,17 @@ ECHORD is a full-stack music streaming platform built for listeners and creators
 </div>
 
 ---
+## 🌐 Access ECHORD
+
+- 🌍 **Web:** Experience ECHORD Live at https://echord-songs.vercel.app
+- 📱 **Android:** Built with **Capacitor**, providing a native Android experience while leveraging the same web application.
+
+  *Highlights:*
+- 📱 Native Android application powered by Capacitor
+- 🔄 Shared codebase with the web application
+- ⚡ Consistent user experience across web and mobile
+- 🎵 Supports the complete music streaming experience on Android devices
+- 🔗 Seamless integration with native Android capabilities through Capacitor plugins
 
 ## 📖 Table of Contents
 

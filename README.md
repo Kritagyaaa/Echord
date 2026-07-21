@@ -13,8 +13,8 @@ ECHORD is a full-stack music streaming platform built for listeners and creators
 ![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=flat&logo=JSON%20web%20tokens)
-
-
+![Capacitor](https://img.shields.io/badge/Capacitor-119EFF?style=flat&logo=capacitor&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)
 </div>
 
 ---

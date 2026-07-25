@@ -1,6 +1,14 @@
-<div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=870339&height=180&section=header&text=ECHORD&fontSize=60&fontColor=E19FC7&animation=fadeIn&fontAlignY=40" width="100%"/>
+
+
+
+<div align="center">
+<p align="center">
+
+  <img src="./public/logo.svg" alt="ECHORD Logo" width="180">
+  <p>ECHORD</p>
+</p>
+
 
 ### Echo Beyond the Beat.
 

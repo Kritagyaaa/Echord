@@ -8,9 +8,39 @@
   color: #E19FC7;
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin: 0;
   font-family: 'Josefin Sans', sans-serif;
   letter-spacing: -0.02em;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.createBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #870339;
+  color: #E19FC7;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.createBtn:hover {
+  background: #a50445;
+  transform: scale(1.03);
 }
 
 .playlistsGrid {
@@ -86,4 +116,54 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ── Mobile: 3-column compact grid ── */
+@media (max-width: 620px) {
+  .playlistsContainer {
+    padding: 16px 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .playlistsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .playlistCard {
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .likedSongsCover {
+    margin-bottom: 8px;
+  }
+
+  .coverWrapper {
+    margin-bottom: 8px;
+  }
+
+  .cardInfo {
+    min-height: auto;
+  }
+
+  .cardTitle {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .cardSubtitle {
+    font-size: 10px;
+  }
+}
+
+/* ── Small mobile: 2-column grid ── */
+@media (max-width: 360px) {
+  .playlistsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

@@ -303,58 +303,123 @@
   }
 }
 
-/* ── Mobile: 2-row layout (track top, controls below) ── */
+/* ── Mobile: sleek mini-player layout ── */
 @media (max-width: 640px) {
   .playerBar {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 10px 16px;
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 0 16px;
+    gap: 12px;
   }
 
   .track {
-    justify-content: flex-start;
-    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    gap: 8px;
   }
 
   .albumCover {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
   }
 
-  .playerCenter {
-    width: 100%;
-  }
-
-  .progressSection {
-    width: 100%;
-  }
-}
-
-/* ── Small mobile: fully compact ── */
-@media (max-width: 480px) {
-  .playerBar {
-    padding: 8px 12px;
-  }
-
-  .track {
-    justify-content: center;
+  .songInfo {
+    flex: 1;
+    min-width: 0;
   }
 
   .songInfo h2 {
     font-size: 13px;
+    font-weight: 700;
   }
 
   .songInfo p {
     font-size: 11px;
   }
 
+  .savedButton {
+    margin-top: 0;
+    margin-left: 0;
+    width: 28px;
+    height: 28px;
+  }
+
+  .playerCenter {
+    width: auto;
+    flex-direction: row;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
   .controls {
-    gap: 10px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* Hide shuffle, skip back, and repeat buttons on mobile */
+  .controls button:first-child,
+  .controls button:nth-child(2),
+  .controls button:last-child {
+    display: none !important;
   }
 
   .playButton {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .controlButton {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Progress section absolutely positioned at the top of the bar */
+  .progressSection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 3px;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .progressSection span {
+    display: none !important;
+  }
+
+  .progressSection input {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .progressSection input::-webkit-slider-thumb {
+    width: 0;
+    height: 0;
+    display: none !important;
+  }
+  
+  .progressSection input::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    display: none !important;
+  }
+
+  .extras {
+    display: none !important;
+  }
+
+  .expandedLayout {
+    display: none !important;
   }
 }
 

@@ -530,3 +530,69 @@
   border-radius: 8px;
   overflow: hidden;
 }
+
+.titleAndArtist {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.songArtistSubtitle {
+  display: none;
+  font-size: 12px;
+  color: #b3b3b3;
+}
+
+@media (max-width: 620px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 16px;
+    min-height: auto;
+    gap: 16px;
+  }
+  
+  .cover, .likedSongsCover, .editableCoverContainer {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .info h1 {
+    font-size: 28px;
+    text-align: center;
+  }
+  
+  .actions {
+    padding: 16px;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .songHeader {
+    display: none !important;
+  }
+  
+  .songList {
+    padding: 0 12px 16px;
+  }
+  
+  .songRow {
+    grid-template-columns: 1fr auto auto;
+    padding: 8px 12px;
+    gap: 12px;
+  }
+  
+  .songIndex, .songArtist, .songDuration {
+    display: none !important;
+  }
+  
+  .songArtistSubtitle {
+    display: block;
+    margin-top: 2px;
+  }
+  
+  .removeSongButton {
+    opacity: 1 !important;
+  }
+}

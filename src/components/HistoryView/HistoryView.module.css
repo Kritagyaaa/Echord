@@ -400,3 +400,36 @@ transparent 55%
     font-size: 32px;
   }
 }
+
+@media (max-width: 620px) {
+  .header {
+    padding: 48px 16px 20px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 28px;
+  }
+  
+  .content {
+    padding: 0 16px;
+  }
+  
+  .tableHeader {
+    display: none !important;
+  }
+  
+  .songRow {
+    grid-template-columns: 1fr auto auto;
+    padding: 8px 8px;
+    gap: 8px;
+  }
+  
+  .colNumber {
+    display: none !important;
+  }
+  
+  .likeBtn {
+    opacity: 1 !important;
+  }
+}

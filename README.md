@@ -1,10 +1,19 @@
-<div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=870339&height=180&section=header&text=ECHORD&fontSize=60&fontColor=E19FC7&animation=fadeIn&fontAlignY=40" width="100%"/>
+
+
+
+<div align="center">
+<p align="center">
+
+  <img src="./public/logo.svg" alt="ECHORD Logo" width="180">
+  <p>ECHORD</p>
+</p>
+
 
 ### Echo Beyond the Beat.
 
 ECHORD is a full-stack music streaming platform built for listeners and creators alike — stream your favorite tracks, build playlists that match your mood, and discover new sounds with personalized listening through intelligent music recommandations, real-time trending charts. Designed with a focus on seamless user experience, ECHORD brings together secure authentication, real-time music playback, and an intuitive interface that makes discovering and organizing music effortless. Whether you're curating the perfect playlist for a late-night drive or exploring what's trending today, ECHORD adapts to how you listen — and for creators, it offers a dedicated space to share their work with a growing community of listeners.
+
 
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
@@ -12,11 +21,22 @@ ECHORD is a full-stack music streaming platform built for listeners and creators
 ![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=flat&logo=JSON%20web%20tokens)
-
-
+![Capacitor](https://img.shields.io/badge/Capacitor-119EFF?style=flat&logo=capacitor&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)
 </div>
 
 ---
+## 🌐 Access ECHORD
+
+- 🌍 **Web:** Experience ECHORD Live at https://echord-songs.vercel.app
+- 📱 **Android:** Built with **Capacitor**, providing a native Android experience while leveraging the same web application.
+
+  *Highlights:*
+- 📱 Native Android application powered by Capacitor
+- 🔄 Shared codebase with the web application
+- ⚡ Consistent user experience across web and mobile
+- 🎵 Supports the complete music streaming experience on Android devices
+- 🔗 Seamless integration with native Android capabilities through Capacitor plugins
 
 ## 📖 Table of Contents
 

@@ -7,6 +7,46 @@ const emailService = require('./services/emailService');
 const fs = require('fs');
 const path = require('path');
 const storageService = require('./services/storageService');
+const { OAuth2Client } = require('google-auth-library');
+
+const GOOGLE_WEB_CLIENT_ID = process.env.GOOGLE_WEB_CLIENT_ID ||
+  '804239846700-6o1h8fo0d98l3bk3a1duoabslp9efj82.apps.googleusercontent.com';
+const googleOAuthClient = new OAuth2Client(GOOGLE_WEB_CLIENT_ID);
+
+async function verifyGoogleCredential({ idToken, accessToken, nonce }) {
+  if (idToken) {
+    const ticket = await googleOAuthClient.verifyIdToken({
+      idToken,
+      audience: GOOGLE_WEB_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    if (!nonce || payload?.nonce !== nonce) {
+      throw Object.assign(new Error('Google sign-in nonce is invalid.'), { statusCode: 401 });
+    }
+    if (!payload?.sub || !payload.email || !payload.email_verified) {
+      throw Object.assign(new Error('Google account email is not verified.'), { statusCode: 401 });
+    }
+    return payload;
+  }
+
+  if (accessToken) {
+    const tokenInfo = await googleOAuthClient.getTokenInfo(accessToken);
+    const audiences = Array.isArray(tokenInfo.aud) ? tokenInfo.aud : [tokenInfo.aud];
+    if (!audiences.includes(GOOGLE_WEB_CLIENT_ID)) {
+      throw Object.assign(new Error('Google access token was issued for another application.'), { statusCode: 401 });
+    }
+    const profileResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const profile = await profileResponse.json();
+    if (!profileResponse.ok || !profile.sub || !profile.email || profile.email_verified === false) {
+      throw Object.assign(new Error('Unable to verify the Google account.'), { statusCode: 401 });
+    }
+    return profile;
+  }
+
+  throw Object.assign(new Error('A Google ID token or access token is required.'), { statusCode: 400 });
+}
 
 async function saveBase64Image(base64String, req) {
   if (!base64String) return null;
@@ -860,11 +900,12 @@ async function handleSocialLogin(request, response) {
 
   try {
     const body = await readBody(request);
-    const { email, name, google_id, profile_picture, role: requestedRole } = body;
-
-    if (!email || !google_id) {
-      return sendJson(response, 400, { error: 'Email and google_id are required.' });
-    }
+    const { id_token: idToken, access_token: accessToken, nonce, name: requestedName, role: requestedRole } = body;
+    const googleProfile = await verifyGoogleCredential({ idToken, accessToken, nonce });
+    const email = googleProfile.email;
+    const google_id = googleProfile.sub;
+    const profile_picture = googleProfile.picture || null;
+    const name = requestedName || googleProfile.name || 'Google User';
 
     // Check if user already exists
     let [users] = await database.query('SELECT * FROM users WHERE google_id = ? OR email = ?', [google_id, email]);

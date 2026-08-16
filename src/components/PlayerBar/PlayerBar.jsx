@@ -104,7 +104,7 @@ export function PlayerBar() {
   // Nothing selected yet
   if (!currentSong) {
     return (
-      <footer className={styles.playerBar}>
+      <footer className={`${styles.playerBar} ${isExpanded ? styles.expandedLayout : ''}`}>
         {/* LEFT – empty state */}
         <div className={styles.track}>
           <div className={styles.songInfo}>
@@ -182,7 +182,7 @@ export function PlayerBar() {
   };
 
   return (
-    <footer className={styles.playerBar}>
+    <footer className={`${styles.playerBar} ${isExpanded ? styles.expandedLayout : ''}`}>
       {/* LEFT */}
       <div className={styles.track}>
         <img

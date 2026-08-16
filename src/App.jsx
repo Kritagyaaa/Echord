@@ -27,6 +27,7 @@ import { BrowseView } from './components/BrowseView/BrowseView.jsx';
 import { AlbumsView } from './components/AlbumsView/AlbumsView.jsx';
 import { PlaylistsView } from './components/PlaylistsView/PlaylistsView.jsx';
 import ShaderBackground from './components/shaderBackground/ShaderBackground.jsx';
+import { Home, Briefcase, Library, User } from 'lucide-react';
 
 function ProtectedLayout({
   isAuthenticated,
@@ -96,6 +97,58 @@ function ProtectedLayout({
       )}
 
       <PlayerBar />
+
+      {!isExpanded && (
+        <nav className={styles.mobileNavBar}>
+          <button 
+            className={`${styles.mobileNavItem} ${location.pathname === '/' && !selectedPlaylist ? styles.activeMobileNavItem : ''}`}
+            onClick={() => {
+              setSelectedPlaylist(null);
+              setSearchQuery("");
+              navigate("/");
+            }}
+          >
+            <Home size={20} />
+            <span>Home</span>
+          </button>
+          
+          <button 
+            className={`${styles.mobileNavItem} ${location.pathname === '/browse' ? styles.activeMobileNavItem : ''}`}
+            onClick={() => {
+              setSelectedPlaylist(null);
+              setSearchQuery("");
+              navigate("/browse");
+            }}
+          >
+            <Briefcase size={20} />
+            <span>Browse</span>
+          </button>
+
+          <button 
+            className={`${styles.mobileNavItem} ${(location.pathname === '/playlists' || selectedPlaylist) ? styles.activeMobileNavItem : ''}`}
+            onClick={() => {
+              setSelectedPlaylist(null);
+              setSearchQuery("");
+              navigate("/playlists");
+            }}
+          >
+            <Library size={20} />
+            <span>Library</span>
+          </button>
+
+          <button 
+            className={`${styles.mobileNavItem} ${location.pathname === '/profile' ? styles.activeMobileNavItem : ''}`}
+            onClick={() => {
+              setSelectedPlaylist(null);
+              setSearchQuery("");
+              navigate("/profile");
+            }}
+          >
+            <User size={20} />
+            <span>Profile</span>
+          </button>
+        </nav>
+      )}
     </div>
   );
 }

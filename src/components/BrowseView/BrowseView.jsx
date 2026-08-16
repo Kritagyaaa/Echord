@@ -250,7 +250,10 @@ export function BrowseView() {
                                                 e.target.src = placeholder;
                                             }}
                                         />
-                                        <span className={styles.songTitle}>{song.title}</span>
+                                        <div className={styles.titleAndArtist}>
+                                            <span className={styles.songTitle}>{song.title}</span>
+                                            <span className={styles.songArtistSubtitle}>{song.artist}</span>
+                                        </div>
                                     </div>
 
                                     <span className={styles.songArtist}>

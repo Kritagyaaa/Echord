@@ -9,7 +9,7 @@ import "./styles/global.css";
 
 import { PlayerProvider } from "./context/playercontext";
 
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "219737061264-18h6l27em1ef1orsbd8hpdh2snano3ne.apps.googleusercontent.com";
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "804239846700-6o1h8fo0d98l3bk3a1duoabslp9efj82.apps.googleusercontent.com";
 
 const isCapacitor = !!(window.Capacitor || (window.location.hostname === 'localhost' && !window.location.port));
 const Router = isCapacitor ? HashRouter : BrowserRouter;

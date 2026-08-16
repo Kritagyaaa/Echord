@@ -430,3 +430,78 @@
   background: rgba(135, 3, 57, 0.3);
   border-color: #870339;
 }
+
+@media (max-width: 620px) {
+  .header {
+    padding: 24px 16px 16px;
+    gap: 12px;
+  }
+  
+  .header h1 {
+    font-size: 24px;
+  }
+  
+  .clearBtn {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+  
+  .content {
+    padding: 0 16px;
+  }
+  
+  .nowPlayingCard {
+    padding: 8px 12px;
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+  
+  .nowPlayingCard img {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .nowPlayingInfo strong {
+    font-size: 14px;
+  }
+  
+  .playingBadge {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+  
+  .songRow, .contextRow, .searchResult {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .dragHandle, .songIndex, .contextSongIndex {
+    display: none !important;
+  }
+  
+  .songImg, .contextRowImg, .searchResult img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .songTitle {
+    font-size: 13px;
+  }
+  
+  .songArtist {
+    font-size: 11px;
+  }
+  
+  .songDuration {
+    display: none !important;
+  }
+  
+  .rowControls {
+    opacity: 1 !important;
+  }
+  
+  .addSection {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+}

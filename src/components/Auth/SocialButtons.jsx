@@ -37,13 +37,13 @@ export function SocialButtons({
   return (
     <>
       {/* Google Button */}
-      <button className="social-btn google-btn" onClick={onGoogleClick}>
+      <button type="button" className="social-btn google-btn" onClick={onGoogleClick}>
         <span className="social-icon">{SOCIAL_ICONS.google}</span>
         {authType === 'login' ? 'Continue with' : 'Sign up with'} Google
       </button>
 
       {authType === 'signup' && (
-        <button className="social-btn add-songs-btn" onClick={onCreatorSignUpClick}>
+        <button type="button" className="social-btn add-songs-btn" onClick={onCreatorSignUpClick}>
           <span className="social-icon">
             <Music size={18} />
           </span>

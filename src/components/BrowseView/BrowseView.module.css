@@ -287,3 +287,102 @@
   color: #b3b3b3;
   font-size: 16px;
 }
+
+.titleAndArtist {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.songArtistSubtitle {
+  display: none;
+  font-size: 12px;
+  color: #b3b3b3;
+}
+
+@media (max-width: 620px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .section h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .genreGrid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+  }
+  
+  .genreCard {
+    height: 120px;
+    padding: 12px;
+  }
+  
+  .genreCard h3 {
+    font-size: 18px;
+  }
+  
+  .creatorGrid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  
+  .creatorCard {
+    padding: 12px;
+  }
+  
+  .creatorImage {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 10px;
+  }
+  
+  .creatorCard h3 {
+    font-size: 13px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+  
+  .cover, .genreCover {
+    width: 140px;
+    height: 140px;
+    font-size: 32px;
+  }
+  
+  .info h1 {
+    font-size: 28px;
+    margin: 0 0 10px 0;
+  }
+  
+  .songHeader {
+    display: none !important;
+  }
+  
+  .songList {
+    padding: 0;
+  }
+  
+  .songRow {
+    grid-template-columns: 1fr auto;
+    padding: 8px 12px;
+    gap: 12px;
+  }
+  
+  .songIndex, .songArtist, .songDuration {
+    display: none !important;
+  }
+  
+  .songArtistSubtitle {
+    display: block;
+    margin-top: 2px;
+  }
+}

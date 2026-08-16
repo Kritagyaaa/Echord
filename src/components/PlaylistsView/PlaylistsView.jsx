@@ -1,13 +1,16 @@
-import { Heart } from "lucide-react";
+import { Heart, Plus } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlaylists } from "../../context/playlistcontext";
 import { PlaylistCover } from "../PlaylistCover/PlaylistCover";
+import { CreatePlaylistModel } from "../CreatePlaylistModel/CreatePlaylistModel";
 import placeholder from "../../assets/music-placeholder.jpg";
 import styles from "./PlaylistsView.module.css";
 
 export function PlaylistsView() {
   const { playlists, selectPlaylist } = usePlaylists();
   const navigate = useNavigate();
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handlePlaylistClick = async (playlist) => {
     await selectPlaylist(playlist);
@@ -16,7 +19,17 @@ export function PlaylistsView() {
 
   return (
     <div className={styles.playlistsContainer}>
-      <h1 className={styles.title}>All Playlists</h1>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.title}>All Playlists</h1>
+        <button
+          className={styles.createBtn}
+          onClick={() => setShowCreateModal(true)}
+          aria-label="Create Playlist"
+        >
+          <Plus size={18} strokeWidth={2.5} />
+          <span>New Playlist</span>
+        </button>
+      </div>
       
       <div className={styles.playlistsGrid}>
         {/* Liked Songs Card */}
@@ -54,6 +67,11 @@ export function PlaylistsView() {
           </div>
         ))}
       </div>
+
+      <CreatePlaylistModel
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+      />
     </div>
   );
 }

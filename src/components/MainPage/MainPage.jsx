@@ -289,27 +289,22 @@ export function MainPage({
 
       <div className={styles.quickPicks}>
         <div
-          className={styles.pickCard}
+          className={`${styles.pickCard} ${styles.likedSongsHeroCard}`}
           onClick={() => selectPlaylist({ id: "liked-songs", name: "Liked Songs" })}
         >
-          <div
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: 4,
-              background: "linear-gradient(135deg,#E19FC7,#E19FC7,#c4efd9)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#E19FC7",
-            }}
-          >
-            <Heart size={24} fill="#870339" />
+          <div className={styles.likedSongsHeroIcon}>
+            <Heart size={24} fill="#870339" color="#E19FC7" />
           </div>
-          <span>Liked Songs</span>
+          <div className={styles.likedSongsHeroText}>
+            <span className={styles.likedSongsTitle}>Liked Songs</span>
+            <span className={styles.likedSongsCount}>Your favorite tracks</span>
+          </div>
+          <div className={styles.likedSongsPlayButton}>
+            <Play fill="#0d0d0d" color="#0d0d0d" size={16} />
+          </div>
         </div>
 
-        {playlists.slice(0, 5).map(playlist => (
+        {playlists.slice(0, 1).map(playlist => (
           <div
             key={playlist.id}
             className={styles.pickCard}

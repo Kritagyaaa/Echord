@@ -277,7 +277,10 @@ export function PlaylistView({ playlist }) {
                                     e.target.src = placeholder;
                                 }}
                             />
-                            <span className={styles.songTitle}>{song.title}</span>
+                            <div className={styles.titleAndArtist}>
+                                <span className={styles.songTitle}>{song.title}</span>
+                                <span className={styles.songArtistSubtitle}>{song.artist}</span>
+                            </div>
                         </span>
 
                         <span className={styles.songArtist}>

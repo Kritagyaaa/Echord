@@ -811,3 +811,74 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+@media (max-width: 620px) {
+  .banner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 16px 16px;
+    min-height: auto;
+    gap: 16px;
+  }
+  
+  .avatarContainer {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .username {
+    font-size: 32px !important;
+    margin: 0 0 12px 0;
+  }
+  
+  .metaData {
+    justify-content: center;
+    font-size: 13px;
+  }
+  
+  .controlsBar {
+    padding: 16px;
+    justify-content: center;
+  }
+  
+  .profileBody {
+    padding: 0 16px 24px;
+    gap: 24px;
+  }
+  
+  .sectionHeader h2 {
+    font-size: 20px;
+  }
+  
+  .cardsRow {
+    gap: 12px;
+  }
+  
+  .artistCard, .playlistCard, .followerCard {
+    width: 140px;
+    padding: 10px;
+  }
+  
+  .artistImageWrapper, .playlistCover, .fallbackPlaylistsCover {
+    width: 118px;
+    height: 118px;
+  }
+  
+  .artistCard h3, .playlistCard h3 {
+    font-size: 14px;
+  }
+  
+  .trackRow {
+    grid-template-columns: 40px 1fr auto;
+    padding: 8px;
+  }
+  
+  .trackAlbum, .trackDuration, .trackIndex {
+    display: none !important;
+  }
+  
+  .rowControls {
+    opacity: 1 !important;
+  }
+}

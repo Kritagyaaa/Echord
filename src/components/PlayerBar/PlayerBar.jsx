@@ -280,10 +280,14 @@ export function PlayerBar() {
             type="range"
             min={0}
             max={duration || 0}
+            step="any"
             value={currentTime}
             onChange={(e) =>
               seek(Number(e.target.value))
             }
+            style={{
+              background: `linear-gradient(to right, #870339 0%, #870339 ${duration && duration > 0 ? (currentTime / duration) * 100 : 0}%, #eaeaea ${duration && duration > 0 ? (currentTime / duration) * 100 : 0}%, #eaeaea 100%)`
+            }}
           />
 
           <span>{formatTime(duration)}</span>

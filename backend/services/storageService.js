@@ -42,14 +42,18 @@ async function uploadFile(key, body, contentType) {
     return key;
 }
 
-async function getObject(key) {
-    const command = new GetObjectCommand({
+async function getObject(key, range) {
+    const params = {
         Bucket: bucket,
         Key: key,
-    });
+    };
+    if (range) {
+        params.Range = range;
+    }
+    const command = new GetObjectCommand(params);
 
     const resp = await s3.send(command);
-    return resp; // contains Body (stream), ContentType, ContentLength
+    return resp; // contains Body (stream), ContentType, ContentLength, ContentRange
 }
 
 async function deleteFile(key) {

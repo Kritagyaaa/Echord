@@ -8,12 +8,21 @@ router.use(async (req, res) => {
   try {
     // req.path inside this router is the path under /files, e.g. '/creators/1/song.mp3'
     const key = req.path.replace(/^\//, '');
-    const obj = await storageService.getObject(key);
+    const range = req.headers.range;
+    const obj = await storageService.getObject(key, range);
     const stream = obj.Body;
 
+    res.setHeader('Accept-Ranges', 'bytes');
     if (obj.ContentType) res.setHeader('Content-Type', obj.ContentType);
     if (obj.ContentLength) res.setHeader('Content-Length', obj.ContentLength);
+    if (obj.ContentRange) res.setHeader('Content-Range', obj.ContentRange);
     res.setHeader('Cache-Control', 'public, max-age=31536000');
+
+    if (range && obj.ContentRange) {
+      res.status(206);
+    } else {
+      res.status(200);
+    }
 
     // Pipe the S3/B2 stream to client
     stream.pipe(res);

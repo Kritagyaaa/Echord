@@ -1,26 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
-import { 
-  ArrowLeft, 
-  User, 
-  Shield, 
-  Key, 
-  Bell, 
-  Monitor, 
-  ChevronRight, 
-  Search, 
-  RotateCcw, 
-  MapPin, 
-  CreditCard, 
-  Users, 
-  XCircle, 
-  FileText, 
-  Grid, 
-  Lock, 
-  Eye, 
-  Trash2, 
-  LogOut, 
-  Sliders, 
-  HelpCircle, 
+import {
+  ArrowLeft,
+  User,
+  Shield,
+  Key,
+  Bell,
+  Monitor,
+  ChevronRight,
+  Search,
+  RotateCcw,
+  MapPin,
+  CreditCard,
+  Users,
+  XCircle,
+  FileText,
+  Grid,
+  Lock,
+  Eye,
+  Trash2,
+  LogOut,
+  Sliders,
+  HelpCircle,
   Globe,
   ExternalLink,
   Diamond
@@ -46,7 +46,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
   useEffect(() => {
     setPictureImgError(false);
   }, [picture]);
-  
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -110,17 +110,17 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
 
   const filteredCategories = settingCategories.map(cat => {
     const titleMatches = cat.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchedItems = cat.items.filter(item => 
+    const matchedItems = cat.items.filter(item =>
       titleMatches || item.label.toLowerCase().includes(searchQuery.toLowerCase())
     );
     return { ...cat, items: matchedItems };
   }).filter(cat => cat.items.length > 0);
 
-  const filteredArticles = searchQuery.trim() 
-    ? helpArticles.filter(art => 
-        art.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        art.content.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+  const filteredArticles = searchQuery.trim()
+    ? helpArticles.filter(art =>
+      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.content.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : [];
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -332,10 +332,10 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
   };
 
   const handleRevokeSession = async (sessionId, isCurrent) => {
-    const confirmMsg = isCurrent 
+    const confirmMsg = isCurrent
       ? 'Are you sure you want to end your CURRENT session? This will immediately log you out of the application.'
       : 'Are you sure you want to terminate this remote session?';
-      
+
     if (!window.confirm(confirmMsg)) return;
 
     try {
@@ -346,7 +346,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to revoke session');
-      
+
       if (isCurrent) {
         onLogout?.();
       } else {
@@ -370,7 +370,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to revoke all sessions');
-      
+
       onLogout?.();
     } catch (err) {
       setError(err.message);
@@ -391,7 +391,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
         <div className="header-inner">
           <div className="echord-logo-clickable" onClick={onBackToMain} style={{ cursor: 'pointer' }}>
             <img src={logo} alt="ECHORD Logo" style={{ width: '36px', height: '36px' }} />
-            <span className="logo-text">E C H O R D</span>
+            <span className="logo-text">ECHORD</span>
           </div>
 
           <nav className="header-nav-links">
@@ -400,10 +400,10 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             <div className="header-profile-dropdown" onClick={onBackToMain} style={{ cursor: 'pointer' }}>
               <div className="header-avatar-circle profile-default-avatar">
                 {user?.profile_picture && !user.profile_picture.includes('googleusercontent.com') && !profileImgError ? (
-                  <img 
-                    src={user.profile_picture} 
-                    alt="Avatar" 
-                    className="header-avatar-img" 
+                  <img
+                    src={user.profile_picture}
+                    alt="Avatar"
+                    className="header-avatar-img"
                     onError={() => setProfileImgError(true)}
                   />
                 ) : (
@@ -412,7 +412,9 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                   </span>
                 )}
               </div>
+              <span className="profile-name">{user?.name || 'Profile'}</span>
               <span className="profile-name">{user?.name || 'Username'}</span>
+
             </div>
           </nav>
         </div>
@@ -420,7 +422,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
 
       {/* Main Content Area */}
       <div className="account-main-layout">
-        
+
         {/* Dynamic sub-view header when not in overview */}
         {activeTab !== 'overview' && (
           <div className="sub-view-back-container">
@@ -437,19 +439,19 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
         {/* Tab 1: Account Overview */}
         {activeTab === 'overview' && (
           <div className="account-overview-view">
-            
+
             {/* Search Bar */}
             <div className="search-section">
               <div className="search-input-wrapper">
                 <Search size={20} className="search-icon" />
-                <input 
-                  type="text" 
-                  placeholder="Search account or help articles" 
+                <input
+                  type="text"
+                  placeholder="Search account or help articles"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 {searchQuery && (
-                  <button 
+                  <button
                     onClick={() => setSearchQuery('')}
                     className="clear-search-btn"
                     title="Clear search"
@@ -550,30 +552,30 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             <form onSubmit={handleUpdateProfile} className="settings-form">
               <div className="form-group">
                 <label>Full Name</label>
-                <input 
-                  type="text" 
-                  value={name} 
-                  onChange={(e) => setName(e.target.value)} 
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>
 
               <div className="form-group">
                 <label>Email Address</label>
-                <input 
-                  type="email" 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
 
               <div className="form-group">
                 <label>Phone Number</label>
-                <input 
-                  type="tel" 
-                  value={phone} 
-                  onChange={(e) => setPhone(e.target.value)} 
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="+1234567890"
                 />
               </div>
@@ -584,9 +586,9 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                   {picture && (
                     <div className="profile-upload-preview">
                       {!pictureImgError ? (
-                        <img 
-                          src={picture} 
-                          alt="Upload Preview" 
+                        <img
+                          src={picture}
+                          alt="Upload Preview"
                           onError={() => setPictureImgError(true)}
                         />
                       ) : (
@@ -595,19 +597,19 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                           <span style={{ fontSize: '10px', color: '#aaa', marginTop: '4px', textAlign: 'center' }}>Error</span>
                         </div>
                       )}
-                      <button 
-                        type="button" 
-                        className="remove-preview-btn" 
+                      <button
+                        type="button"
+                        className="remove-preview-btn"
                         onClick={() => setPicture('')}
                       >
                         Remove Image
                       </button>
                     </div>
                   )}
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleFileChange} 
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
                     className="file-input"
                     id="profile-pic-upload"
                   />
@@ -636,30 +638,30 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             <form onSubmit={handleChangePassword} className="settings-form">
               <div className="form-group">
                 <label>Current Password</label>
-                <input 
-                  type="password" 
-                  value={currentPassword} 
-                  onChange={(e) => setCurrentPassword(e.target.value)} 
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                   required
                 />
               </div>
 
               <div className="form-group">
                 <label>New Password</label>
-                <input 
-                  type="password" 
-                  value={newPassword} 
-                  onChange={(e) => setNewPassword(e.target.value)} 
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
               </div>
 
               <div className="form-group">
                 <label>Confirm New Password</label>
-                <input 
-                  type="password" 
-                  value={confirmPassword} 
-                  onChange={(e) => setConfirmPassword(e.target.value)} 
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
               </div>
@@ -681,15 +683,15 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
           <div className="account-pane sub-view-card">
             <h2>Notification Settings</h2>
             <p className="section-description">Choose how you want to stay updated on Meowsick announcements and alerts.</p>
-            
+
             <div className="notification-list">
               <div className="notification-item">
                 <div className="notification-info">
                   <h4>Product and Feature Updates</h4>
                   <p>Get tips and stay informed on new features added to the streaming web app.</p>
                 </div>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   className="switch-checkbox"
                   checked={notificationSettings.news}
                   onChange={() => handleToggleNotification('news')}
@@ -701,8 +703,8 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                   <h4>Recommended Concerts & Tours</h4>
                   <p>Get notified about upcoming events for artists you listen to regularly.</p>
                 </div>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   className="switch-checkbox"
                   checked={notificationSettings.concerts}
                   onChange={() => handleToggleNotification('concerts')}
@@ -714,8 +716,8 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                   <h4>Playlists & Releases</h4>
                   <p>Receive updates when your playlists receive new songs or artists drop new songs.</p>
                 </div>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   className="switch-checkbox"
                   checked={notificationSettings.playlists}
                   onChange={() => handleToggleNotification('playlists')}
@@ -727,8 +729,8 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
                   <h4>Security Warnings</h4>
                   <p>Get important alerts regarding account sign-ins, resets, and login attempts.</p>
                 </div>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   className="switch-checkbox"
                   checked={notificationSettings.security}
                   onChange={() => handleToggleNotification('security')}
@@ -906,7 +908,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
               <span>ECHORD</span>
             </div>
           </div>
-          
+
           <div className="footer-links-cols">
             <div className="footer-col">
               <h4>Company</h4>
@@ -956,7 +958,7 @@ function AccountPage({ user, onProfileUpdate, onLogout, onBackToMain }) {
             </a>
           </div>
         </div>
-        
+
         <div className="footer-bottom">
           <div className="footer-bottom-left">
             <a href="#" onClick={(e) => { e.preventDefault(); triggerMockToast('Legal'); }}>Legal</a>

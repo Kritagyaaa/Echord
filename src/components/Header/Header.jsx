@@ -83,7 +83,7 @@ export function Header({
       <div className={styles.left}>
         <div className={styles.siteHeader} onClick={onHomeClick} title="Go to Home" role="link" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter') onHomeClick(); }}>
           <img src={logo} alt="Echord Logo" className={styles.titleLogo} />
-          <span className={styles.siteTitle}>E C H O R D</span>
+          <span className={styles.siteTitle}>ECHORD</span>
         </div>
       </div>
 
@@ -183,7 +183,6 @@ export function Header({
                 style={{ cursor: 'pointer' }}
               >
                 <span>Account</span>
-                <ExternalLink size={16} />
               </div>
               <div
                 className={styles.menuItem}
@@ -219,10 +218,6 @@ export function Header({
                 style={{ cursor: 'pointer' }}
               >
                 Recents
-              </div>
-              <div className={styles.menuItem} role="menuitem">
-                <span>Download</span>
-                <ExternalLink size={16} />
               </div>
               <div className={styles.menuItem} role="menuitem" onClick={onLogout} style={{ cursor: 'pointer' }}>Log out</div>
             </div>

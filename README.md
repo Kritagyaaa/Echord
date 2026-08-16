@@ -71,7 +71,7 @@ ECHORD is a full-stack music streaming platform built for listeners and creators
 </tr>
 <tr>
   <td colspan="2" align="center">
-    <img src="src/assets/Screenshots/creator dashboard.png" width="430"/>
+    <img src="src/assets/Screenshots/creator%20dashboard.png" width="430"/>
   </td>
 </tr>
 </table>
@@ -108,7 +108,7 @@ ECHORD is a full-stack music streaming platform built for listeners and creators
 - [Backblaze B2](https://www.backblaze.com/cloud-storage) — object storage for audio files and cover art
 - Audio served/streamed via signed URLs or direct streaming endpoints from B2
 
-*🚀 *Hosting & Deployment**
+**🚀 Hosting & Deployment**
 - [Vercel](https://vercel.com/) — frontend hosting & deployment
 - [Railway](https://railway.app/) — backend hosting & deployment
 - [Render](https://render.com/) — backend hosting & deployment
@@ -259,20 +259,20 @@ ECHORD/
 
 ## 🔌 API Overview
 
-| Method | Endpoint                   | Description                 |
-|--------|----------------------------|-----------------------------|
-| POST   | `/api/auth/Signup  `       | Register a new user         |
-| POST   | `/api/auth/login`          | Log in and receive a JWT    |
-| GET    | `/api/auth/google`         | Google OAuth authentication |
-| GET    | `/api/auth/forgot-password`| Send password reset email   |
-| POST   | ` /api/auth/reset-password`| Reset user password         |
-| GET    | `/api/songs`               | Retrieve songs              |
-| GET    | `/api/recommendations`     | Get recommended songs       |
-| GET    | `/api/playlists `          | Retrieve user playlists     |
-| GET    | `/api/playlists `          | Create a playlis            |
-| GET    | `/api/playlists/:id`       | Update a playlist           |
-| GET    | `/api/playlists/:id`       | Delete a playlist           |
-| GET    | `/api/files/upload`        | Upload audio or cover image |
+| Method | Endpoint                    | Description                 |
+|--------|-----------------------------|-----------------------------|
+| POST   | `/api/auth/signup`          | Register a new user         |
+| POST   | `/api/auth/login`           | Log in and receive a JWT    |
+| GET    | `/api/auth/google`          | Google OAuth authentication |
+| GET    | `/api/auth/forgot-password` | Send password reset email   |
+| POST   | `/api/auth/reset-password`  | Reset user password         |
+| GET    | `/api/songs`                | Retrieve songs              |
+| GET    | `/api/recommendations`      | Get recommended songs       |
+| GET    | `/api/playlists`            | Retrieve user playlists     |
+| POST   | `/api/playlists`            | Create a playlist           |
+| PUT    | `/api/playlists/:id`        | Update a playlist           |
+| DELETE | `/api/playlists/:id`        | Delete a playlist           |
+| POST   | `/api/files/upload`         | Upload audio or cover image |
 
 ---
 

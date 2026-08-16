@@ -180,19 +180,58 @@
   text-align: center;
 }
 
-.progressSection input,
-.volumeSlider {
-  height: 4px;
-  min-width: 0;
-  accent-color: #870339;
-  cursor: pointer;
-}
-
 .progressSection input {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
+  height: 4px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 4px;
   outline: none;
   border: none;
   box-shadow: none;
+  cursor: pointer;
+  background: #eaeaea;
+  vertical-align: middle;
+}
+
+.progressSection input::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+}
+
+.progressSection input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #870339;
+  cursor: pointer;
+  border: none;
+  margin-top: -4px;
+}
+
+.progressSection input::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+}
+
+.progressSection input::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #870339;
+  cursor: pointer;
+  border: none;
 }
 
 .progressSection input:focus,

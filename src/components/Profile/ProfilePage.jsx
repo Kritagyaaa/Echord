@@ -2,27 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, MoreHorizontal, Play, Check, User } from 'lucide-react';
 import styles from './ProfilePage.module.css';
-import { getArtists, getListeningHistory } from '../../services/api';
+import { getArtists, getListeningHistory, getSongs } from '../../services/api';
 import { usePlayer } from '../../context/playercontext';
 import { usePlaylists } from '../../context/playlistcontext';
 import { PlaylistCover } from '../PlaylistCover/PlaylistCover';
 
 const FALLBACK_AVATAR = "https://i.pinimg.com/736x/6c/41/cb/6c41cb3ae4d97eeb68ee2279fe0e0c6f.jpg";
-
-const MOCK_ARTISTS = [
-  { id: 'mock-a1', name: 'Pritam', cover_url: 'https://i.scdn.co/image/ab6761610000e5ebcb690b22decddb548fe030e4', bio: 'Artist' },
-  { id: 'mock-a2', name: 'Arijit Singh', cover_url: 'https://i.scdn.co/image/ab6761610000e5eb197e3e2999e2b10d73f7cfd0', bio: 'Artist' },
-  { id: 'mock-a3', name: 'Vishal Mishra', cover_url: 'https://i.scdn.co/image/ab6761610000e5ebdbfa6f54c8612140be816827', bio: 'Artist' },
-  { id: 'mock-a4', name: 'Atif Aslam', cover_url: 'https://i.scdn.co/image/ab6761610000e5eb803efaf311e5824c08c8430b', bio: 'Artist' },
-  { id: 'mock-a5', name: 'Sachin-Jigar', cover_url: 'https://i.scdn.co/image/ab6761610000e5ebd7435f3cc83ffbf88bf332c9', bio: 'Artist' },
-];
-
-const MOCK_TRACKS = [
-  { id: 'mock-t1', title: 'Sadka', artist: 'Vishal-Shekhar, Suraj Jagan, Mahalakshmi Iyer', album: 'I Hate Luv Storys (Original Motion Picture Soundtrack)', duration: 343, cover_url: 'https://i.scdn.co/image/ab67616d0000b27376c66cf1ec5337b56a1b02cc' },
-  { id: 'mock-t2', title: 'Laagi Na Choote', artist: 'Sachin-Jigar, Arijit Singh, Shreya Ghoshal', album: 'A Gentleman', duration: 209, cover_url: 'https://i.scdn.co/image/ab67616d0000b273922c06283db856eb0d5885a4' },
-  { id: 'mock-t3', title: 'Zaalima', artist: 'Arijit Singh, Harshdeep Kaur', album: 'The Arijit Singh Collection', duration: 299, cover_url: 'https://i.scdn.co/image/ab67616d0000b273b4d4cf525381f215ab7a740f' },
-  { id: 'mock-t4', title: 'Kahin To', artist: 'Rashid Ali, Vasundhara Das', album: 'Jaane Tu... Ya Jaane Na', duration: 303, cover_url: 'https://i.scdn.co/image/ab67616d0000b2737e90f230da37f2d5f8489dfb' }
-];
 
 export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
   const navigate = useNavigate();
@@ -31,6 +16,7 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
 
   const [dbArtists, setDbArtists] = useState([]);
   const [dbHistory, setDbHistory] = useState([]);
+  const [dbSongs, setDbSongs] = useState([]);
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -102,18 +88,9 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
     }
   };
 
-  // Load Database Artists and History
+  // Load Database Artists, History and Real Songs
   useEffect(() => {
     async function loadData() {
-      try {
-        const artistsData = await getArtists();
-        if (Array.isArray(artistsData)) {
-          setDbArtists(artistsData);
-        }
-      } catch (err) {
-        console.error("Failed to load artists from database:", err);
-      }
-
       try {
         const historyData = await getListeningHistory();
         if (Array.isArray(historyData)) {
@@ -122,11 +99,27 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
       } catch (err) {
         console.error("Failed to load listening history from database:", err);
       }
+
+      try {
+        const songsData = await getSongs();
+        if (Array.isArray(songsData)) {
+          setDbSongs(songsData);
+        }
+      } catch (err) {
+        console.error("Failed to load songs from database:", err);
+      }
+
+      try {
+        const artistsData = await getArtists();
+        if (Array.isArray(artistsData)) {
+          setDbArtists(artistsData);
+        }
+      } catch (err) {
+        console.error("Failed to load artists from database:", err);
+      }
     }
     loadData();
   }, []);
-
-
 
   const formatDuration = (seconds) => {
     if (!seconds) return "0:00";
@@ -144,9 +137,17 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
     }, 3000);
   };
 
-  // Determine arrays to render (DB or fallback mock data)
-  const artistsToRender = dbArtists.length > 0 ? dbArtists : MOCK_ARTISTS;
-  const tracksToRender = dbHistory.length > 0 ? dbHistory.slice(0, 5) : MOCK_TRACKS;
+  // Render actual user listening history if available; otherwise real database songs
+  const tracksToRender = dbHistory.length > 0 ? dbHistory.slice(0, 5) : dbSongs.slice(0, 5);
+  const artistsToRender = dbArtists.length > 0
+    ? dbArtists
+    : (dbSongs.length > 0
+        ? Array.from(new Set(dbSongs.map(s => s.artist))).filter(Boolean).slice(0, 5).map((name, idx) => ({
+            id: `art-${idx}`,
+            name,
+            cover_url: dbSongs.find(s => s.artist === name)?.cover_url || FALLBACK_AVATAR
+          }))
+        : []);
   const playlistCount = playlists ? playlists.length : 0;
 
   return (
@@ -273,34 +274,40 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
             <button className={styles.showAllBtn}>Show all</button>
           </div>
           <div className={styles.tracksList}>
-            {tracksToRender.map((track, index) => (
-              <div
-                key={track.id || track.history_id}
-                className={styles.trackRow}
-                onClick={() => playSong(track, tracksToRender)}
-              >
-                <span className={styles.trackIndex}>{index + 1}</span>
-                <img
-                  src={track.cover_url || FALLBACK_AVATAR}
-                  alt={track.title}
-                  className={styles.trackCover}
-                />
-                <div className={styles.trackDetails}>
-                  <p className={styles.trackTitle}>{track.title}</p>
-                  <p className={styles.trackSubtitle}>
-                    <span className={styles.videoBadge}>Music video</span>
-                    {track.artist}
-                  </p>
+            {tracksToRender.length > 0 ? (
+              tracksToRender.map((track, index) => (
+                <div
+                  key={track.id || track.history_id || index}
+                  className={styles.trackRow}
+                  onClick={() => playSong(track, tracksToRender)}
+                >
+                  <span className={styles.trackIndex}>{index + 1}</span>
+                  <img
+                    src={track.cover_url || FALLBACK_AVATAR}
+                    alt={track.title}
+                    className={styles.trackCover}
+                    onError={(e) => { e.target.src = FALLBACK_AVATAR; }}
+                  />
+                  <div className={styles.trackDetails}>
+                    <p className={styles.trackTitle}>{track.title}</p>
+                    <p className={styles.trackSubtitle}>
+                      {track.artist || "Unknown Artist"}
+                    </p>
+                  </div>
+                  <span className={styles.trackAlbum}>{track.album || "Single"}</span>
+                  <span className={styles.checkIcon}>
+                    <Check size={16} color="#E19FC7" strokeWidth={3} />
+                  </span>
+                  <span className={styles.trackDuration}>
+                    {formatDuration(track.duration)}
+                  </span>
                 </div>
-                <span className={styles.trackAlbum}>{track.album || "Single"}</span>
-                <span className={styles.checkIcon}>
-                  <Check size={16} color="#E19FC7" strokeWidth={3} />
-                </span>
-                <span className={styles.trackDuration}>
-                  {formatDuration(track.duration)}
-                </span>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ color: '#b3b3b3', padding: '16px 0', fontSize: '14px' }}>
+                No top tracks yet. Start listening to music!
+              </p>
+            )}
           </div>
         </section>
 
@@ -327,22 +334,9 @@ export function ProfilePage({ user, onProfileUpdate, onBackToMain }) {
                 </div>
               ))
             ) : (
-              <>
-                <div className={styles.playlistCard}>
-                  <div className={styles.fallbackPlaylistsCover}>
-                    <span style={{ fontSize: '32px' }}>☘️</span>
-                  </div>
-                  <h3>☘️</h3>
-                  <p>2 Followers</p>
-                </div>
-                <div className={styles.playlistCard}>
-                  <div className={styles.fallbackPlaylistsCover} style={{ background: 'linear-gradient(135deg, #7b4397, #dc2430)' }}>
-                    <span style={{ fontSize: '28px', fontWeight: 'bold' }}>S</span>
-                  </div>
-                  <h3>Sukoon</h3>
-                  <p>2 Followers</p>
-                </div>
-              </>
+              <p style={{ color: '#b3b3b3', padding: '16px 0', fontSize: '14px' }}>
+                No public playlists created yet.
+              </p>
             )}
           </div>
         </section>

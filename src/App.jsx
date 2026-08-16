@@ -59,7 +59,7 @@ function ProtectedLayout({
         }}
         user={user}
         onLogout={handleLogout}
-        onAccountClick={() => window.open("/account", "_blank")}
+        onAccountClick={() => navigate("/account")}
         onProfileClick={() => navigate("/profile")}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}

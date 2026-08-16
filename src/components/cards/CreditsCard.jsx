@@ -8,9 +8,6 @@ export function CreditsCard({ credits }) {
         <h2 className={styles.title} id="credits-title">
           Credits
         </h2>
-        <button className={styles.showAllButton} type="button">
-          Show all
-        </button>
       </div>
       <ul className={styles.creditList}>
         {credits.map((credit) => (

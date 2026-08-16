@@ -25,12 +25,18 @@ app.use(cors({
     origin: function (origin, callback) {
         const allowedOrigins = [
             'http://localhost:5173',
+            'http://127.0.0.1:5173',
             'https://kritagyaaa.github.io'
         ];
         // Allow requests with no origin (mobile apps, curl, etc.)
         if (!origin) return callback(null, true);
-        // Allow any *.vercel.app preview/production deploy
-        if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+        // Allow any localhost/127.0.0.1 port, *.vercel.app preview/production deploy
+        if (
+            origin.startsWith('http://localhost:') ||
+            origin.startsWith('http://127.0.0.1:') ||
+            origin.endsWith('.vercel.app') ||
+            allowedOrigins.includes(origin)
+        ) {
             return callback(null, true);
         }
         callback(new Error('Not allowed by CORS'));
@@ -41,6 +47,11 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use('/files', fileRoutes);
+
+// UptimeRobot / Render Health Check
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 // Health Check
 app.get("/api/health", (req, res) => {
